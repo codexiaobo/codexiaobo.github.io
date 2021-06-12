@@ -29,8 +29,9 @@
 <meta property="og:site_name" content="Code小博">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/20210612/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20210611081249.5nv13ksuk5k0.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6.25tpl5a324tc.png">
 <meta property="article:published_time" content="2021-06-12T04:23:15.000Z">
-<meta property="article:modified_time" content="2021-06-12T04:26:53.433Z">
+<meta property="article:modified_time" content="2021-06-12T17:00:27.553Z">
 <meta property="article:author" content="xiaobo">
 <meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
@@ -266,10 +267,16 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2021-06-12 12:23:15 / 修改时间：12:26:53" itemprop="dateCreated datePublished" datetime="2021-06-12T12:23:15+08:00">2021-06-12</time>
+      <time title="创建时间：2021-06-12 12:23:15" itemprop="dateCreated datePublished" datetime="2021-06-12T12:23:15+08:00">2021-06-12</time>
     </span>
+      <span class="post-meta-item">
+        <span class="post-meta-item-icon">
+          <i class="far fa-calendar-check"></i>
+        </span>
+        <span class="post-meta-item-text">更新于</span>
+        <time title="修改时间：2021-06-13 01:00:27" itemprop="dateModified" datetime="2021-06-13T01:00:27+08:00">2021-06-13</time>
+      </span>
 
   
     <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
@@ -626,6 +633,7 @@
 </blockquote>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ArrayList arrayList = <span class="keyword">new</span> ArrayList();</span><br><span class="line">        Collections.addAll(arrayList,</span><br><span class="line">                            <span class="keyword">new</span> Student(<span class="number">1</span>,<span class="string">&quot;小博&quot;</span>,<span class="number">21</span>),</span><br><span class="line">                            <span class="keyword">new</span> Student(<span class="number">2</span>,<span class="string">&quot;小张&quot;</span>,<span class="number">22</span>),</span><br><span class="line">                            <span class="keyword">new</span> Student(<span class="number">3</span>,<span class="string">&quot;小金&quot;</span>,<span class="number">24</span>)</span><br><span class="line">                );</span><br><span class="line">        Collections.sort(arrayList);</span><br><span class="line">        System.out.println(arrayList);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span> <span class="keyword">implements</span> <span class="title">Comparable</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">(<span class="keyword">int</span> id, String name, <span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Student&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;id=&quot;</span> + id +</span><br><span class="line">                <span class="string">&quot;, name=&#x27;&quot;</span> + name + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&quot;, age=&quot;</span> + age +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (o <span class="keyword">instanceof</span> Student) &#123;</span><br><span class="line">            Student student = (Student) o;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.age &gt; student.age) &#123;</span><br><span class="line">                <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">this</span>.age == student.age) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/%E9%9B%86%E5%90%88%E6%A1%86%E6%9E%B6.25tpl5a324tc.png" alt="集合框架"></p>
 <h2 id="泛型（Generics）"><a href="#泛型（Generics）" class="headerlink" title="泛型（Generics）"></a>泛型（Generics）</h2><blockquote>
 <p>在类定义时不指定类中信息的具体数据类型、而是暂时用一个标识来替代、当外部实例化对象时再来指定具体的数据类型</p>
 </blockquote>
@@ -687,7 +695,7 @@
   <p><span>本文标题:</span><a href="/posts/29725478/">集合框架&泛型</a></p>
   <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a>小博</p>
   <p><span>发布时间:</span>2021年06月12日 - 12:23</p>
-  <p><span>最后更新:</span>2021年06月12日 - 12:26</p>
+  <p><span>最后更新:</span>2021年06月13日 - 01:00</p>
   <p><span>原始链接:</span><a href="/posts/29725478/" title="集合框架&泛型">https://codexiaobo.github.io/posts/29725478/</a>
     <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://codexiaobo.github.io/posts/29725478/"  aria-label="复制成功！"></i></span>
   </p>
