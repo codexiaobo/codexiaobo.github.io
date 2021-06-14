@@ -23,23 +23,28 @@
 
 <link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Code小博">
-<meta property="og:url" content="https://codexiaobo.github.io/index.html">
+<meta name="description" content="Java WebServlet 一个与平台无关的组件、运行在Servlet容器&#x2F;Web应用服务器&#x2F;Tomcat、负责与客户端进行通信    Servlet功能 创建并返回基于客户请求的动态HTML页面与数据库进行通信  Servlet使用 Servlet本身是一个接口、如果一个类实现了这个接口、则这个类就具备了接受客户端请求及做出响应的功能  123456789101112131415161718">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Servlet&amp;JSP&amp;Session&amp;Cookie">
+<meta property="og:url" content="https://codexiaobo.github.io/posts/3563979080/index.html">
 <meta property="og:site_name" content="Code小博">
+<meta property="og:description" content="Java WebServlet 一个与平台无关的组件、运行在Servlet容器&#x2F;Web应用服务器&#x2F;Tomcat、负责与客户端进行通信    Servlet功能 创建并返回基于客户请求的动态HTML页面与数据库进行通信  Servlet使用 Servlet本身是一个接口、如果一个类实现了这个接口、则这个类就具备了接受客户端请求及做出响应的功能  123456789101112131415161718">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-06-14T14:30:44.000Z">
+<meta property="article:modified_time" content="2021-06-14T14:31:54.222Z">
 <meta property="article:author" content="xiaobo">
+<meta property="article:tag" content="javaWeb">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://codexiaobo.github.io/">
+<link rel="canonical" href="https://codexiaobo.github.io/posts/3563979080/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:true,&quot;isPost&quot;:false,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:&quot;&quot;,&quot;permalink&quot;:&quot;&quot;,&quot;path&quot;:&quot;index.html&quot;,&quot;title&quot;:&quot;&quot;}</script>
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;codexiaobo.github.io&#x2F;posts&#x2F;3563979080&#x2F;&quot;,&quot;path&quot;:&quot;posts&#x2F;3563979080&#x2F;&quot;,&quot;title&quot;:&quot;Servlet&amp;JSP&amp;Session&amp;Cookie&quot;}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
-<title>Code小博</title>
+<title>Servlet&JSP&Session&Cookie | Code小博</title>
   
 
 
@@ -135,7 +140,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -148,6 +153,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-Web"><span class="nav-number">1.</span> <span class="nav-text">Java Web</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Servlet"><span class="nav-number">1.1.</span> <span class="nav-text">Servlet</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Servlet%E5%8A%9F%E8%83%BD"><span class="nav-number">1.1.1.</span> <span class="nav-text">Servlet功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Servlet%E4%BD%BF%E7%94%A8"><span class="nav-number">1.1.2.</span> <span class="nav-text">Servlet使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Servlet%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-number">1.1.3.</span> <span class="nav-text">Servlet生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Servlet%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E4%B8%AD%E6%96%B9%E6%B3%95%E7%9A%84%E6%89%A7%E8%A1%8C"><span class="nav-number">1.1.4.</span> <span class="nav-text">Servlet生命周期中方法的执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ServletConfig"><span class="nav-number">1.1.5.</span> <span class="nav-text">ServletConfig</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ServletConfig%E4%B8%AD%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">1.1.6.</span> <span class="nav-text">ServletConfig中使用方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ServletContext"><span class="nav-number">1.1.7.</span> <span class="nav-text">ServletContext</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ServletConfig%E5%92%8CServletContext%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.1.8.</span> <span class="nav-text">ServletConfig和ServletContext的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Servlet%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.9.</span> <span class="nav-text">Servlet层次结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP%E5%B8%B8%E8%A7%81%E7%9A%84%E8%AF%B7%E6%B1%82%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.1.10.</span> <span class="nav-text">HTTP常见的请求类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%A7%E8%87%B4%E6%B5%81%E7%A8%8B%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.1.10.1.</span> <span class="nav-text">大致流程描述</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E8%87%B4%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%E6%BC%94%E7%A4%BA"><span class="nav-number">1.1.11.</span> <span class="nav-text">大致工作流程演示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSP"><span class="nav-number">1.2.</span> <span class="nav-text">JSP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JSP%E8%84%9A%E6%9C%AC%E3%80%81%E6%89%A7%E8%A1%8CJava%E9%80%BB%E8%BE%91%E4%BB%A3%E7%A0%81"><span class="nav-number">1.2.1.</span> <span class="nav-text">JSP脚本、执行Java逻辑代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSP%E5%A3%B0%E6%98%8E%EF%BC%9A%E5%AE%9A%E4%B9%89java%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.2.</span> <span class="nav-text">JSP声明：定义java方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSP%E8%A1%A8%E8%BE%BE%E5%BC%8F%EF%BC%9A%E6%8A%8AJava%E5%AF%B9%E8%B1%A1%E7%9B%B4%E6%8E%A5%E8%BE%93%E5%87%BA%E5%88%B0HTML%E9%A1%B5%E9%9D%A2%E4%B8%AD"><span class="nav-number">1.2.3.</span> <span class="nav-text">JSP表达式：把Java对象直接输出到HTML页面中</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSP%E5%86%85%E7%BD%AE%E5%AF%B9%E8%B1%A19%E4%B8%AA"><span class="nav-number">1.2.4.</span> <span class="nav-text">JSP内置对象9个</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Request%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.5.</span> <span class="nav-text">Request常用方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP%E8%AF%B7%E6%B1%82%E7%8A%B6%E6%80%81%E7%A0%81"><span class="nav-number">1.2.6.</span> <span class="nav-text">HTTP请求状态码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Response%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.7.</span> <span class="nav-text">Response常用方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E5%8F%91%E5%92%8C%E9%87%8D%E5%AE%9A%E5%90%91%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.2.8.</span> <span class="nav-text">转发和重定向的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0%E7%99%BB%E5%BD%95%E6%A8%A1%E6%8B%9F%E8%BD%AC%E5%8F%91%E5%92%8C%E9%87%8D%E5%AE%9A%E5%90%91"><span class="nav-number">1.2.9.</span> <span class="nav-text">简单实现登录模拟转发和重定向</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Session%EF%BC%88%E7%94%A8%E6%88%B7%E4%BC%9A%E8%AF%9D%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">Session（用户会话）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%9A%E8%AF%9D%E7%8A%B6%E6%80%81"><span class="nav-number">1.3.1.</span> <span class="nav-text">会话状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Session%E5%B8%B8%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.2.</span> <span class="nav-text">Session常用的方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Session%E7%AE%80%E5%8D%95%E5%BA%94%E7%94%A8"><span class="nav-number">1.3.3.</span> <span class="nav-text">Session简单应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie"><span class="nav-number">1.4.</span> <span class="nav-text">Cookie</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Cookie%E5%88%9B%E5%BB%BA"><span class="nav-number">1.4.1.</span> <span class="nav-text">Cookie创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cookie%E8%AF%BB%E5%8F%96"><span class="nav-number">1.4.2.</span> <span class="nav-text">Cookie读取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cookie%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">1.4.3.</span> <span class="nav-text">Cookie常用方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Session%E5%92%8CCookie%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.5.</span> <span class="nav-text">Session和Cookie的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Session"><span class="nav-number">1.5.1.</span> <span class="nav-text">Session</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF"><span class="nav-number">1.5.1.1.</span> <span class="nav-text">存储用户信息</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cookie-1"><span class="nav-number">1.5.2.</span> <span class="nav-text">Cookie</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF-1"><span class="nav-number">1.5.2.1.</span> <span class="nav-text">存储用户信息</span></a></li></ol></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -226,16 +232,17 @@
 </noscript>
 
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/3563979080/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -248,9 +255,9 @@
       <meta itemprop="name" content="Code小博">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/3563979080/" class="post-title-link" itemprop="url">Servlet&JSP&Session&Cookie</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          Servlet&JSP&Session&Cookie
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -265,6 +272,13 @@
     </span>
 
   
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
       </div>
       <div class="post-meta">
     <span class="post-meta-item" title="本文字数">
@@ -290,7 +304,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="Java-Web"><a href="#Java-Web" class="headerlink" title="Java Web"></a>Java Web</h1><h2 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h2><blockquote>
+        <h1 id="Java-Web"><a href="#Java-Web" class="headerlink" title="Java Web"></a>Java Web</h1><h2 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h2><blockquote>
 <p>一个与平台无关的组件、运行在Servlet容器/Web应用服务器/Tomcat、负责与客户端进行通信  </p>
 </blockquote>
 <h3 id="Servlet功能"><a href="#Servlet功能" class="headerlink" title="Servlet功能"></a>Servlet功能</h3><blockquote>
@@ -582,115 +596,51 @@
 <li>退出登录<br><strong>setMaxAge(0)</strong></li>
 </ul>
 
-      
     </div>
 	<div>
 	
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束 <i class="fa fa-paw"></i> 感谢您的阅读-------------</div>
+    
+</div>
+
+     
 	</div>
 	
 	<div>
       
-	</div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/29725478/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/29725478/" class="post-title-link" itemprop="url">集合框架&泛型</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-06-12 12:23:15" itemprop="dateCreated datePublished" datetime="2021-06-12T12:23:15+08:00">2021-06-12</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-06-13 01:00:27" itemprop="dateModified" datetime="2021-06-13T01:00:27+08:00">2021-06-13</time>
-      </span>
-
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>9k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>8 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/20210612/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20210611081249.5nv13ksuk5k0.png" alt="集合框架&amp;泛型"></p>
-<!--sleep-->
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/29725478/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/posts/3563979080/">Servlet&JSP&Session&Cookie</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a>小博</p>
+  <p><span>发布时间:</span>2021年06月14日 - 22:30</p>
+  <p><span>最后更新:</span>2021年06月14日 - 22:31</p>
+  <p><span>原始链接:</span><a href="/posts/3563979080/" title="Servlet&JSP&Session&Cookie">https://codexiaobo.github.io/posts/3563979080/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://codexiaobo.github.io/posts/3563979080/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+      $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+        });
+    });  
+</script>
+
+
       
 	</div>
 
@@ -699,405 +649,43 @@
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/2215251221/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/2215251221/" class="post-title-link" itemprop="url">并发编程总结</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2021-06-10 21:20:38 / 修改时间：21:28:16" itemprop="dateCreated datePublished" datetime="2021-06-10T21:20:38+08:00">2021-06-10</time>
-    </span>
-
-  
+          <div class="reward-container">
+  <div>学习技术分享、感谢您的支持</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="xiaobo 微信">
+        <span>微信</span>
       </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>10k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>9 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/%E5%B9%B6%E5%8F%91.3vjf5vr0q2g.png" alt="并发"></p>
-<!--sleep-->
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/2215251221/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
-      
-	</div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/3985617401/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/3985617401/" class="post-title-link" itemprop="url">みんなの日本語第一課</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2021-06-10 19:51:56 / 修改时间：19:57:22" itemprop="dateCreated datePublished" datetime="2021-06-10T19:51:56+08:00">2021-06-10</time>
-    </span>
-
-  
+      <div>
+        <img src="/images/alipay.png" alt="xiaobo 支付宝">
+        <span>支付宝</span>
       </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>461</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
+
+  </div>
 </div>
 
-        </div>
-      </header>
+          <div class="post-tags">
+              <a href="/tags/javaWeb/" rel="tag"># javaWeb</a>
+          </div>
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%97%A5%E6%9C%AC%E8%AA%9E/20210610195348.4fyolimixse0.jpg" alt="第一課"></p>
-<!--sleep-->
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/3985617401/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
-      
-	</div>
 
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/29725478/" rel="prev" title="集合框架&泛型">
+                  <i class="fa fa-chevron-left"></i> 集合框架&泛型
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
     </footer>
   </article>
 </div>
 
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/1948455747/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/1948455747/" class="post-title-link" itemprop="url">测试</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-06-06 14:40:11" itemprop="dateCreated datePublished" datetime="2021-06-06T14:40:11+08:00">2021-06-06</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-06-07 11:31:02" itemprop="dateModified" datetime="2021-06-07T11:31:02+08:00">2021-06-07</time>
-      </span>
-
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>110</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/e95e7068327314945b7b2b79787b55ad.4e50a2she9o0.jpg" alt="现实"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/1948455747/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
-      
-	</div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/1243066710/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/1243066710/" class="post-title-link" itemprop="url">Hello World</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-06-06 12:42:16" itemprop="dateCreated datePublished" datetime="2021-06-06T12:42:16+08:00">2021-06-06</time>
-    </span>
-      <span class="post-meta-item">
-        <span class="post-meta-item-icon">
-          <i class="far fa-calendar-check"></i>
-        </span>
-        <span class="post-meta-item-text">更新于</span>
-        <time title="修改时间：2021-06-07 11:30:25" itemprop="dateModified" datetime="2021-06-07T11:30:25+08:00">2021-06-07</time>
-      </span>
-
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>28</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/20210607/c.5xxyvmu2ccg0.png" alt="起点"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/1243066710/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
-      
-	</div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
 
 
 
