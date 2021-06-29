@@ -1,6 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Maven</title>
+    <url>/posts/120011996/</url>
+    <content><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/Maven.1t9grf8m7z0g.png" alt="Maven"></p>
+<!--sleep-->
+
+<span id="more"></span>
+
+<h1 id="Maven"><a href="#Maven" class="headerlink" title="Maven"></a>Maven</h1><p><strong>基于java平台的、自动化构建工具</strong></p>
+<blockquote>
+<p>清理：删除编译结果、为重新编译做准备<br>编译：java编译成class<br>测试：对项目中关键点进行测试、用测试代码去测试开发代码<br>报告：将测试的结果进行显示<br>打包：将项目中包含的多个文件压缩成一个文件、用于安装和部署<br>安装：将打成的包放到 本地仓库、供其他项目使用<br>部署：将打成的包方到  服务器上运行  </p>
+</blockquote>
+<h2 id="Maven作用"><a href="#Maven作用" class="headerlink" title="Maven作用"></a>Maven作用</h2><ul>
+<li>管理jar</li>
+</ul>
+<blockquote>
+<p>添加第三方jar<br>自动关联下载所有依赖的jar、并且不会冲突<br>通常下载一个jar、先在本地仓库中下载、如果本地仓库中不存在、则在联网去中央仓库或中央仓库镜像去下载</p>
+</blockquote>
+<ul>
+<li>将项目拆分成若干个模块</li>
+</ul>
+<h2 id="Maven配置流程"><a href="#Maven配置流程" class="headerlink" title="Maven配置流程"></a>Maven配置流程</h2><ul>
+<li>环境变量配置-</li>
+</ul>
+<p><strong>path配置Maven的bin目录</strong></p>
+<ul>
+<li>conf/settings.xml配置属性<br>配置阿里云镜像和修改本地仓库</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- localRepository</span></span><br><span class="line"><span class="comment">   | The path to the local repository maven will use to store artifacts.</span></span><br><span class="line"><span class="comment">   |</span></span><br><span class="line"><span class="comment">   | Default: $&#123;user.home&#125;/.m2/repository</span></span><br><span class="line"><span class="comment">  &lt;localRepository&gt;/path/to/local/repo&lt;/localRepository&gt;</span></span><br><span class="line"><span class="comment">  --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">localRepository</span>&gt;</span>D:/Maven/IDEA jar<span class="tag">&lt;/<span class="name">localRepository</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mirrors</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- mirror</span></span><br><span class="line"><span class="comment">     | Specifies a repository mirror site to use instead of a given repository. The repository that</span></span><br><span class="line"><span class="comment">     | this mirror serves has an ID that matches the mirrorOf element of this mirror. IDs are used</span></span><br><span class="line"><span class="comment">     | for inheritance and direct lookup purposes, and must be unique across the set of mirrors.</span></span><br><span class="line"><span class="comment">     |</span></span><br><span class="line"><span class="comment">    &lt;mirror&gt;</span></span><br><span class="line"><span class="comment">      &lt;id&gt;mirrorId&lt;/id&gt;</span></span><br><span class="line"><span class="comment">      &lt;mirrorOf&gt;repositoryId&lt;/mirrorOf&gt;</span></span><br><span class="line"><span class="comment">      &lt;name&gt;Human Readable Name for this Mirror.&lt;/name&gt;</span></span><br><span class="line"><span class="comment">      &lt;url&gt;http://my.repository.com/repo/path&lt;/url&gt;</span></span><br><span class="line"><span class="comment">    &lt;/mirror&gt;</span></span><br><span class="line"><span class="comment">     --&gt;</span></span><br><span class="line">	 <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">id</span>&gt;</span>alimaven<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">name</span>&gt;</span>aliyun maven<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">	  <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>central<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">mirrors</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Maven结构"><a href="#Maven结构" class="headerlink" title="Maven结构"></a>Maven结构</h2><blockquote>
+<p>src/main/java  程序功能代码<br>src/main/resourses  资源代码、配置代码<br>src/test  测试代码<br>pom.xml  项目对象模型（把项目看成一个对象）</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--    大项目名--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.dream.xiaobo<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--    子模块名--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>testMaven<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--    版本号--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--    名字--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>testMaven<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Maven常见命令"><a href="#Maven常见命令" class="headerlink" title="Maven常见命令"></a>Maven常见命令</h2><ul>
+<li>编译命令（只编译main目录java文件）</li>
+</ul>
+<figure class="highlight dos"><table><tr><td class="code"><pre><span class="line">mvn compile</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>测试</li>
+</ul>
+<figure class="highlight dos"><table><tr><td class="code"><pre><span class="line">mvn test</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>打包（jar/war）</li>
+</ul>
+<figure class="highlight dos"><table><tr><td class="code"><pre><span class="line">mvn package</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>存入本地仓库（供其他模块使用）</li>
+</ul>
+<figure class="highlight dos"><table><tr><td class="code"><pre><span class="line">mvn install</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>删除target</li>
+</ul>
+<figure class="highlight dos"><table><tr><td class="code"><pre><span class="line">mvn clean</span><br></pre></td></tr></table></figure>
+
+<h2 id="Maven依赖"><a href="#Maven依赖" class="headerlink" title="Maven依赖"></a>Maven依赖</h2><blockquote>
+<p>maven依赖一般都是在pom.xml中进行引入操作</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>依赖的范围</li>
+</ul>
+<blockquote>
+<p>complie（默认）<br>test<br>provided</p>
+</blockquote>
+<ul>
+<li>依赖排除</li>
+</ul>
+<p>我们来举个例子啊、就好比引入a.jar时他依赖于b.jar、所以会自动引入、但我们就是不想要b.jar、所以可以手动排除掉</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-context<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.3.13.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"></span><br><span class="line">            <span class="tag">&lt;<span class="name">exclusions</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">                    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-beans<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">exclusions</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>依赖的传递</li>
+</ul>
+<p>A.jar-B.jar-&gt;C.jar 要使 A.jar -&gt;C.jar:当且仅当 B.jar 依赖于C.jar的范围是compile</p>
+<ul>
+<li>依赖原则</li>
+</ul>
+<p><strong>路径最短优先原则</strong><br><strong>路径长度相同时：</strong>  </p>
+<blockquote>
+<p>在同一个pom.xml文件中有2个相同的依赖（覆盖）：后面声明的依赖 会覆盖前面声明的依赖<br>如果是不同的 pom.xml中有2个相同的依赖（优先）：则先声明的依赖 ，会覆盖后声明的依赖</p>
+</blockquote>
+<ul>
+<li>多个maven项目（模块）之间依赖</li>
+</ul>
+<blockquote>
+<p>现将被依赖的项目install到仓库<br>然后另一个项目导入依赖即可</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line"> 		 	 <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.dream.xiaobo<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>testMaven<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Maven统一项目jdk版本</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">profiles</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">profile</span>&gt;</span>  </span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span>&gt;</span>jdk-18<span class="tag">&lt;/<span class="name">id</span>&gt;</span>  </span><br><span class="line">        <span class="tag">&lt;<span class="name">activation</span>&gt;</span>  </span><br><span class="line">            <span class="tag">&lt;<span class="name">activeByDefault</span>&gt;</span>true<span class="tag">&lt;/<span class="name">activeByDefault</span>&gt;</span>  </span><br><span class="line">            <span class="tag">&lt;<span class="name">jdk</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">jdk</span>&gt;</span>  </span><br><span class="line">        <span class="tag">&lt;/<span class="name">activation</span>&gt;</span>  </span><br><span class="line">        <span class="tag">&lt;<span class="name">properties</span>&gt;</span>  </span><br><span class="line">            <span class="tag">&lt;<span class="name">maven.compiler.source</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">maven.compiler.source</span>&gt;</span>  </span><br><span class="line">            <span class="tag">&lt;<span class="name">maven.compiler.target</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">maven.compiler.target</span>&gt;</span>  </span><br><span class="line">            <span class="tag">&lt;<span class="name">maven.compiler.compilerVersion</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">maven.compiler.compilerVersion</span>&gt;</span>  </span><br><span class="line">        <span class="tag">&lt;/<span class="name">properties</span>&gt;</span>   </span><br><span class="line">    <span class="tag">&lt;/<span class="name">profile</span>&gt;</span>  </span><br><span class="line"> <span class="tag">&lt;/<span class="name">profiles</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>动态配置</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">properties</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">project.build.sourceEncoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">project.build.sourceEncoding</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">xiaobotest</span>&gt;</span>4.0<span class="tag">&lt;/<span class="name">xiaobotest</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">properties</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;xiaobotest&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Maven打包种类"><a href="#Maven打包种类" class="headerlink" title="Maven打包种类"></a>Maven打包种类</h2><p><strong>jar</strong></p>
+<p><strong>war</strong></p>
+<p><strong>pom</strong></p>
+<h2 id="Maven实现项目之间继承"><a href="#Maven实现项目之间继承" class="headerlink" title="Maven实现项目之间继承"></a>Maven实现项目之间继承</h2><ul>
+<li>父类</li>
+</ul>
+<blockquote>
+<p>建立父类工程、其父类工程打包方式必须为pom<br>在父类中pom.xml中编写</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencyManagement</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencyManagement</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>子类</li>
+</ul>
+<blockquote>
+<p>继承一个父工程、加入父工程gav<br>当前项目中pom.xml导入父工程pom.xml相对路径<br>当前项目中pom.xml使用父类依赖</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 1加入父工程坐标gav --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>大项目名<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>小模块名<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>版本<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 2当前工程的Pom.xml到父工程的Pom.xml之间的 相对路径 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">relativePath</span>&gt;</span>../模块名/pom.xml<span class="tag">&lt;/<span class="name">relativePath</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 声明：需要使用到父类的junit （只需要ga） --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Maven的聚合"><a href="#Maven的聚合" class="headerlink" title="Maven的聚合"></a>Maven的聚合</h2><blockquote>
+<p>将多个子工程和起来</p>
+</blockquote>
+<ul>
+<li>使用方法</li>
+</ul>
+<blockquote>
+<p>建立一个总工程、打包方式为pom<br>进行配置<br>配置完聚合之后，以后只要操作总工程，则会自动操作 改聚合中配置过的工程</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">modules</span>&gt;</span></span><br><span class="line">  		<span class="comment">&lt;!--项目的根路径  --&gt;</span></span><br><span class="line">  	  <span class="tag">&lt;<span class="name">module</span>&gt;</span>../Maven1<span class="tag">&lt;/<span class="name">module</span>&gt;</span></span><br><span class="line">  	  <span class="tag">&lt;<span class="name">module</span>&gt;</span>../Maven2<span class="tag">&lt;/<span class="name">module</span>&gt;</span></span><br><span class="line">  	  </span><br><span class="line">  <span class="tag">&lt;/<span class="name">modules</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>正确的开始、微小的长进、然后持续、嘿、我是小博、带你一起看我目之所及的世界……</strong></p>
+]]></content>
+      <tags>
+        <tag>maven</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Lesson-one-Lesson-Two</title>
     <url>/posts/1137689928/</url>
     <content><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E6%96%B0%E6%A6%82%E5%BF%B5%E8%8B%B1%E8%AF%AD%E7%AC%AC%E4%B8%80%E5%86%8C.yg2kvsapz34.png" alt="新概念英语第一册"></p>
