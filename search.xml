@@ -1,30 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>解决Github无法访问问题</title>
-    <url>/posts/997874523/</url>
-    <content><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/git/git.796qjy99re40.jpg" alt="git"></p>
-<!--sleep-->
-
-<span id="more"></span>
-
-<p><strong>打开计算机C:\Windows\System32\Drivers\etc中hosts文件</strong></p>
-<p><strong>添加</strong></p>
-<p><strong>140.82.112.4 github.com<br>199.232.69.194 github.global.ssl.fastly.net</strong></p>
-<p><strong>WIN+R启动DOS</strong></p>
-<p><strong>输入</strong></p>
-<figure class="highlight dos"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ipconfig</span> /flushdns</span><br></pre></td></tr></table></figure>
-<p><strong>刷新DNS</strong></p>
-<p><strong>重新访问即可</strong></p>
-]]></content>
-      <tags>
-        <tag>git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lesson one &amp; Lesson Two</title>
-    <url>/posts/2738277980/</url>
-    <content><![CDATA[<p>![Lesson one &amp; Lesson Two](<a href="https://raw.githubusercontent.com/codexiaobo/image/main/English/Lesson">https://raw.githubusercontent.com/codexiaobo/image/main/English/Lesson</a> one %26 Lesson Two.bvqrqzqeds0.jpg)</p>
+    <title>Lesson-one-Lesson-Two</title>
+    <url>/posts/1137689928/</url>
+    <content><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E6%96%B0%E6%A6%82%E5%BF%B5%E8%8B%B1%E8%AF%AD%E7%AC%AC%E4%B8%80%E5%86%8C.yg2kvsapz34.png" alt="新概念英语第一册"></p>
 <!--sleep-->
 
 <span id="more"></span>
@@ -178,6 +157,27 @@
 ]]></content>
       <tags>
         <tag>new concept english</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决Github无法访问问题</title>
+    <url>/posts/997874523/</url>
+    <content><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/git/git.796qjy99re40.jpg" alt="git"></p>
+<!--sleep-->
+
+<span id="more"></span>
+
+<p><strong>打开计算机C:\Windows\System32\Drivers\etc中hosts文件</strong></p>
+<p><strong>添加</strong></p>
+<p><strong>140.82.112.4 github.com<br>199.232.69.194 github.global.ssl.fastly.net</strong></p>
+<p><strong>WIN+R启动DOS</strong></p>
+<p><strong>输入</strong></p>
+<figure class="highlight dos"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ipconfig</span> /flushdns</span><br></pre></td></tr></table></figure>
+<p><strong>刷新DNS</strong></p>
+<p><strong>重新访问即可</strong></p>
+]]></content>
+      <tags>
+        <tag>git</tag>
       </tags>
   </entry>
   <entry>
