@@ -1,6 +1,202 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Mybatis plus</title>
+    <url>/posts/92906615/</url>
+    <content><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/mossawi_133336916082_20190520013852_389495090337.71a9wknulfw0.jpg" alt="mybatisplus"></p>
+<!--sleep-->
+
+<span id="more"></span>
+
+<h1 id="MyBatis-Plus"><a href="#MyBatis-Plus" class="headerlink" title="MyBatis Plus"></a>MyBatis Plus</h1><blockquote>
+<p>国产的开源框架、基于Mybatis、简化Mybatis开发、提高效率</p>
+</blockquote>
+<h2 id="spirng-boot-整合-MyBatis"><a href="#spirng-boot-整合-MyBatis" class="headerlink" title="spirng boot 整合 MyBatis"></a>spirng boot 整合 MyBatis</h2><ul>
+<li>pom</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.baomidou<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-plus-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.3.1.tmp<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>pojo</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@TableName(value = &quot;user&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@TableId(value = &quot;id&quot;,type = IdType.AUTO)</span></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@TableField(value = &quot;name&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Integer sex;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@TableField(value = &quot;create_time&quot;, fill = FieldFill.INSERT)</span></span><br><span class="line">    <span class="keyword">private</span> Date createTime;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@TableField(value = &quot;update_time&quot;, fill = FieldFill.INSERT_UPDATE)</span></span><br><span class="line">    <span class="keyword">private</span> Date updateTime;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Mapper</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserMapper</span> <span class="keyword">extends</span> <span class="title">BaseMapper</span>&lt;<span class="title">User</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>启动类</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@MapperScan(&quot;com.dream.xiaobo.mapping&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MybatisplusApplication</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(MybatisplusApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>test</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserMapperTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserMapper userMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">        userMapper.selectList(<span class="keyword">null</span>).forEach(System.out::println);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">save</span><span class="params">()</span></span>&#123;</span><br><span class="line">        User user = <span class="keyword">new</span> User();</span><br><span class="line"></span><br><span class="line">        user.setName(<span class="string">&quot;小博&quot;</span>);</span><br><span class="line">        user.setSex(<span class="number">0</span>);</span><br><span class="line">        user.setAge(<span class="number">21</span>);</span><br><span class="line"></span><br><span class="line">        userMapper.insert(user);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">update</span><span class="params">()</span></span>&#123;</span><br><span class="line">        User user = userMapper.selectById(<span class="number">17</span>);</span><br><span class="line">        System.out.println(user);</span><br><span class="line">        user.setName(<span class="string">&quot;wangyibo&quot;</span>);</span><br><span class="line">        user.setSex(<span class="number">1</span>);</span><br><span class="line">        user.setAge(<span class="number">22</span>);</span><br><span class="line">        userMapper.updateById(user);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="注解剖析"><a href="#注解剖析" class="headerlink" title="注解剖析"></a>注解剖析</h2><ul>
+<li>@TableName</li>
+</ul>
+<blockquote>
+<p>映射数据库表名  </p>
+<ul>
+<li>@TableId<br>主键映射  </li>
+</ul>
+</blockquote>
+<ul>
+<li>value属性</li>
+</ul>
+<blockquote>
+<p>映射字段名</p>
+</blockquote>
+<ul>
+<li>type属性</li>
+</ul>
+<blockquote>
+<p>设置主键类型</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AUTO</td>
+<td>数据库自增</td>
+</tr>
+<tr>
+<td>NONE</td>
+<td>set一个主键值、用雪花算法实现的</td>
+</tr>
+<tr>
+<td>INPUT</td>
+<td>需要开发者手动赋值</td>
+</tr>
+<tr>
+<td>ASSIGN_ID</td>
+<td>自动分配ID、Long、Integer、String</td>
+</tr>
+<tr>
+<td>ASSIGN_UUID</td>
+<td>分配UUID、数据类型必须是String类型</td>
+</tr>
+</tbody></table>
+<ul>
+<li>@TableField</li>
+</ul>
+<blockquote>
+<p>映射非主键字段</p>
+</blockquote>
+<ul>
+<li>exist属性</li>
+</ul>
+<blockquote>
+<p>设置是否为数据库字段名、true OR false</p>
+</blockquote>
+<ul>
+<li>select属性</li>
+</ul>
+<blockquote>
+<p>表示是否查询该字段</p>
+</blockquote>
+<ul>
+<li>fill属性</li>
+</ul>
+<blockquote>
+<p>表示是否自动填充<br>值：<br>INSERT<br>INSRT_UPDATE<br>UPDATE<br>DEFAULT</p>
+</blockquote>
+<p><strong>创建时间和更新时间自动填充演示</strong></p>
+<ul>
+<li>Handler</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyMetaObjectHandler</span> <span class="keyword">implements</span> <span class="title">MetaObjectHandler</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertFill</span><span class="params">(MetaObject metaObject)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.setFieldValByName(<span class="string">&quot;createTime&quot;</span>,<span class="keyword">new</span> Date(),metaObject);</span><br><span class="line">        <span class="keyword">this</span>.setFieldValByName(<span class="string">&quot;updateTime&quot;</span>,<span class="keyword">new</span> Date(),metaObject);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateFill</span><span class="params">(MetaObject metaObject)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.setFieldValByName(<span class="string">&quot;updateTime&quot;</span>,<span class="keyword">new</span> Date(),metaObject);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>@Version</li>
+</ul>
+<blockquote>
+<p>标记乐观锁、通过数据库添加version字段、设置个默认值来保护数据安全性、当修改数据时、用version作为条件、当条件成立时方可修改</p>
+</blockquote>
+<ul>
+<li>pojo</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@TableField(value = &quot;version&quot;)</span></span><br><span class="line"><span class="meta">@Version</span></span><br><span class="line"><span class="keyword">private</span> Integer version;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>config</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyBatisPlusConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> OptimisticLockerInterceptor <span class="title">optimisticLockerInterceptor</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> OptimisticLockerInterceptor();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>test</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">update</span><span class="params">()</span></span>&#123;</span><br><span class="line">    User user = userMapper.selectById(<span class="number">17</span>);</span><br><span class="line">    user.setName(<span class="string">&quot;wangxiaobo&quot;</span>);</span><br><span class="line">    user.setSex(<span class="number">0</span>);</span><br><span class="line">    user.setAge(<span class="number">22</span>);</span><br><span class="line"></span><br><span class="line">    User user1 = userMapper.selectById(<span class="number">17</span>);</span><br><span class="line"></span><br><span class="line">    user1.setName(<span class="string">&quot;hhh&quot;</span>);</span><br><span class="line"></span><br><span class="line">    userMapper.updateById(user1);</span><br><span class="line"></span><br><span class="line">    userMapper.updateById(user);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>@EnumValue实现显示数据转换</strong></p>
+<p>通过枚举注解方式</p>
+<ul>
+<li>enum</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">StatusEnum</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    工作(<span class="number">1</span>,<span class="string">&quot;工作&quot;</span>),</span><br><span class="line">    休息(<span class="number">0</span>,<span class="string">&quot;休息&quot;</span>);</span><br><span class="line"></span><br><span class="line">    StatusEnum(Integer code,String msg)&#123;</span><br><span class="line">        <span class="keyword">this</span>.code = code;</span><br><span class="line">        <span class="keyword">this</span>.msg = msg;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@EnumValue</span></span><br><span class="line">    <span class="keyword">private</span> Integer code;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String msg;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">SexEnum</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    男(<span class="number">1</span>,<span class="string">&quot;男&quot;</span>),</span><br><span class="line">    女(<span class="number">0</span>,<span class="string">&quot;女&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="meta">@EnumValue</span></span><br><span class="line">    <span class="keyword">private</span> Integer code;</span><br><span class="line">    <span class="keyword">private</span> String msg;</span><br><span class="line"></span><br><span class="line">    SexEnum(Integer code, String msg)&#123;</span><br><span class="line">        <span class="keyword">this</span>.code = code;</span><br><span class="line">        <span class="keyword">this</span>.msg = msg;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>pojo</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@TableField(value = &quot;sex&quot;)</span></span><br><span class="line"><span class="keyword">private</span> SexEnum sex;</span><br><span class="line"></span><br><span class="line"><span class="meta">@TableField(value = &quot;status&quot;)</span></span><br><span class="line"><span class="keyword">private</span> StatusEnum status;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>application.yml</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">mybatis-plus:</span></span><br><span class="line"><span class="comment"># 扫描enum</span></span><br><span class="line">  <span class="attr">type-enums-package:</span> <span class="string">com.dream.xiaobo.enums</span></span><br></pre></td></tr></table></figure>
+
+<p>实现接口方式</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">SexEnum</span> <span class="keyword">implements</span> <span class="title">IEnum</span>&lt;<span class="title">Integer</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    男(<span class="number">1</span>,<span class="string">&quot;男&quot;</span>),</span><br><span class="line">    女(<span class="number">0</span>,<span class="string">&quot;女&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Integer code;</span><br><span class="line">    <span class="keyword">private</span> String msg;</span><br><span class="line"></span><br><span class="line">    SexEnum(Integer code, String msg)&#123;</span><br><span class="line">        <span class="keyword">this</span>.code = code;</span><br><span class="line">        <span class="keyword">this</span>.msg = msg;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.code;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Mybatis-Plus-增删改查"><a href="#Mybatis-Plus-增删改查" class="headerlink" title="Mybatis Plus 增删改查"></a>Mybatis Plus 增删改查</h2><h3 id="SELECT"><a href="#SELECT" class="headerlink" title="SELECT"></a>SELECT</h3><p><strong>基本查询</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">select</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//查询全部</span></span><br><span class="line">        userMapper.selectList(<span class="keyword">null</span>).forEach(System.out::println);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建操作对象</span></span><br><span class="line">        QueryWrapper queryWrapper = <span class="keyword">new</span> QueryWrapper();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建Map集合</span></span><br><span class="line">        Map&lt;String,Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        map.put(<span class="string">&quot;age&quot;</span>,<span class="number">21</span>);</span><br><span class="line">        map.put(<span class="string">&quot;name&quot;</span>,<span class="string">&quot;xiaobo&quot;</span>);</span><br><span class="line">        <span class="comment">//将Map放入操作对象中</span></span><br><span class="line">        queryWrapper.allEq(map);</span><br><span class="line">        <span class="comment">//模糊查询</span></span><br><span class="line">        queryWrapper.likeLeft(<span class="string">&quot;name&quot;</span>,<span class="string">&quot;x&quot;</span>);</span><br><span class="line">        <span class="comment">//模糊查询</span></span><br><span class="line">        queryWrapper.likeRight(<span class="string">&quot;name&quot;</span>,<span class="string">&quot;x&quot;</span>);</span><br><span class="line">        <span class="comment">//等值查询</span></span><br><span class="line">        queryWrapper.eq(<span class="string">&quot;age&quot;</span>,<span class="number">21</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//子查询</span></span><br><span class="line">        queryWrapper.inSql(<span class="string">&quot;id&quot;</span>,<span class="string">&quot;SELECT id FROM user WHERE id &lt; 12&quot;</span>);</span><br><span class="line">        queryWrapper.inSql(<span class="string">&quot;age&quot;</span>,<span class="string">&quot;SELECT age FROM user WHERE age &lt; 30&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//升降序</span></span><br><span class="line">        queryWrapper.orderByAsc(<span class="string">&quot;age&quot;</span>);</span><br><span class="line">        queryWrapper.orderByDesc(<span class="string">&quot;id&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//打印查询结果</span></span><br><span class="line">        userMapper.selectList(queryWrapper).forEach(System.out::println);</span><br><span class="line"></span><br><span class="line">        根据Id查询</span><br><span class="line">        userMapper.selectBatchIds(Arrays.asList(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>)).forEach(System.out::println);</span><br><span class="line"></span><br><span class="line">        Map&lt;String,Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        map.put(<span class="string">&quot;name&quot;</span>,<span class="string">&quot;xiaobo&quot;</span>);</span><br><span class="line">        <span class="comment">//Map 只能做等值判断、逻辑判断需要使用 queryWrapper 来处理</span></span><br><span class="line">        userMapper.selectByMap(map).forEach(System.out::println);</span><br><span class="line"></span><br><span class="line">        QueryWrapper queryWrapper = <span class="keyword">new</span> QueryWrapper();</span><br><span class="line">        queryWrapper.eq(<span class="string">&quot;age&quot;</span>,<span class="number">21</span>);</span><br><span class="line">        <span class="comment">//查询结果数量</span></span><br><span class="line">        System.out.println(userMapper.selectCount(queryWrapper));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">//分页查询</span></span><br><span class="line">        Page&lt;User&gt; page = <span class="keyword">new</span> Page&lt;&gt;(<span class="number">1</span>,<span class="number">3</span>);</span><br><span class="line">        Page&lt;User&gt; result = userMapper.selectPage(page, <span class="keyword">null</span>);</span><br><span class="line">        System.out.println(result.getSize());</span><br><span class="line">        System.out.println(result.getTotal());</span><br><span class="line">        System.out.println(result.getCurrent());</span><br><span class="line"></span><br><span class="line">        result.getRecords().forEach(System.out::println);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">//将map放在Page里面</span></span><br><span class="line">        Page&lt;Map&lt;String,Object&gt;&gt; page = <span class="keyword">new</span> Page&lt;&gt;(<span class="number">1</span>,<span class="number">4</span>);</span><br><span class="line">        userMapper.selectMapsPage(page,<span class="keyword">null</span>).getRecords().forEach(System.out::println);</span><br><span class="line">        userMapper.selectObjs(<span class="keyword">null</span>).forEach(System.out::println);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>自定义查询</strong></p>
+<ul>
+<li>pojo</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserVO</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line">    <span class="keyword">private</span> String password;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>mapper</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserMapper</span> <span class="keyword">extends</span> <span class="title">BaseMapper</span>&lt;<span class="title">User</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Select(&quot;SELECT u.id,username,password,name,age FROM user u,login l &quot; +</span></span><br><span class="line"><span class="meta">            &quot;WHERE u.login_id = l.id AND u.id = #&#123;id &#125;&quot;)</span></span><br><span class="line">    <span class="function">List&lt;UserVO&gt; <span class="title">userVoList</span><span class="params">(Integer id)</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="INSERT"><a href="#INSERT" class="headerlink" title="INSERT"></a>INSERT</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">save</span><span class="params">()</span></span>&#123;</span><br><span class="line">    User user = <span class="keyword">new</span> User();</span><br><span class="line"></span><br><span class="line">    user.setName(<span class="string">&quot;小博&quot;</span>);</span><br><span class="line">    user.setSex(SexEnum.男);</span><br><span class="line">    user.setAge(<span class="number">21</span>);</span><br><span class="line"></span><br><span class="line">    userMapper.insert(user);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="DELETE"><a href="#DELETE" class="headerlink" title="DELETE"></a>DELETE</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">delete</span><span class="params">()</span></span>&#123;</span><br><span class="line"><span class="comment">//        userMapper.deleteById(17);</span></span><br><span class="line">        Map&lt;String,Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        map.put(<span class="string">&quot;id&quot;</span>,<span class="number">2</span>);</span><br><span class="line">        userMapper.deleteByMap(map);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="UPDATE"><a href="#UPDATE" class="headerlink" title="UPDATE"></a>UPDATE</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">update</span><span class="params">()</span></span>&#123;</span><br><span class="line"><span class="comment">//        User user = userMapper.selectById(17);</span></span><br><span class="line"><span class="comment">//        user.setName(&quot;wangxiaobo&quot;);</span></span><br><span class="line"><span class="comment">//        user.setSex(SexEnum.女);</span></span><br><span class="line"><span class="comment">//        user.setAge(21);</span></span><br><span class="line"><span class="comment">//        User user1 = userMapper.selectById(17);</span></span><br><span class="line"><span class="comment">//        user1.setName(&quot;hhh&quot;);</span></span><br><span class="line"><span class="comment">//        userMapper.updateById(user1);</span></span><br><span class="line"><span class="comment">//        userMapper.updateById(user);</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        User user = userMapper.selectById(<span class="number">17</span>);</span><br><span class="line">        user.setName(<span class="string">&quot;wangxiaobo&quot;</span>);</span><br><span class="line">        user.setSex(SexEnum.男);</span><br><span class="line"></span><br><span class="line">        QueryWrapper queryWrapper = <span class="keyword">new</span> QueryWrapper();</span><br><span class="line">        queryWrapper.eq(<span class="string">&quot;id&quot;</span>,<span class="number">17</span>);</span><br><span class="line">        userMapper.update(user,queryWrapper);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Mybatis-Plus-自动生成"><a href="#Mybatis-Plus-自动生成" class="headerlink" title="Mybatis Plus 自动生成"></a>Mybatis Plus 自动生成</h2><ul>
+<li>pom</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--        Mybatis Plus 自动生成--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.baomidou<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-plus-generator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.3.1.tmp<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.velocity<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>velocity<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>生成类</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//创建generator对象</span></span><br><span class="line">        AutoGenerator autoGenerator = <span class="keyword">new</span> AutoGenerator();</span><br><span class="line">        <span class="comment">//数据源</span></span><br><span class="line">        DataSourceConfig dataSourceConfig = <span class="keyword">new</span> DataSourceConfig();</span><br><span class="line">        dataSourceConfig.setDbType(DbType.MYSQL);</span><br><span class="line">        dataSourceConfig.setUrl(<span class="string">&quot;jdbc:mysql://localhost:3306/db_springboot?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC&quot;</span>);</span><br><span class="line">        dataSourceConfig.setUsername(<span class="string">&quot;root&quot;</span>);</span><br><span class="line">        dataSourceConfig.setPassword(<span class="string">&quot;xiaobo&quot;</span>);</span><br><span class="line">        dataSourceConfig.setDriverName(<span class="string">&quot;com.mysql.cj.jdbc.Driver&quot;</span>);</span><br><span class="line">        autoGenerator.setDataSource(dataSourceConfig);</span><br><span class="line">        <span class="comment">//全局配置</span></span><br><span class="line">        GlobalConfig globalConfig = <span class="keyword">new</span> GlobalConfig();</span><br><span class="line">        globalConfig.setOutputDir(System.getProperty(<span class="string">&quot;user.dir&quot;</span>)+<span class="string">&quot;/src/main/java&quot;</span>);</span><br><span class="line">        globalConfig.setOpen(<span class="keyword">false</span>);</span><br><span class="line">        globalConfig.setAuthor(<span class="string">&quot;dream.xiaobo&quot;</span>);</span><br><span class="line">        globalConfig.setServiceName(<span class="string">&quot;%sService&quot;</span>);</span><br><span class="line">        autoGenerator.setGlobalConfig(globalConfig);</span><br><span class="line">        <span class="comment">//包信息</span></span><br><span class="line">        PackageConfig packageConfig = <span class="keyword">new</span> PackageConfig();</span><br><span class="line">        packageConfig.setParent(<span class="string">&quot;com.dream.xiaobo.mybatisplus&quot;</span>);</span><br><span class="line">        packageConfig.setModuleName(<span class="string">&quot;generator&quot;</span>);</span><br><span class="line">        packageConfig.setController(<span class="string">&quot;controller&quot;</span>);</span><br><span class="line">        packageConfig.setService(<span class="string">&quot;service&quot;</span>);</span><br><span class="line">        packageConfig.setServiceImpl(<span class="string">&quot;service.impl&quot;</span>);</span><br><span class="line">        packageConfig.setMapper(<span class="string">&quot;mapper&quot;</span>);</span><br><span class="line">        packageConfig.setEntity(<span class="string">&quot;entity&quot;</span>);</span><br><span class="line">        autoGenerator.setPackageInfo(packageConfig);</span><br><span class="line">        <span class="comment">//配置策略</span></span><br><span class="line">        StrategyConfig strategyConfig = <span class="keyword">new</span> StrategyConfig();</span><br><span class="line">        strategyConfig.setEntityLombokModel(<span class="keyword">true</span>);</span><br><span class="line">        strategyConfig.setNaming(NamingStrategy.underline_to_camel);</span><br><span class="line">        strategyConfig.setColumnNaming(NamingStrategy.underline_to_camel);</span><br><span class="line">        autoGenerator.setStrategy(strategyConfig);</span><br><span class="line"></span><br><span class="line">        autoGenerator.execute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>正确的开始、微小的长进、然后持续、嘿、我是小博、带你一起看我目之所及的世界……</strong></p>
+]]></content>
+      <tags>
+        <tag>java</tag>
+        <tag>框架</tag>
+        <tag>Mybatis plus</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>springboot入门</title>
     <url>/posts/1686262074/</url>
     <content><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/springio.4ceoheqi8940.png" alt="springio"></p>
