@@ -6,7 +6,7 @@
   <link href="https://codexiaobo.github.io/atom.xml" rel="self"/>
   
   <link href="https://codexiaobo.github.io/"/>
-  <updated>2021-09-28T09:51:37.298Z</updated>
+  <updated>2021-09-29T08:42:26.681Z</updated>
   <id>https://codexiaobo.github.io/</id>
   
   <author>
@@ -15,6 +15,26 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>git操作</title>
+    <link href="https://codexiaobo.github.io/posts/1178143540/"/>
+    <id>https://codexiaobo.github.io/posts/1178143540/</id>
+    <published>2021-09-29T08:41:58.000Z</published>
+    <updated>2021-09-29T08:42:26.681Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/1.2qq9rivg6bg0.png" alt="1"></p><!--sleep--><span id="more"></span><h1 id="git"><a href="#git" class="headerlink" title="git"></a>git</h1><h2 id="版本控制"><a href="#版本控制" class="headerlink" title="版本控制"></a>版本控制</h2><p>版本控制（Revision control）是一种在开发的过程中用于管理我们对文件、目录或工程等内容的修改历史，方便查看更改历史记录，备份以便恢复以前的版本的软件工程技术。</p><p>没有进行版本控制或者版本控制本身缺乏正确的流程管理，在软件开发过程中将会引入很多问题，如软件代码的一致性、软件内容的冗余、软件过程的事物性、软件开发过程中的并发性、软件源代码的安全性，以及软件的整合等问题。</p><p>管理多人协同开发项目的技术、多人开发就必须要使用版本控制！</p><h3 id="常见的版本控制工具"><a href="#常见的版本控制工具" class="headerlink" title="常见的版本控制工具"></a>常见的版本控制工具</h3><ul><li><p>Git</p></li><li><p>SVN（Subversion）</p></li><li><p>CVS（Concurrent Versions System）</p></li><li><p>VSS（Micorosoft Visual SourceSafe）</p></li><li><p>TFS（Team Foundation Server）</p></li></ul><p>影响力最大且使用最广泛的是Git与SVN</p><h3 id="版本控制分类"><a href="#版本控制分类" class="headerlink" title="版本控制分类"></a>版本控制分类</h3><p><strong>本地版本控制</strong></p><p>记录文件每次的更新，可以对每个版本做一个快照，或是记录补丁文件，适合个人用，如RCS</p><p><strong>集中版本控制  SVN</strong></p><p>所有的版本数据都保存在服务器上，协同开发者从服务器上同步更新或上传自己的修改</p><p>所有的版本数据都存在服务器上，用户的本地只有自己以前所同步的版本，如果不连网的话，用户就看不到历史版本，也无法切换版本验证问题，或在不同分支工作。而且，所有数据都保存在单一的服务器上，有很大的风险这个服务器会损坏，这样就会丢失所有的数据，当然可以定期备份。代表产品：SVN、CVS、VSS</p><p><strong>分布式版本控制     Git</strong></p><p>每个人都拥有全部的代码！安全隐患！</p><p>所有版本信息仓库全部同步到本地的每个用户，这样就可以在本地查看所有版本历史，可以离线在本地提交，只需在连网时push到相应的服务器或其他用户那里。由于每个用户那里保存的都是所有的版本数据，只要有一个用户的设备没有问题就可以恢复所有的数据，但这增加了本地存储空间的占用。</p><p>不会因为服务器损坏或者网络问题，造成不能工作的情况！</p><h3 id="git和SVN的区别"><a href="#git和SVN的区别" class="headerlink" title="git和SVN的区别"></a>git和SVN的区别</h3><p><strong>SVN</strong></p><p>SVN是集中式版本控制系统，版本库是集中放在中央服务器的，而工作的时候，用的都是自己的电脑，所以首先要从中央服务器得到最新的版本，然后工作，完成工作后，需要把自己做完的活推送到中央服务器。集中式版本控制系统是必须联网才能工作，对网络带宽要求较高。</p><p><strong>git</strong></p><p>Git是分布式版本控制系统，没有中央服务器，每个人的电脑就是一个完整的版本库，工作的时候不需要联网了，因为版本都在自己电脑上。协同的方法是这样的：比如说自己在电脑上改了文件A，其他人也在电脑上改了文件A，这时，你们两之间只需把各自的修改推送给对方，就可以互相看到对方的修改了。Git可以直接看到更新了哪些代码和文件！</p><p><strong>Git是目前世界上最先进的分布式版本控制系统。</strong></p><h2 id="git环境配置"><a href="#git环境配置" class="headerlink" title="git环境配置"></a>git环境配置</h2><p>镜像或者官网下载、无脑安装即可、安装成功后进入环境变量配置git的cmd目录即完成git的使用准备阶段</p><h3 id="基本的常用命令"><a href="#基本的常用命令" class="headerlink" title="基本的常用命令"></a>基本的常用命令</h3><p><code>cd</code> : 改变目录。</p><p><code>cd ..</code>: 回退到上一个目录，直接cd进入默认目录</p><p><code>pwd</code> : 显示当前所在的目录路径。</p><p><code>ls(ll)</code>:  都是列出当前目录中的所有文件，只不过ll(两个ll)列出的内容更为详细。</p><p><code>touch</code> : 新建一个文件 如 touch index.js 就会在当前目录下新建一个index.js文件。</p><p><code>rm</code>:  删除一个文件, rm index.js 就会把index.js文件删除。</p><p><code>mkdir</code>:  新建一个目录,就是新建一个文件夹。</p><p><code>rm -r</code> :  删除一个文件夹, rm -r src 删除src目录</p><p><code>rm -rf /</code>: 切勿在Linux中尝试！删除电脑中全部文件！</p><p><code>mv</code>: 移动文件, mv index.html src index.html 是我们要移动的文件, src 是目标文件夹,当然, 这样写,必须保证文件和目标文件夹在同一目录下。</p><p><code>reset</code>: 重新初始化终端/清屏。</p><p><code>clear</code>: 清屏。</p><p><code>history</code>: 查看命令历史。</p><p><code>help</code>: 帮助。</p><p><code>exit</code>: 退出。</p><p><code>#</code>:表示注释</p><h3 id="git配置"><a href="#git配置" class="headerlink" title="git配置"></a>git配置</h3><p><code>git config -l</code> 查看配置   </p><p><code>git config --system --list</code> 查看系统config  </p><p><code>git config --global  --list</code> 查看当前用户（global）配置  </p><p><strong>Git相关的配置文件</strong></p><p><code>Git\etc\gitconfig</code>  ：Git 安装目录下的 gitconfig     –system 系统级</p><p><code>C:\Users\Administrator\ .gitconfig</code> 只适用于当前登录用户的配置   </p><p><code>--global</code> 全局</p><h3 id="设置用户名与邮箱（必须配置）"><a href="#设置用户名与邮箱（必须配置）" class="headerlink" title="设置用户名与邮箱（必须配置）"></a>设置用户名与邮箱（必须配置）</h3><p><code>git config --global user.name 用户名</code> 名称  </p><p><code>git config --global user.email 邮箱</code> 邮箱  </p><p>只需要做一次这个设置，如果你传递了–global 选项，因为Git将总是会使用该信息来处理你在系统中所做的一切操作。如果你希望在一个特定的项目中使用不同的名称或e-mail地址，你可以在该项目中运行该命令而不要–global选项。总之–global为全局配置，不加为某个项目的特定配置。</p><h3 id="git工作流程"><a href="#git工作流程" class="headerlink" title="git工作流程"></a>git工作流程</h3><ul><li><p>在工作目录中添加、修改文件；</p></li><li><p>将需要进行版本管理的文件放入暂存区域；</p></li><li><p>将暂存区域的文件提交到git仓库。</p></li></ul><p><strong>git管理的文件有三种状态</strong></p><ul><li>已修改（modified）  </li><li>已暂存（staged）  </li><li>已提交(committed)</li></ul><h2 id="git的项目使用"><a href="#git的项目使用" class="headerlink" title="git的项目使用"></a>git的项目使用</h2><h3 id="本地仓库搭建"><a href="#本地仓库搭建" class="headerlink" title="本地仓库搭建"></a>本地仓库搭建</h3><p><code>git init</code> 在当前目录新建一个Git代码库</p><p>执行后可以看到，在项目目录多出了一个.git目录，关于版本等的所有信息都在这个目录里面、需要打开显示隐藏目录</p><h3 id="克隆远程仓库登录"><a href="#克隆远程仓库登录" class="headerlink" title="克隆远程仓库登录"></a>克隆远程仓库登录</h3><p><code>git clone [url]</code> 克隆一个项目和它的整个代码历史</p><h2 id="git文件操作"><a href="#git文件操作" class="headerlink" title="git文件操作"></a>git文件操作</h2><h3 id="文件的4种状态"><a href="#文件的4种状态" class="headerlink" title="文件的4种状态"></a>文件的4种状态</h3><ul><li><p>Untracked: 未跟踪, 此文件在文件夹中, 但并没有加入到git库, 不参与版本控制. 通过git add 状态变为Staged.</p></li><li><p>Unmodify: 文件已经入库, 未修改, 即版本库中的文件快照内容与文件夹中完全一致. 这种类型的文件有两种去处, 如果它被修改, 而变为Modified. 如果使用git rm移出版本库, 则成为Untracked文件</p></li><li><p>Modified: 文件已修改, 仅仅是修改, 并没有进行其他的操作. 这个文件也有两个去处, 通过git add可进入暂存staged状态, 使用git checkout 则丢弃修改过, 返回到unmodify状态, 这个git checkout即从库中取出文件, 覆盖当前修改 !</p></li><li><p>Staged: 暂存状态. 执行git commit则将修改同步到库中, 这时库中的文件和本地文件又变为一致, 文件为Unmodify状态. 执行git reset HEAD filename取消暂存, 文件状态为Modified</p></li></ul><h3 id="文件状态的操作"><a href="#文件状态的操作" class="headerlink" title="文件状态的操作"></a>文件状态的操作</h3><p><code>git status</code> 查看所有文件状态  </p><p><code>git add .</code> 添加所有文件到暂存区  </p><p><code>git commit -m &quot;消息内容&quot; </code>   提交暂存区中的内容到本地仓库 -m 提交信息</p><p><code>git push</code> 更新远程仓库</p><p><code>ssh-keygen</code> 生成公钥、位置（C:\用户\xiaobo.ssh）</p><h3 id="忽略提交文件"><a href="#忽略提交文件" class="headerlink" title="忽略提交文件"></a>忽略提交文件</h3><p>在主目录下建立”.gitignore”文件，文件规则如下：</p><ul><li><p>忽略文件中的空行或以井号（#）开始的行将会被忽略。</p></li><li><p>可以使用Linux通配符。例如：星号（*）代表任意多个字符，问号（？）代表一个字符，方括号（[abc]）代表可选字符范围，大括号（{string1,string2,…}）代表可选的字符串等。</p></li><li><p>如果名称的最前面有一个感叹号（!），表示例外规则，将不被忽略。</p></li><li><p>如果名称的最前面是一个路径分隔符（/），表示要忽略的文件在此目录下，而子目录中的文件不忽略。</p></li><li><p>如果名称的最后面是一个路径分隔符（/），表示要忽略的是此目录下该名称的子目录，而非文件（默认文件或目录都忽略）。</p></li></ul><p><code>#</code> 注释  </p><p><code>*.txt</code> 忽略所有 .txt结尾的文件,这样的话上传就不会被选中！  </p><p><code>!lib.txt</code> lib.txt除外  </p><p><code>/temp</code> 仅忽略项目根目录下的TODO文件,不包括其它目录temp  </p><p><code>build/</code> 忽略build/目录下的所有文件  </p><p><code>doc/*.txt</code> 会忽略 doc/notes.txt 但不包括 doc/server/arch.txt  </p><h2 id="git的分支"><a href="#git的分支" class="headerlink" title="git的分支"></a>git的分支</h2><p><code>git branch</code> 列出所有本地分支</p><p><code>git branch -r</code> 列出所有远程分支</p><p><code>git branch [branch-name]</code> 新建一个分支，但依然停留在当前分支</p><p><code>git checkout -b [branch]</code> 新建一个分支，并切换到该分支</p><p><code>git merge [branch]</code> 合并指定分支到当前分支</p><p><code>git branch -d [branch-name]</code> 删除分支</p><p><code>git push origin --delete [branch-name]</code> 删除远程分支  </p><p><code>git branch -dr [remote/branch]</code> 删除远程分支  </p><p><strong>正确的开始、微小的长进、然后持续、嘿、我是小博、带你一起看我目之所及的世界……</strong></p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/1.2qq9rivg6bg0.png&quot; alt=&quot;1&quot;&gt;&lt;/p&gt;
+&lt;!--sleep--&gt;</summary>
+    
+    
+    
+    
+    <category term="git" scheme="https://codexiaobo.github.io/tags/git/"/>
+    
+  </entry>
   
   <entry>
     <title>Linux管理操作</title>
@@ -419,26 +439,6 @@
     
     
     <category term="new concept english" scheme="https://codexiaobo.github.io/tags/new-concept-english/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>解决Github无法访问问题</title>
-    <link href="https://codexiaobo.github.io/posts/997874523/"/>
-    <id>https://codexiaobo.github.io/posts/997874523/</id>
-    <published>2021-06-29T05:24:14.000Z</published>
-    <updated>2021-06-29T05:26:52.053Z</updated>
-    
-    <content type="html"><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/git/git.796qjy99re40.jpg" alt="git"></p><!--sleep--><span id="more"></span><p><strong>打开计算机C:\Windows\System32\Drivers\etc中hosts文件</strong></p><p><strong>添加</strong></p><p><strong>140.82.112.4 github.com<br>199.232.69.194 github.global.ssl.fastly.net</strong></p><p><strong>WIN+R启动DOS</strong></p><p><strong>输入</strong></p><figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ipconfig</span> /flushdns</span><br></pre></td></tr></table></figure><p><strong>刷新DNS</strong></p><p><strong>重新访问即可</strong></p>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;&lt;img src=&quot;https://cdn.jsdelivr.net/gh/codexiaobo/image@main/git/git.796qjy99re40.jpg&quot; alt=&quot;git&quot;&gt;&lt;/p&gt;
-&lt;!--sleep--&gt;</summary>
-    
-    
-    
-    
-    <category term="git" scheme="https://codexiaobo.github.io/tags/git/"/>
     
   </entry>
   
