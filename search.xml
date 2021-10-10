@@ -4843,4 +4843,306 @@
         <tag>设计模式</tag>
       </tags>
   </entry>
+  <entry>
+    <title>redis基础</title>
+    <url>/posts/2025154759/</url>
+    <content><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20211010161510.6ogvf8ra22s0.jpg" alt="微信图片_20211010161510"></p>
+<!--sleep-->
+
+<span id="more"></span>
+
+<h1 id="Nosql-AND-Redis"><a href="#Nosql-AND-Redis" class="headerlink" title="Nosql AND Redis"></a>Nosql AND Redis</h1><h2 id="Nosql概述"><a href="#Nosql概述" class="headerlink" title="Nosql概述"></a>Nosql概述</h2><blockquote>
+<p>为什么用Nosql</p>
+</blockquote>
+<p><strong>我们生活在一个大数据的时代、普通数据库不能满足大数据的要求、所以要用Nosql数据库</strong></p>
+<blockquote>
+<p>源生Mysql  </p>
+</blockquote>
+<p><strong>数据量访问太大、存放不下<br>数据索引（B+Tree）、内存放不下<br>访问量太大、服务器承受不了</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/%E6%BA%90%E7%94%9FMysql.4tx58584ui20.png" alt="源生Mysql"></p>
+<blockquote>
+<p>缓存+Mysql+垂直拆分（读写分离）主从副治</p>
+</blockquote>
+<p><strong>因为系统的90%都是在读取、所以为了减轻数据库的负担、所以用缓存来提高效率</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/%E7%BC%93%E5%AD%98+mysql+%E5%9E%82%E7%9B%B4%E6%8B%86%E5%88%86.mti1mv55hw0.png" alt="缓存+mysql+垂直拆分"></p>
+<blockquote>
+<p>分库分表+水平拆分+Mysql集群</p>
+</blockquote>
+<p><strong>将不同的逻辑所需的数据存放到不同的表中、例如、像将订单、支付、登录业务数据存放到不同的数据库中、然后最后根据分布式将系统整合起来</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8+%E6%B0%B4%E5%B9%B3%E6%8B%86%E5%88%86+mysql%E9%9B%86%E7%BE%A4.3je69i2aw3c0.png" alt="分库分表+水平拆分+mysql集群"></p>
+<blockquote>
+<p>互联网公司服务流程</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/%E4%BA%92%E8%81%94%E7%BD%91%E5%85%AC%E5%8F%B8%E7%8E%B0%E5%9C%A8%E5%9F%BA%E6%9C%AC%E8%AE%BE%E6%96%BD.1mo9klhpnikg.png" alt="互联网公司现在基本设施"></p>
+<h2 id="什么是Nosql"><a href="#什么是Nosql" class="headerlink" title="什么是Nosql"></a>什么是Nosql</h2><p><strong>Nosql = Not Only Sql</strong>  </p>
+<p><strong>Nosql不像关系型数据库那样、存储的是表格、行、列、Nosql的存储不需要一个固定的格式、像一些地图信息、社交网络、地理位置等都是用Nosql存储的、使用Map&lt;String,Object&gt;键值对的形式来控制的</strong></p>
+<blockquote>
+<p>Nosql的特点</p>
+</blockquote>
+<ul>
+<li><p>解耦 </p>
+</li>
+<li><p>方便扩展（数据之间没有关系）  </p>
+</li>
+<li><p>大数据量高性能（Redis一秒可以写8万次、一秒可以读11万次、性能较高）  </p>
+</li>
+<li><p>数据类型多样性（不需要事先设计数据库、随取随用）</p>
+</li>
+</ul>
+<h3 id="传统的RDBMS-和-Nosql的区别"><a href="#传统的RDBMS-和-Nosql的区别" class="headerlink" title="传统的RDBMS 和 Nosql的区别"></a>传统的RDBMS 和 Nosql的区别</h3><blockquote>
+<p>传统的RDBMS</p>
+<ul>
+<li>结构化组织  </li>
+<li>SQL  </li>
+<li>数据和关系都存在单独的表中  </li>
+<li>数据定义语言  </li>
+<li>严格的一致性  </li>
+</ul>
+</blockquote>
+<ul>
+<li>基础的事务</li>
+</ul>
+<blockquote>
+<p>Nosql</p>
+</blockquote>
+<ul>
+<li>不仅仅是数据  </li>
+<li>键值对存储、列存储、文档存储、图形数据库（社交）  </li>
+<li>最终一致性  </li>
+<li>CAP定理和BASE  </li>
+<li>高性能、高可用、高可控</li>
+</ul>
+<h3 id="阿里巴巴演进史"><a href="#阿里巴巴演进史" class="headerlink" title="阿里巴巴演进史"></a>阿里巴巴演进史</h3><blockquote>
+<p>商品的基本信息</p>
+</blockquote>
+<p>RDBMS+Nosql  </p>
+<blockquote>
+<p>商品的描述、评论（文字较多）</p>
+</blockquote>
+<p>文档型数据库、MongoDB</p>
+<blockquote>
+<p>图片</p>
+</blockquote>
+<p>分布式文件系统 FastDFS<br>淘宝自己的 TFS<br>Gooale的 GFS<br>Hadoop的 HDFS<br>阿里云的 OSS</p>
+<blockquote>
+<p>商品关键字（搜索）</p>
+</blockquote>
+<p>搜索引擎 Solr elasticsearch<br>Iserach </p>
+<blockquote>
+<p>商品热门的波段信息</p>
+</blockquote>
+<p>内存数据库<br>Redis Tair Memache</p>
+<h2 id="Nosql的四大分类"><a href="#Nosql的四大分类" class="headerlink" title="Nosql的四大分类"></a>Nosql的四大分类</h2><h3 id="KV键值对"><a href="#KV键值对" class="headerlink" title="KV键值对"></a>KV键值对</h3><p><strong>Redis</strong></p>
+<h3 id="文档型数据库"><a href="#文档型数据库" class="headerlink" title="文档型数据库"></a>文档型数据库</h3><p><strong>MongoDB</strong><br>MongoDB基于分布式文件存储数据库、C++编写、用来处理大量的文档<br>MongoDB介于关系数据库和非关系数据库中间的产品、最像关系数据库的数据库</p>
+<h3 id="列存储数据库"><a href="#列存储数据库" class="headerlink" title="列存储数据库"></a>列存储数据库</h3><p><strong>HBase</strong><br><strong>分布式文件系统</strong></p>
+<h3 id="图关系数据库"><a href="#图关系数据库" class="headerlink" title="图关系数据库"></a>图关系数据库</h3><p><strong>Neo4j</strong><br><strong>InfoGrid</strong><br><strong>他存放的是关系、而不是图形、例如、社交网络、广告推荐</strong></p>
+<h2 id="Nosql四大分类的对比"><a href="#Nosql四大分类的对比" class="headerlink" title="Nosql四大分类的对比"></a>Nosql四大分类的对比</h2><p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/Nosql%E5%9B%9B%E5%A4%A7%E5%88%86%E7%B1%BB%E7%9A%84%E5%AF%B9%E6%AF%94%E5%9B%BE.5ox3w01qkow.png" alt="Nosql四大分类的对比图"><br>图片来源于网络</p>
+<h2 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h2><blockquote>
+<p>Redis概述</p>
+</blockquote>
+<p><strong>Redis（Remote Dictionary Server )，即远程字典服务、结构化数据库</strong> </p>
+<p><strong>是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。从2010年3月15日起，Redis的开发工作由VMware主持。</strong></p>
+<blockquote>
+<p>Redis的功能</p>
+<ul>
+<li>1、内存存储、持久化（rdb、aof）  </li>
+<li>2、效率高、可以用于高速缓存  </li>
+<li>3、发布订阅系统  </li>
+<li>4、地图信息分析  </li>
+</ul>
+</blockquote>
+<ul>
+<li>5、计时器、计数器（浏览量）</li>
+</ul>
+<blockquote>
+<p>Redis特性</p>
+</blockquote>
+<ul>
+<li>1、多样的数据类型  </li>
+<li>2、持久化  </li>
+<li>3、集群  </li>
+<li>4、事务</li>
+</ul>
+<h2 id="Redis-Windows系统下的操作"><a href="#Redis-Windows系统下的操作" class="headerlink" title="Redis Windows系统下的操作"></a>Redis Windows系统下的操作</h2><p>下载Redis压缩包、解压即可、四个服务</p>
+<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/windows%E7%9A%84redis%E5%9B%9B%E4%B8%AA%E6%9C%8D%E5%8A%A1.3any3k4qhac.png" alt="windows的redis四个服务"></p>
+<p><code>redis-server.exe：</code>redis启动服务<br><code>redis-cli.exe：</code>redis客户端服务<br><code>redis-check-aof.exe：</code>检查持久化的文件是否正确<br><code>redis-benchmark.exe：</code>测试性能的</p>
+<p>Redis服务的启动  </p>
+<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/redis%E6%9C%8D%E5%8A%A1%E5%90%AF%E5%8A%A8%E6%88%90%E5%8A%9F.5uqo17gu1o00.png" alt="redis服务启动成功"></p>
+<p>Redis客户端的启动</p>
+<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/redis%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%BF%9E%E6%8E%A5.1djvzezzqf40.png" alt="redis客户端连接"></p>
+<h2 id="Redis在Linux系统下的操作"><a href="#Redis在Linux系统下的操作" class="headerlink" title="Redis在Linux系统下的操作"></a>Redis在Linux系统下的操作</h2><p>1、下载Redis压缩包、解压安装即可    程序会安装到/opt 目录下  </p>
+<p>2、解压后进入安装目录下去下载所需的相关组件  </p>
+<p><code>yum install gcc-c++</code>  </p>
+<p><code>make</code>  </p>
+<p><code>make install</code>  </p>
+<p>3、寻找Redis默认安装路径 <code>/usr/local/bin</code>  </p>
+<p>4、在安装路径下新建一个config文件夹、然后将redis的redis.config文件复制到此目录下、以后操作这个配置文件就行了、一点出错、不会收到什么影响  </p>
+<p>5、修改配置文件中的 <code>daemonize</code> 将它从no 改为 yes  </p>
+<p>6、启动Redis服务 命令 <code>redis-server 配置文件路径/配置文件名</code> 就是启动服务、并告诉服务按照哪个配置文件启动  </p>
+<p>7、启动Redis连通测试 命令 <code>redis-cli -p 端口号</code>  </p>
+<p>8、查看Redis进程服务 命令 <code>ps -ef|grep redis</code>  </p>
+<p>9、关闭Redis服务 命令 <code>shutdown</code></p>
+<h2 id="Redis性能测试"><a href="#Redis性能测试" class="headerlink" title="Redis性能测试"></a>Redis性能测试</h2><p><code>redis-benchmark -h localhost -p 6379 -c 100 -n 100000</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/redis%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E8%A1%A8.64h03adletc0.png" alt="redis性能测试表"></p>
+<h2 id="Redis基础知识"><a href="#Redis基础知识" class="headerlink" title="Redis基础知识"></a>Redis基础知识</h2><p><strong>Redis有16个数据库</strong>  </p>
+<p><strong>默认使用第0个数据库</strong>  </p>
+<h3 id="Redis基本命令"><a href="#Redis基本命令" class="headerlink" title="Redis基本命令"></a>Redis基本命令</h3><p><a href="http://www.redis.cn/commands.html">Redis命令大全直通车</a><br><a href="http://www.redis.cn/commands.html">http://www.redis.cn/commands.html</a></p>
+<p><code>SELECT 第几个库</code> 切换数据库  </p>
+<p><code>DBSIZE</code> 查看当前数据库的大小  </p>
+<p><code>KEYS *</code> 查看当前数据库的所有key  </p>
+<p><code>flushdb</code> 删除当前数据库的所有内容  </p>
+<p><code>flushAll</code> 清除所有数据库的内容</p>
+<h3 id="Redis的端口号为什么是6379"><a href="#Redis的端口号为什么是6379" class="headerlink" title="Redis的端口号为什么是6379"></a>Redis的端口号为什么是6379</h3><p><strong>因为作者喜欢的一个明星的名字用9键输入法打出来就是6379</strong></p>
+<h3 id="Redis是单线程的为什么还这么快"><a href="#Redis是单线程的为什么还这么快" class="headerlink" title="Redis是单线程的为什么还这么快"></a>Redis是单线程的为什么还这么快</h3><p><strong>因为Redis是基于内存的、CPU并不是Redis的瓶颈、Redis的瓶颈是机器的内存和网络带宽有关、因为使用单线程可以实现、所以就使用了单线程</strong>  </p>
+<p><strong>Redis是将所有的数据存放到内存中、所以说单线程去操作效率是最高的、因为CPU会上下文切换、这个过程会耗时、对于内存系统来说、没有上下文切换效率就是最高的</strong></p>
+<h2 id="Redis五个基本类型"><a href="#Redis五个基本类型" class="headerlink" title="Redis五个基本类型"></a>Redis五个基本类型</h2><h3 id="String（字符串）"><a href="#String（字符串）" class="headerlink" title="String（字符串）"></a>String（字符串）</h3><p><code>EXISTS key名</code> 判断这个键是否存在</p>
+<p><code>move key名 哪个库</code> 移除当前的key</p>
+<p><code>EXPIRE key名 过期时间（这个是秒）</code> 设置key过期时间</p>
+<p><code>ttl key名</code> 查看剩余过期时间</p>
+<p><code>type key名</code> 查看key的类型</p>
+<p><code>append key名 &quot; love&quot;</code> 追加内容</p>
+<p><code>strlen key名</code> 获取到内容的长度</p>
+<p><code>incr key名</code> 使其数据 + 1</p>
+<p><code>decr key名</code> 使其数据 - 1</p>
+<p><code>incrby key名 你要设置的步长</code> 设置每次增加的数量</p>
+<p><code>decrby key名 你要设置的步长</code> 设置每次减少的数量</p>
+<p><code>getrange key名 起始位置 要截取的位置</code> 查看指定范围内的数据</p>
+<p><code>setrange key名 起始位置 要替换的内容</code> 替换指定位置的数据</p>
+<p><code>setex key名 过期时间</code> 设置过期时间</p>
+<p><code>setnx key名 过期时间</code> 不存在时在设置、如果存在则创建失败（分布式锁中常常使用）</p>
+<p><code>mset key名 值 key名 值 key名 值</code> 批量操作、设置k和v</p>
+<p><code>mget key名 key名 key名</code> 批量操作、取到多个key</p>
+<p><code>msetnx key名 值 key名 值</code> 原子性操作、要么一起成功、要么一起失败</p>
+<p><code>getset key名 值</code> 先get、后set、如果不存在则返回nil、如果存在则返回刚刚赋的值、并设置新的值</p>
+<p><strong>应用场景</strong></p>
+<ul>
+<li>计数器</li>
+<li>统计多单位数量</li>
+<li>粉丝数</li>
+<li>对象缓存存储</li>
+</ul>
+<h3 id="List（列表）"><a href="#List（列表）" class="headerlink" title="List（列表）"></a>List（列表）</h3><p>我们可以把List运用成栈、对列、阻塞对列</p>
+<p>两边插入或者改动效率最高、中间元素相对效率低些</p>
+<p>消息排队、消息队列（Lpush Rpop）左进右出</p>
+<p>栈（Lpush Lpop）左进左出</p>
+<p><code>lpush key名 值</code> 将一个值或多个值插入到列表的头部、也可以想象成是左边</p>
+<p><code>lrange key名 起始数据下标 末尾数据下标</code> 获取List中的值（0 -1）获取所有的值</p>
+<p><code>rpush key名 值</code> 将一个值或多个值插入到列表的尾部、也可以想象成是右边</p>
+<p><code>lpop key名</code> 移除第一个元素、头部、也就是左边的</p>
+<p><code>rpop key名</code> 移除最后一个元素、尾部、也就是右边的</p>
+<p><code>lindex key名 要查找元素的下标</code> 查询指定下标的内容</p>
+<p><code>llen key名</code> 判断数据的长度</p>
+<p><code>lrem key名 要移除的数量 要移除的数据内容</code> 移除指定数据内容和个数</p>
+<p><code>ltrim key名 起始位置 结束位置</code> 截取指定范围内的数据、使其内容只剩下截取的内容</p>
+<p><code>rpoplpush 原key名 新key名</code> 移除列表中的最后一个元素、将它移动到新的列表中</p>
+<p><code>exists key名</code> 判断这个列表是否存在</p>
+<p><code>lset key名 要修改的下标 要修改成的内容</code> 修改列表中的数据、前提是这个数据得存在、否则报错</p>
+<p><code>linsert key名 前面插入（before）/后面插入（after） 插入位置的数据名 要插入的内容</code> 在指定位置的前面或后面插入数据</p>
+<h3 id="Set（集合）"><a href="#Set（集合）" class="headerlink" title="Set（集合）"></a>Set（集合）</h3><p>set的值是不能重读的</p>
+<p>set是无序不重复的</p>
+<p><code>sadd key名 值</code> 向set中添加元素</p>
+<p><code>smembers key名</code> 查看set中的所有值</p>
+<p><code>sismember key名 值</code> 判断该key中的这个值是否存在</p>
+<p><code>scard key名</code> 获取该key中的元素个数</p>
+<p><code>srem key名 值</code> 移除元素中的指定元素</p>
+<p><code>srandmember key名 要查询的个数</code> 随机查询出内容</p>
+<p><code>spop key名 弹出数量</code> 随机弹出元素</p>
+<p><code>smove 要移动的key名 移动到指定位置的key名 要移动的元素</code> 从一个key中移动元素到指定key中</p>
+<p><code>sdiff 要比较的key名 被比较的key名</code> 返回差集 返回与被比较的key不同的元素</p>
+<p><code>sinter 要比较的key名 被比较的key名</code> 返回交集</p>
+<p><code>sunion 要比较的key名 被比较的key名</code> 返回并集</p>
+<h3 id="Hash（哈希）"><a href="#Hash（哈希）" class="headerlink" title="Hash（哈希）"></a>Hash（哈希）</h3><p>存放形式和java的map差不多、只不过就是把整个map集合当成值了</p>
+<p>形式： key key - value</p>
+<p><code>hset key名 哈希key名 值</code> 向hash中添加元素</p>
+<p><code>hget key名 哈希key名</code> 获取hash中的全部元素</p>
+<p><code>hmset key名 哈希key名 值 哈希key名 值</code> 批量添加元素</p>
+<p><code>hmget key名 哈希key名 哈希key名</code> 批量获取元素</p>
+<p><code>hgetall key名</code> 查看所有key中的元素</p>
+<p><code>hlen key名</code> 判断hash长度</p>
+<p><code>hkeys key名</code> 查询hash中的key中的哈希key</p>
+<p><code>hvals key名</code> 查询hash中的key中的值</p>
+<p><code>hsetnx key名 hashkey名 值</code> 如果不存在则创建、如果存在则无法创建</p>
+<p>hash适合对象存储、string适合字符串存储</p>
+<h3 id="Zset（有序集合）"><a href="#Zset（有序集合）" class="headerlink" title="Zset（有序集合）"></a>Zset（有序集合）</h3><p>也是一个集合、和set集合一样、但是这个是有排序的</p>
+<p><code>zadd key名 序号（例如、工资） 值</code> 像zset集合中添加元素</p>
+<p><code>zrange key名 0 -1</code> 查询集合中的全部信息</p>
+<p><code>zrangebyscore key名 min最小值（-inf 负无穷） max最大值（+inf 正无穷） withscores（显示序号）</code> 排序后显示信息（从小到大）</p>
+<p><code>zrem key名 值</code> 移除集合中的元素</p>
+<p><code>zcard key名</code> 判断集合中key的数量</p>
+<p><code>zrevrange key名 0 -1</code> 从高到低查询全部信息</p>
+<p><code>zcount key名 最小值 最大值</code> 获得区间数据条数</p>
+<p><strong>zset应用场景</strong></p>
+<ul>
+<li><p>存储班级成绩表、工资表排序等</p>
+</li>
+<li><p>排行榜 top N</p>
+</li>
+</ul>
+<h2 id="三种特殊数据类型"><a href="#三种特殊数据类型" class="headerlink" title="三种特殊数据类型"></a>三种特殊数据类型</h2><h3 id="geospatial（地理位置）"><a href="#geospatial（地理位置）" class="headerlink" title="geospatial（地理位置）"></a>geospatial（地理位置）</h3><blockquote>
+<p>geoadd</p>
+</blockquote>
+<p><code>geoadd key名 经度 纬度 值（城市名）</code>  添加地理位置的经纬度</p>
+<blockquote>
+<p>geopos </p>
+</blockquote>
+<p><code>geopos key名 值 key名 值 ...</code> 查询地理位置的经纬度</p>
+<blockquote>
+<p>geodist </p>
+</blockquote>
+<p>判断两人之间的距离</p>
+<p><strong>单位</strong></p>
+<ul>
+<li>m 米</li>
+<li>km 千米</li>
+<li>mi 英里</li>
+<li>ft 英尺</li>
+</ul>
+<p><code>geodist key名 值（地点） 值（地点） 单位（km/m/mi/ft）</code> 计算出两个城市之间的直线距离</p>
+<blockquote>
+<p>georadius</p>
+</blockquote>
+<p>附近的人</p>
+<p>给出一个经纬度、在给出一个范围、可查询当前范围内的信息</p>
+<p><code>georadius key名 经度 纬度 距离 单位 withdist(显示距离) withcoord(显示查询到的详细经纬度) count 数量（显示几条查询到的信息）</code> 查看你已经存入的城市中有哪些城市在这个经纬度范围内</p>
+<blockquote>
+<p>GEORADIUSBYMEMBER</p>
+</blockquote>
+<p>地图</p>
+<p>根据城市查询范围内的信息</p>
+<p><code>georadiusbymember key名 值（城市） 数量（距离） 单位（km/m/mi/ct）</code> 查看这个城市范围内的城市</p>
+<blockquote>
+<p>GEOHASH</p>
+</blockquote>
+<p>城市的Hash值、字符串</p>
+<p><code>geohash key名 值 值 值...</code> 将二维的经纬度转换为一维的字符串</p>
+<blockquote>
+<p>删除地理位置</p>
+</blockquote>
+<p>因为geo底层原理是zset、所以删除即可用zset完成</p>
+<p><code>zrange key名 0 -1</code> 查看地图中全部信息</p>
+<p><code>zrem key名 值...</code> 删除地理位置信息</p>
+<h3 id="hyperloglogs（基数统计）"><a href="#hyperloglogs（基数统计）" class="headerlink" title="hyperloglogs（基数统计）"></a>hyperloglogs（基数统计）</h3><p>基数统计的算法、一种数据结构</p>
+<p>优点：占用的内是固定的 非常的小 大概12kb 0.81%错误率</p>
+<p>应用范围： 网页的UV（互联网访问、浏览这个网页的自然人）</p>
+<p><code>pfadd key名 值 值 值 值...</code> 添加信息</p>
+<p><code>pfcount key名</code> 查看数据数量</p>
+<p><code>pfmerge 合并后的key名 要合并的key名 要合并的key名</code> 将多个key合并成新的key但是是基数、不重复的</p>
+<h3 id="bitmaps（位图）"><a href="#bitmaps（位图）" class="headerlink" title="bitmaps（位图）"></a>bitmaps（位图）</h3><p>一种数据结构、操作二进制位来进记录、只有0和1两个状态</p>
+<p><strong>应用场景</strong></p>
+<ul>
+<li>统计用户信息</li>
+<li>活跃、不活跃</li>
+<li>登录、未登录</li>
+<li>打卡</li>
+</ul>
+<p>两个状态的都可以使用bigmaps</p>
+<p><code>setbit key名 值 存储的值（0/1）</code> 设置存储状态</p>
+<p><code>getbit key名 值</code> 查看数据状态</p>
+<p><code>bitcount key名</code> 查看状态为1的信息数量</p>
+<p><strong>正确的开始、微小的长进、然后持续、嘿、我是小博、带你一起看我目之所及的世界……</strong></p>
+]]></content>
+      <tags>
+        <tag>redis</tag>
+      </tags>
+  </entry>
 </search>

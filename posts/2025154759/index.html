@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/./images/favicon32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/./images/favicon16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;codexiaobo.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Pisces&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;},&quot;path&quot;:&quot;&#x2F;search.xml&quot;,&quot;localsearch&quot;:{&quot;enable&quot;:true,&quot;trigger&quot;:&quot;auto&quot;,&quot;top_n_per_article&quot;:1,&quot;unescape&quot;:false,&quot;preload&quot;:false}}</script><script src="/js/config.js"></script>
+
+<link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis基础">
+<meta property="og:url" content="https://codexiaobo.github.io/posts/2025154759/index.html">
+<meta property="og:site_name" content="Code小博">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20211010161510.6ogvf8ra22s0.jpg">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/%E6%BA%90%E7%94%9FMysql.4tx58584ui20.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/%E7%BC%93%E5%AD%98+mysql+%E5%9E%82%E7%9B%B4%E6%8B%86%E5%88%86.mti1mv55hw0.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8+%E6%B0%B4%E5%B9%B3%E6%8B%86%E5%88%86+mysql%E9%9B%86%E7%BE%A4.3je69i2aw3c0.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/%E4%BA%92%E8%81%94%E7%BD%91%E5%85%AC%E5%8F%B8%E7%8E%B0%E5%9C%A8%E5%9F%BA%E6%9C%AC%E8%AE%BE%E6%96%BD.1mo9klhpnikg.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/Nosql%E5%9B%9B%E5%A4%A7%E5%88%86%E7%B1%BB%E7%9A%84%E5%AF%B9%E6%AF%94%E5%9B%BE.5ox3w01qkow.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/windows%E7%9A%84redis%E5%9B%9B%E4%B8%AA%E6%9C%8D%E5%8A%A1.3any3k4qhac.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/redis%E6%9C%8D%E5%8A%A1%E5%90%AF%E5%8A%A8%E6%88%90%E5%8A%9F.5uqo17gu1o00.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/redis%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%BF%9E%E6%8E%A5.1djvzezzqf40.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/redis%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E8%A1%A8.64h03adletc0.png">
+<meta property="article:published_time" content="2021-10-10T08:38:22.000Z">
+<meta property="article:modified_time" content="2021-10-10T08:40:18.856Z">
+<meta property="article:author" content="xiaobo">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20211010161510.6ogvf8ra22s0.jpg">
+
+
+<link rel="canonical" href="https://codexiaobo.github.io/posts/2025154759/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;codexiaobo.github.io&#x2F;posts&#x2F;2025154759&#x2F;&quot;,&quot;path&quot;:&quot;posts&#x2F;2025154759&#x2F;&quot;,&quot;title&quot;:&quot;redis基础&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>redis基础 | Code小博</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Code小博" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+  
+  <a href="https://codexiaobo.github.io" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+  
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Code小博</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Nosql-AND-Redis"><span class="nav-number">1.</span> <span class="nav-text">Nosql AND Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Nosql%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">Nosql概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFNosql"><span class="nav-number">1.2.</span> <span class="nav-text">什么是Nosql</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E7%BB%9F%E7%9A%84RDBMS-%E5%92%8C-Nosql%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.2.1.</span> <span class="nav-text">传统的RDBMS 和 Nosql的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4%E6%BC%94%E8%BF%9B%E5%8F%B2"><span class="nav-number">1.2.2.</span> <span class="nav-text">阿里巴巴演进史</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nosql%E7%9A%84%E5%9B%9B%E5%A4%A7%E5%88%86%E7%B1%BB"><span class="nav-number">1.3.</span> <span class="nav-text">Nosql的四大分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#KV%E9%94%AE%E5%80%BC%E5%AF%B9"><span class="nav-number">1.3.1.</span> <span class="nav-text">KV键值对</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%A1%A3%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.3.2.</span> <span class="nav-text">文档型数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%97%E5%AD%98%E5%82%A8%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.3.3.</span> <span class="nav-text">列存储数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.3.4.</span> <span class="nav-text">图关系数据库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nosql%E5%9B%9B%E5%A4%A7%E5%88%86%E7%B1%BB%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-number">1.4.</span> <span class="nav-text">Nosql四大分类的对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis"><span class="nav-number">1.5.</span> <span class="nav-text">Redis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-Windows%E7%B3%BB%E7%BB%9F%E4%B8%8B%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-number">1.6.</span> <span class="nav-text">Redis Windows系统下的操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis%E5%9C%A8Linux%E7%B3%BB%E7%BB%9F%E4%B8%8B%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="nav-number">1.7.</span> <span class="nav-text">Redis在Linux系统下的操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95"><span class="nav-number">1.8.</span> <span class="nav-text">Redis性能测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-number">1.9.</span> <span class="nav-text">Redis基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4"><span class="nav-number">1.9.1.</span> <span class="nav-text">Redis基本命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E7%9A%84%E7%AB%AF%E5%8F%A3%E5%8F%B7%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AF6379"><span class="nav-number">1.9.2.</span> <span class="nav-text">Redis的端口号为什么是6379</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E6%98%AF%E5%8D%95%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%98%E8%BF%99%E4%B9%88%E5%BF%AB"><span class="nav-number">1.9.3.</span> <span class="nav-text">Redis是单线程的为什么还这么快</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis%E4%BA%94%E4%B8%AA%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.10.</span> <span class="nav-text">Redis五个基本类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#String%EF%BC%88%E5%AD%97%E7%AC%A6%E4%B8%B2%EF%BC%89"><span class="nav-number">1.10.1.</span> <span class="nav-text">String（字符串）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#List%EF%BC%88%E5%88%97%E8%A1%A8%EF%BC%89"><span class="nav-number">1.10.2.</span> <span class="nav-text">List（列表）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Set%EF%BC%88%E9%9B%86%E5%90%88%EF%BC%89"><span class="nav-number">1.10.3.</span> <span class="nav-text">Set（集合）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hash%EF%BC%88%E5%93%88%E5%B8%8C%EF%BC%89"><span class="nav-number">1.10.4.</span> <span class="nav-text">Hash（哈希）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Zset%EF%BC%88%E6%9C%89%E5%BA%8F%E9%9B%86%E5%90%88%EF%BC%89"><span class="nav-number">1.10.5.</span> <span class="nav-text">Zset（有序集合）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E7%89%B9%E6%AE%8A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.11.</span> <span class="nav-text">三种特殊数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#geospatial%EF%BC%88%E5%9C%B0%E7%90%86%E4%BD%8D%E7%BD%AE%EF%BC%89"><span class="nav-number">1.11.1.</span> <span class="nav-text">geospatial（地理位置）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hyperloglogs%EF%BC%88%E5%9F%BA%E6%95%B0%E7%BB%9F%E8%AE%A1%EF%BC%89"><span class="nav-number">1.11.2.</span> <span class="nav-text">hyperloglogs（基数统计）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bitmaps%EF%BC%88%E4%BD%8D%E5%9B%BE%EF%BC%89"><span class="nav-number">1.11.3.</span> <span class="nav-text">bitmaps（位图）</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="xiaobo"
+      src="/images/xiaobo.png">
+  <p class="site-author-name" itemprop="name">xiaobo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://codexiaobo.github.io/" title="GitHub → https:&#x2F;&#x2F;codexiaobo.github.io"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/6557440727/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;6557440727&#x2F;profile?rightmod&#x3D;1&amp;wvr&#x3D;6&amp;mod&#x3D;personinfo&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.baidu.com/" title="https:&#x2F;&#x2F;www.baidu.com" rel="noopener" target="_blank">百度</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/" title="https:&#x2F;&#x2F;www.zhihu.com" rel="noopener" target="_blank">知乎</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.csdn.net/" title="https:&#x2F;&#x2F;www.csdn.net" rel="noopener" target="_blank">CSDN</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bilibili.com/" title="https:&#x2F;&#x2F;www.bilibili.com" rel="noopener" target="_blank">哔哩哔哩</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+	<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=440208476&auto=1&height=66"></iframe>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/2025154759/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/xiaobo.png">
+      <meta itemprop="name" content="xiaobo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code小博">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          redis基础
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2021-10-10 16:38:22 / 修改时间：16:40:18" itemprop="dateCreated datePublished" datetime="2021-10-10T16:38:22+08:00">2021-10-10</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20211010161510.6ogvf8ra22s0.jpg" alt="微信图片_20211010161510"></p>
+<!--sleep-->
+
+<span id="more"></span>
+
+<h1 id="Nosql-AND-Redis"><a href="#Nosql-AND-Redis" class="headerlink" title="Nosql AND Redis"></a>Nosql AND Redis</h1><h2 id="Nosql概述"><a href="#Nosql概述" class="headerlink" title="Nosql概述"></a>Nosql概述</h2><blockquote>
+<p>为什么用Nosql</p>
+</blockquote>
+<p><strong>我们生活在一个大数据的时代、普通数据库不能满足大数据的要求、所以要用Nosql数据库</strong></p>
+<blockquote>
+<p>源生Mysql  </p>
+</blockquote>
+<p><strong>数据量访问太大、存放不下<br>数据索引（B+Tree）、内存放不下<br>访问量太大、服务器承受不了</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/%E6%BA%90%E7%94%9FMysql.4tx58584ui20.png" alt="源生Mysql"></p>
+<blockquote>
+<p>缓存+Mysql+垂直拆分（读写分离）主从副治</p>
+</blockquote>
+<p><strong>因为系统的90%都是在读取、所以为了减轻数据库的负担、所以用缓存来提高效率</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/%E7%BC%93%E5%AD%98+mysql+%E5%9E%82%E7%9B%B4%E6%8B%86%E5%88%86.mti1mv55hw0.png" alt="缓存+mysql+垂直拆分"></p>
+<blockquote>
+<p>分库分表+水平拆分+Mysql集群</p>
+</blockquote>
+<p><strong>将不同的逻辑所需的数据存放到不同的表中、例如、像将订单、支付、登录业务数据存放到不同的数据库中、然后最后根据分布式将系统整合起来</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8+%E6%B0%B4%E5%B9%B3%E6%8B%86%E5%88%86+mysql%E9%9B%86%E7%BE%A4.3je69i2aw3c0.png" alt="分库分表+水平拆分+mysql集群"></p>
+<blockquote>
+<p>互联网公司服务流程</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/%E4%BA%92%E8%81%94%E7%BD%91%E5%85%AC%E5%8F%B8%E7%8E%B0%E5%9C%A8%E5%9F%BA%E6%9C%AC%E8%AE%BE%E6%96%BD.1mo9klhpnikg.png" alt="互联网公司现在基本设施"></p>
+<h2 id="什么是Nosql"><a href="#什么是Nosql" class="headerlink" title="什么是Nosql"></a>什么是Nosql</h2><p><strong>Nosql = Not Only Sql</strong>  </p>
+<p><strong>Nosql不像关系型数据库那样、存储的是表格、行、列、Nosql的存储不需要一个固定的格式、像一些地图信息、社交网络、地理位置等都是用Nosql存储的、使用Map&lt;String,Object&gt;键值对的形式来控制的</strong></p>
+<blockquote>
+<p>Nosql的特点</p>
+</blockquote>
+<ul>
+<li><p>解耦 </p>
+</li>
+<li><p>方便扩展（数据之间没有关系）  </p>
+</li>
+<li><p>大数据量高性能（Redis一秒可以写8万次、一秒可以读11万次、性能较高）  </p>
+</li>
+<li><p>数据类型多样性（不需要事先设计数据库、随取随用）</p>
+</li>
+</ul>
+<h3 id="传统的RDBMS-和-Nosql的区别"><a href="#传统的RDBMS-和-Nosql的区别" class="headerlink" title="传统的RDBMS 和 Nosql的区别"></a>传统的RDBMS 和 Nosql的区别</h3><blockquote>
+<p>传统的RDBMS</p>
+<ul>
+<li>结构化组织  </li>
+<li>SQL  </li>
+<li>数据和关系都存在单独的表中  </li>
+<li>数据定义语言  </li>
+<li>严格的一致性  </li>
+</ul>
+</blockquote>
+<ul>
+<li>基础的事务</li>
+</ul>
+<blockquote>
+<p>Nosql</p>
+</blockquote>
+<ul>
+<li>不仅仅是数据  </li>
+<li>键值对存储、列存储、文档存储、图形数据库（社交）  </li>
+<li>最终一致性  </li>
+<li>CAP定理和BASE  </li>
+<li>高性能、高可用、高可控</li>
+</ul>
+<h3 id="阿里巴巴演进史"><a href="#阿里巴巴演进史" class="headerlink" title="阿里巴巴演进史"></a>阿里巴巴演进史</h3><blockquote>
+<p>商品的基本信息</p>
+</blockquote>
+<p>RDBMS+Nosql  </p>
+<blockquote>
+<p>商品的描述、评论（文字较多）</p>
+</blockquote>
+<p>文档型数据库、MongoDB</p>
+<blockquote>
+<p>图片</p>
+</blockquote>
+<p>分布式文件系统 FastDFS<br>淘宝自己的 TFS<br>Gooale的 GFS<br>Hadoop的 HDFS<br>阿里云的 OSS</p>
+<blockquote>
+<p>商品关键字（搜索）</p>
+</blockquote>
+<p>搜索引擎 Solr elasticsearch<br>Iserach </p>
+<blockquote>
+<p>商品热门的波段信息</p>
+</blockquote>
+<p>内存数据库<br>Redis Tair Memache</p>
+<h2 id="Nosql的四大分类"><a href="#Nosql的四大分类" class="headerlink" title="Nosql的四大分类"></a>Nosql的四大分类</h2><h3 id="KV键值对"><a href="#KV键值对" class="headerlink" title="KV键值对"></a>KV键值对</h3><p><strong>Redis</strong></p>
+<h3 id="文档型数据库"><a href="#文档型数据库" class="headerlink" title="文档型数据库"></a>文档型数据库</h3><p><strong>MongoDB</strong><br>MongoDB基于分布式文件存储数据库、C++编写、用来处理大量的文档<br>MongoDB介于关系数据库和非关系数据库中间的产品、最像关系数据库的数据库</p>
+<h3 id="列存储数据库"><a href="#列存储数据库" class="headerlink" title="列存储数据库"></a>列存储数据库</h3><p><strong>HBase</strong><br><strong>分布式文件系统</strong></p>
+<h3 id="图关系数据库"><a href="#图关系数据库" class="headerlink" title="图关系数据库"></a>图关系数据库</h3><p><strong>Neo4j</strong><br><strong>InfoGrid</strong><br><strong>他存放的是关系、而不是图形、例如、社交网络、广告推荐</strong></p>
+<h2 id="Nosql四大分类的对比"><a href="#Nosql四大分类的对比" class="headerlink" title="Nosql四大分类的对比"></a>Nosql四大分类的对比</h2><p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/Nosql%E5%9B%9B%E5%A4%A7%E5%88%86%E7%B1%BB%E7%9A%84%E5%AF%B9%E6%AF%94%E5%9B%BE.5ox3w01qkow.png" alt="Nosql四大分类的对比图"><br>图片来源于网络</p>
+<h2 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h2><blockquote>
+<p>Redis概述</p>
+</blockquote>
+<p><strong>Redis（Remote Dictionary Server )，即远程字典服务、结构化数据库</strong> </p>
+<p><strong>是一个开源的使用ANSI C语言编写、支持网络、可基于内存亦可持久化的日志型、Key-Value数据库，并提供多种语言的API。从2010年3月15日起，Redis的开发工作由VMware主持。</strong></p>
+<blockquote>
+<p>Redis的功能</p>
+<ul>
+<li>1、内存存储、持久化（rdb、aof）  </li>
+<li>2、效率高、可以用于高速缓存  </li>
+<li>3、发布订阅系统  </li>
+<li>4、地图信息分析  </li>
+</ul>
+</blockquote>
+<ul>
+<li>5、计时器、计数器（浏览量）</li>
+</ul>
+<blockquote>
+<p>Redis特性</p>
+</blockquote>
+<ul>
+<li>1、多样的数据类型  </li>
+<li>2、持久化  </li>
+<li>3、集群  </li>
+<li>4、事务</li>
+</ul>
+<h2 id="Redis-Windows系统下的操作"><a href="#Redis-Windows系统下的操作" class="headerlink" title="Redis Windows系统下的操作"></a>Redis Windows系统下的操作</h2><p>下载Redis压缩包、解压即可、四个服务</p>
+<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/windows%E7%9A%84redis%E5%9B%9B%E4%B8%AA%E6%9C%8D%E5%8A%A1.3any3k4qhac.png" alt="windows的redis四个服务"></p>
+<p><code>redis-server.exe：</code>redis启动服务<br><code>redis-cli.exe：</code>redis客户端服务<br><code>redis-check-aof.exe：</code>检查持久化的文件是否正确<br><code>redis-benchmark.exe：</code>测试性能的</p>
+<p>Redis服务的启动  </p>
+<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/redis%E6%9C%8D%E5%8A%A1%E5%90%AF%E5%8A%A8%E6%88%90%E5%8A%9F.5uqo17gu1o00.png" alt="redis服务启动成功"></p>
+<p>Redis客户端的启动</p>
+<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/redis%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%BF%9E%E6%8E%A5.1djvzezzqf40.png" alt="redis客户端连接"></p>
+<h2 id="Redis在Linux系统下的操作"><a href="#Redis在Linux系统下的操作" class="headerlink" title="Redis在Linux系统下的操作"></a>Redis在Linux系统下的操作</h2><p>1、下载Redis压缩包、解压安装即可    程序会安装到/opt 目录下  </p>
+<p>2、解压后进入安装目录下去下载所需的相关组件  </p>
+<p><code>yum install gcc-c++</code>  </p>
+<p><code>make</code>  </p>
+<p><code>make install</code>  </p>
+<p>3、寻找Redis默认安装路径 <code>/usr/local/bin</code>  </p>
+<p>4、在安装路径下新建一个config文件夹、然后将redis的redis.config文件复制到此目录下、以后操作这个配置文件就行了、一点出错、不会收到什么影响  </p>
+<p>5、修改配置文件中的 <code>daemonize</code> 将它从no 改为 yes  </p>
+<p>6、启动Redis服务 命令 <code>redis-server 配置文件路径/配置文件名</code> 就是启动服务、并告诉服务按照哪个配置文件启动  </p>
+<p>7、启动Redis连通测试 命令 <code>redis-cli -p 端口号</code>  </p>
+<p>8、查看Redis进程服务 命令 <code>ps -ef|grep redis</code>  </p>
+<p>9、关闭Redis服务 命令 <code>shutdown</code></p>
+<h2 id="Redis性能测试"><a href="#Redis性能测试" class="headerlink" title="Redis性能测试"></a>Redis性能测试</h2><p><code>redis-benchmark -h localhost -p 6379 -c 100 -n 100000</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/redis%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E8%A1%A8.64h03adletc0.png" alt="redis性能测试表"></p>
+<h2 id="Redis基础知识"><a href="#Redis基础知识" class="headerlink" title="Redis基础知识"></a>Redis基础知识</h2><p><strong>Redis有16个数据库</strong>  </p>
+<p><strong>默认使用第0个数据库</strong>  </p>
+<h3 id="Redis基本命令"><a href="#Redis基本命令" class="headerlink" title="Redis基本命令"></a>Redis基本命令</h3><p><a target="_blank" rel="noopener" href="http://www.redis.cn/commands.html">Redis命令大全直通车</a><br><a target="_blank" rel="noopener" href="http://www.redis.cn/commands.html">http://www.redis.cn/commands.html</a></p>
+<p><code>SELECT 第几个库</code> 切换数据库  </p>
+<p><code>DBSIZE</code> 查看当前数据库的大小  </p>
+<p><code>KEYS *</code> 查看当前数据库的所有key  </p>
+<p><code>flushdb</code> 删除当前数据库的所有内容  </p>
+<p><code>flushAll</code> 清除所有数据库的内容</p>
+<h3 id="Redis的端口号为什么是6379"><a href="#Redis的端口号为什么是6379" class="headerlink" title="Redis的端口号为什么是6379"></a>Redis的端口号为什么是6379</h3><p><strong>因为作者喜欢的一个明星的名字用9键输入法打出来就是6379</strong></p>
+<h3 id="Redis是单线程的为什么还这么快"><a href="#Redis是单线程的为什么还这么快" class="headerlink" title="Redis是单线程的为什么还这么快"></a>Redis是单线程的为什么还这么快</h3><p><strong>因为Redis是基于内存的、CPU并不是Redis的瓶颈、Redis的瓶颈是机器的内存和网络带宽有关、因为使用单线程可以实现、所以就使用了单线程</strong>  </p>
+<p><strong>Redis是将所有的数据存放到内存中、所以说单线程去操作效率是最高的、因为CPU会上下文切换、这个过程会耗时、对于内存系统来说、没有上下文切换效率就是最高的</strong></p>
+<h2 id="Redis五个基本类型"><a href="#Redis五个基本类型" class="headerlink" title="Redis五个基本类型"></a>Redis五个基本类型</h2><h3 id="String（字符串）"><a href="#String（字符串）" class="headerlink" title="String（字符串）"></a>String（字符串）</h3><p><code>EXISTS key名</code> 判断这个键是否存在</p>
+<p><code>move key名 哪个库</code> 移除当前的key</p>
+<p><code>EXPIRE key名 过期时间（这个是秒）</code> 设置key过期时间</p>
+<p><code>ttl key名</code> 查看剩余过期时间</p>
+<p><code>type key名</code> 查看key的类型</p>
+<p><code>append key名 &quot; love&quot;</code> 追加内容</p>
+<p><code>strlen key名</code> 获取到内容的长度</p>
+<p><code>incr key名</code> 使其数据 + 1</p>
+<p><code>decr key名</code> 使其数据 - 1</p>
+<p><code>incrby key名 你要设置的步长</code> 设置每次增加的数量</p>
+<p><code>decrby key名 你要设置的步长</code> 设置每次减少的数量</p>
+<p><code>getrange key名 起始位置 要截取的位置</code> 查看指定范围内的数据</p>
+<p><code>setrange key名 起始位置 要替换的内容</code> 替换指定位置的数据</p>
+<p><code>setex key名 过期时间</code> 设置过期时间</p>
+<p><code>setnx key名 过期时间</code> 不存在时在设置、如果存在则创建失败（分布式锁中常常使用）</p>
+<p><code>mset key名 值 key名 值 key名 值</code> 批量操作、设置k和v</p>
+<p><code>mget key名 key名 key名</code> 批量操作、取到多个key</p>
+<p><code>msetnx key名 值 key名 值</code> 原子性操作、要么一起成功、要么一起失败</p>
+<p><code>getset key名 值</code> 先get、后set、如果不存在则返回nil、如果存在则返回刚刚赋的值、并设置新的值</p>
+<p><strong>应用场景</strong></p>
+<ul>
+<li>计数器</li>
+<li>统计多单位数量</li>
+<li>粉丝数</li>
+<li>对象缓存存储</li>
+</ul>
+<h3 id="List（列表）"><a href="#List（列表）" class="headerlink" title="List（列表）"></a>List（列表）</h3><p>我们可以把List运用成栈、对列、阻塞对列</p>
+<p>两边插入或者改动效率最高、中间元素相对效率低些</p>
+<p>消息排队、消息队列（Lpush Rpop）左进右出</p>
+<p>栈（Lpush Lpop）左进左出</p>
+<p><code>lpush key名 值</code> 将一个值或多个值插入到列表的头部、也可以想象成是左边</p>
+<p><code>lrange key名 起始数据下标 末尾数据下标</code> 获取List中的值（0 -1）获取所有的值</p>
+<p><code>rpush key名 值</code> 将一个值或多个值插入到列表的尾部、也可以想象成是右边</p>
+<p><code>lpop key名</code> 移除第一个元素、头部、也就是左边的</p>
+<p><code>rpop key名</code> 移除最后一个元素、尾部、也就是右边的</p>
+<p><code>lindex key名 要查找元素的下标</code> 查询指定下标的内容</p>
+<p><code>llen key名</code> 判断数据的长度</p>
+<p><code>lrem key名 要移除的数量 要移除的数据内容</code> 移除指定数据内容和个数</p>
+<p><code>ltrim key名 起始位置 结束位置</code> 截取指定范围内的数据、使其内容只剩下截取的内容</p>
+<p><code>rpoplpush 原key名 新key名</code> 移除列表中的最后一个元素、将它移动到新的列表中</p>
+<p><code>exists key名</code> 判断这个列表是否存在</p>
+<p><code>lset key名 要修改的下标 要修改成的内容</code> 修改列表中的数据、前提是这个数据得存在、否则报错</p>
+<p><code>linsert key名 前面插入（before）/后面插入（after） 插入位置的数据名 要插入的内容</code> 在指定位置的前面或后面插入数据</p>
+<h3 id="Set（集合）"><a href="#Set（集合）" class="headerlink" title="Set（集合）"></a>Set（集合）</h3><p>set的值是不能重读的</p>
+<p>set是无序不重复的</p>
+<p><code>sadd key名 值</code> 向set中添加元素</p>
+<p><code>smembers key名</code> 查看set中的所有值</p>
+<p><code>sismember key名 值</code> 判断该key中的这个值是否存在</p>
+<p><code>scard key名</code> 获取该key中的元素个数</p>
+<p><code>srem key名 值</code> 移除元素中的指定元素</p>
+<p><code>srandmember key名 要查询的个数</code> 随机查询出内容</p>
+<p><code>spop key名 弹出数量</code> 随机弹出元素</p>
+<p><code>smove 要移动的key名 移动到指定位置的key名 要移动的元素</code> 从一个key中移动元素到指定key中</p>
+<p><code>sdiff 要比较的key名 被比较的key名</code> 返回差集 返回与被比较的key不同的元素</p>
+<p><code>sinter 要比较的key名 被比较的key名</code> 返回交集</p>
+<p><code>sunion 要比较的key名 被比较的key名</code> 返回并集</p>
+<h3 id="Hash（哈希）"><a href="#Hash（哈希）" class="headerlink" title="Hash（哈希）"></a>Hash（哈希）</h3><p>存放形式和java的map差不多、只不过就是把整个map集合当成值了</p>
+<p>形式： key key - value</p>
+<p><code>hset key名 哈希key名 值</code> 向hash中添加元素</p>
+<p><code>hget key名 哈希key名</code> 获取hash中的全部元素</p>
+<p><code>hmset key名 哈希key名 值 哈希key名 值</code> 批量添加元素</p>
+<p><code>hmget key名 哈希key名 哈希key名</code> 批量获取元素</p>
+<p><code>hgetall key名</code> 查看所有key中的元素</p>
+<p><code>hlen key名</code> 判断hash长度</p>
+<p><code>hkeys key名</code> 查询hash中的key中的哈希key</p>
+<p><code>hvals key名</code> 查询hash中的key中的值</p>
+<p><code>hsetnx key名 hashkey名 值</code> 如果不存在则创建、如果存在则无法创建</p>
+<p>hash适合对象存储、string适合字符串存储</p>
+<h3 id="Zset（有序集合）"><a href="#Zset（有序集合）" class="headerlink" title="Zset（有序集合）"></a>Zset（有序集合）</h3><p>也是一个集合、和set集合一样、但是这个是有排序的</p>
+<p><code>zadd key名 序号（例如、工资） 值</code> 像zset集合中添加元素</p>
+<p><code>zrange key名 0 -1</code> 查询集合中的全部信息</p>
+<p><code>zrangebyscore key名 min最小值（-inf 负无穷） max最大值（+inf 正无穷） withscores（显示序号）</code> 排序后显示信息（从小到大）</p>
+<p><code>zrem key名 值</code> 移除集合中的元素</p>
+<p><code>zcard key名</code> 判断集合中key的数量</p>
+<p><code>zrevrange key名 0 -1</code> 从高到低查询全部信息</p>
+<p><code>zcount key名 最小值 最大值</code> 获得区间数据条数</p>
+<p><strong>zset应用场景</strong></p>
+<ul>
+<li><p>存储班级成绩表、工资表排序等</p>
+</li>
+<li><p>排行榜 top N</p>
+</li>
+</ul>
+<h2 id="三种特殊数据类型"><a href="#三种特殊数据类型" class="headerlink" title="三种特殊数据类型"></a>三种特殊数据类型</h2><h3 id="geospatial（地理位置）"><a href="#geospatial（地理位置）" class="headerlink" title="geospatial（地理位置）"></a>geospatial（地理位置）</h3><blockquote>
+<p>geoadd</p>
+</blockquote>
+<p><code>geoadd key名 经度 纬度 值（城市名）</code>  添加地理位置的经纬度</p>
+<blockquote>
+<p>geopos </p>
+</blockquote>
+<p><code>geopos key名 值 key名 值 ...</code> 查询地理位置的经纬度</p>
+<blockquote>
+<p>geodist </p>
+</blockquote>
+<p>判断两人之间的距离</p>
+<p><strong>单位</strong></p>
+<ul>
+<li>m 米</li>
+<li>km 千米</li>
+<li>mi 英里</li>
+<li>ft 英尺</li>
+</ul>
+<p><code>geodist key名 值（地点） 值（地点） 单位（km/m/mi/ft）</code> 计算出两个城市之间的直线距离</p>
+<blockquote>
+<p>georadius</p>
+</blockquote>
+<p>附近的人</p>
+<p>给出一个经纬度、在给出一个范围、可查询当前范围内的信息</p>
+<p><code>georadius key名 经度 纬度 距离 单位 withdist(显示距离) withcoord(显示查询到的详细经纬度) count 数量（显示几条查询到的信息）</code> 查看你已经存入的城市中有哪些城市在这个经纬度范围内</p>
+<blockquote>
+<p>GEORADIUSBYMEMBER</p>
+</blockquote>
+<p>地图</p>
+<p>根据城市查询范围内的信息</p>
+<p><code>georadiusbymember key名 值（城市） 数量（距离） 单位（km/m/mi/ct）</code> 查看这个城市范围内的城市</p>
+<blockquote>
+<p>GEOHASH</p>
+</blockquote>
+<p>城市的Hash值、字符串</p>
+<p><code>geohash key名 值 值 值...</code> 将二维的经纬度转换为一维的字符串</p>
+<blockquote>
+<p>删除地理位置</p>
+</blockquote>
+<p>因为geo底层原理是zset、所以删除即可用zset完成</p>
+<p><code>zrange key名 0 -1</code> 查看地图中全部信息</p>
+<p><code>zrem key名 值...</code> 删除地理位置信息</p>
+<h3 id="hyperloglogs（基数统计）"><a href="#hyperloglogs（基数统计）" class="headerlink" title="hyperloglogs（基数统计）"></a>hyperloglogs（基数统计）</h3><p>基数统计的算法、一种数据结构</p>
+<p>优点：占用的内是固定的 非常的小 大概12kb 0.81%错误率</p>
+<p>应用范围： 网页的UV（互联网访问、浏览这个网页的自然人）</p>
+<p><code>pfadd key名 值 值 值 值...</code> 添加信息</p>
+<p><code>pfcount key名</code> 查看数据数量</p>
+<p><code>pfmerge 合并后的key名 要合并的key名 要合并的key名</code> 将多个key合并成新的key但是是基数、不重复的</p>
+<h3 id="bitmaps（位图）"><a href="#bitmaps（位图）" class="headerlink" title="bitmaps（位图）"></a>bitmaps（位图）</h3><p>一种数据结构、操作二进制位来进记录、只有0和1两个状态</p>
+<p><strong>应用场景</strong></p>
+<ul>
+<li>统计用户信息</li>
+<li>活跃、不活跃</li>
+<li>登录、未登录</li>
+<li>打卡</li>
+</ul>
+<p>两个状态的都可以使用bigmaps</p>
+<p><code>setbit key名 值 存储的值（0/1）</code> 设置存储状态</p>
+<p><code>getbit key名 值</code> 查看数据状态</p>
+<p><code>bitcount key名</code> 查看状态为1的信息数量</p>
+<p><strong>正确的开始、微小的长进、然后持续、嘿、我是小博、带你一起看我目之所及的世界……</strong></p>
+
+    </div>
+	<div>
+	
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束 <i class="fa fa-paw"></i> 感谢您的阅读-------------</div>
+    
+</div>
+
+     
+	</div>
+	
+	<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/posts/2025154759/">redis基础</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a>小博</p>
+  <p><span>发布时间:</span>2021年10月10日 - 16:38</p>
+  <p><span>最后更新:</span>2021年10月10日 - 16:40</p>
+  <p><span>原始链接:</span><a href="/posts/2025154759/" title="redis基础">https://codexiaobo.github.io/posts/2025154759/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://codexiaobo.github.io/posts/2025154759/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+      $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+        });
+    });  
+</script>
+
+
+      
+	</div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>学习技术分享、感谢您的支持</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="xiaobo 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="xiaobo 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/redis/" rel="tag"># redis</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/1976879072/" rel="prev" title="工厂模式、适配器模式、代理模式、模板方法模式、责任链模式">
+                  <i class="fa fa-chevron-left"></i> 工厂模式、适配器模式、代理模式、模板方法模式、责任链模式
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaobo</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">271k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">4:06</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+<span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+<script>
+    var now = new Date(); 
+    function createtime() { 
+        var grt= new Date("06/07/2021 10:15:49");//在此处修改你的建站时间，格式：月/日/年 时:分:秒
+        now.setTime(now.getTime()+250); 
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 "; 
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+    } 
+setInterval("createtime()",250);
+</script>
+
+
+
+
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+ 
+  
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+
+ 
+</body>
+</html>
