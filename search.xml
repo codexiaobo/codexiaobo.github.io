@@ -1,6 +1,366 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>javaSE 面向对象 复习</title>
+    <url>/posts/399676132/</url>
+    <content><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%93%91%E5%89%A7.5q1pbp7pdzs0.webp" alt="哑剧"></p>
+<!--sleep-->
+
+<span id="more"></span>
+
+<h1 id="java-SE-复习整理-（仗剑走天涯）"><a href="#java-SE-复习整理-（仗剑走天涯）" class="headerlink" title="java SE 复习整理 （仗剑走天涯）"></a>java SE 复习整理 （仗剑走天涯）</h1><h2 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h2><p>在java中万物皆对象</p>
+<h3 id="面向对象-amp-面向过程"><a href="#面向对象-amp-面向过程" class="headerlink" title="面向对象&amp;面向过程"></a>面向对象&amp;面向过程</h3><h4 id="面向过程-–步骤化"><a href="#面向过程-–步骤化" class="headerlink" title="面向过程 –步骤化"></a>面向过程 –步骤化</h4><p>面向过程就是分析出实现需求所需要的步骤，通过函数（方法）一步一步实现这些步骤，接着依次调用即可</p>
+<h4 id="面向对象-–行为化"><a href="#面向对象-–行为化" class="headerlink" title="面向对象 –行为化"></a>面向对象 –行为化</h4><p>面向对象是把整个需求按照特点、功能划分，将这些存在共性的部分封装成类（类实例化后才是对象），让对象去解决对应的问题</p>
+<h2 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h2><p>将类的属性隐藏在内部、外部不能直接访问和修改</p>
+<p><strong>核心思想</strong></p>
+<p>尽可能的把属性都隐藏在内部、对外提供方法访问、在这些方法中添加逻辑处理来实现过滤以及屏蔽错误数据</p>
+<p><strong>一般步骤</strong></p>
+<p>修改属性的访问权限为私有、使外部无法直接访问</p>
+<p>提供外部可以直接调用的方法</p>
+<p>在该方法中加入逻辑控制、避免出现错误</p>
+<h3 id="成员变量-amp-成员方法"><a href="#成员变量-amp-成员方法" class="headerlink" title="成员变量&amp;成员方法"></a>成员变量&amp;成员方法</h3><h4 id="成员变量"><a href="#成员变量" class="headerlink" title="成员变量"></a>成员变量</h4><p>类的一些属性特征</p>
+<h4 id="成员方法"><a href="#成员方法" class="headerlink" title="成员方法"></a>成员方法</h4><p>类的一些行为、动作</p>
+<h3 id="return关键字"><a href="#return关键字" class="headerlink" title="return关键字"></a>return关键字</h3><p>终止当前方法继续执行</p>
+<p>返回方法的返回值</p>
+<p><strong>在void中，即使没有返回值的方法中也能 用return</strong></p>
+<h3 id="方法的重载"><a href="#方法的重载" class="headerlink" title="方法的重载"></a>方法的重载</h3><p>方法名必须一致</p>
+<p>参数不一致，有两层含义第一是参数的数量不一致，第二层含义是：参数的类型不一致，【参数的名字一样不一样都行】</p>
+<p>返回值无要求。</p>
+<h3 id="可变参数"><a href="#可变参数" class="headerlink" title="可变参数"></a>可变参数</h3><p><code>语法</code>：访问修饰符 返回类型 方法名(数据类型… 形参名) {}</p>
+<p>这种参数可以随心所欲去传递参数</p>
+<p><strong>一个方法的形参列表最多只能出现一个可变参数</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span>... nums,<span class="keyword">int</span>... nums2)</span></span>;  <span class="comment">// 不可以</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>可变参数可以和普通参数放在一起，但是可变参数必须放在最后</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> first,<span class="keyword">int</span>... nums2)</span></span>;   <span class="comment">// 可以</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span>... nums2,<span class="keyword">int</span> last)</span></span>;    <span class="comment">// 不可以</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="局部变量和作用域"><a href="#局部变量和作用域" class="headerlink" title="局部变量和作用域"></a>局部变量和作用域</h3><p>成员变量会有默认值：基础数据都是零，char中的零是代表空字符，boolean是false，引用数据类型都是null</p>
+<p>局部变量没有默认值：必须初始化才能使用</p>
+<h3 id="权限修饰符"><a href="#权限修饰符" class="headerlink" title="权限修饰符"></a>权限修饰符</h3><pre><code>√    √    √    √
+√    √    √    ×
+√    √    ×    ×
+√    ×    ×    ×
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>作用域</th>
+<th>当前类</th>
+<th>同package</th>
+<th>子孙类</th>
+<th>其他package</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>public</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>protected</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>×</td>
+</tr>
+<tr>
+<td>friendly( default )</td>
+<td>√</td>
+<td>√</td>
+<td>×</td>
+<td>×</td>
+</tr>
+<tr>
+<td>private</td>
+<td>√</td>
+<td>×</td>
+<td>×</td>
+<td>×</td>
+</tr>
+</tbody></table>
+<p><strong>class只能被public修饰，但是内部类可以被以上几种修饰</strong></p>
+<p><strong>局部变量不能使用权限修饰符</strong></p>
+<h3 id="构造方法（构造器）"><a href="#构造方法（构造器）" class="headerlink" title="构造方法（构造器）"></a>构造方法（构造器）</h3><p>方法名与类名相同</p>
+<p>java的类默认带一个无参构造的构造方法</p>
+<p>在new对象的时候主动被调用</p>
+<p>如果自己手写了一个带参数的构造方法 那么这个带参数的构造方法会自动覆盖默认的那个构造方法 所以要手写一个不带参数的 要不然new的时候不能new不带参的</p>
+<h4 id="new一个对象干啥了"><a href="#new一个对象干啥了" class="headerlink" title="new一个对象干啥了"></a>new一个对象干啥了</h4><p>java在new一个对象的时候，会先查看对象所属的类有没有被加载到内存，如果没有的话，就会先通过类的权限定名来加载</p>
+<p>加载并初始化类完成后，再进行对象的创建工作。</p>
+<h3 id="this关键字"><a href="#this关键字" class="headerlink" title="this关键字"></a>this关键字</h3><p><strong>每一个方法都会默认传入一个变量叫this，它永远指向调用它的【当前实例】</strong></p>
+<p>一个方法只有在调用的时候，才能明确方法中的【this】具体指向哪个实例对象。</p>
+<p>我们可以使用this访问当前对象的方法和属性</p>
+<p><strong>如果我们使用无参构造会传入一个默认值，这就是典型的案例</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">xiaobo</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(<span class="string">&quot;default&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="String"><a href="#String" class="headerlink" title="String"></a>String</h3><p>引用数据类型</p>
+<p>常用 new不new都行</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String name = <span class="keyword">new</span> String(<span class="string">&quot;xiaobo&quot;</span>);</span><br><span class="line"></span><br><span class="line">String name = <span class="string">&quot;xiaobo&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用string一定要注意，必须用一个新的String接受</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String substring = name.substring(<span class="number">1</span>, <span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="符串查找-indexOf"><a href="#符串查找-indexOf" class="headerlink" title="符串查找 indexOf()"></a>符串查找 indexOf()</h4><p>String 类的 indexOf() 方法在字符串中查找子字符串出现的位置，如过存在返回字符串出现的位置（第一位为0），如果不存在返回 -1</p>
+<h4 id="字符串替换"><a href="#字符串替换" class="headerlink" title="字符串替换"></a>字符串替换</h4><p>java String 类的 replace 方法可以替换字符串中的字符</p>
+<p><code>replace()</code> 替换全部</p>
+<p><code>replaceFirst()</code> 替换第一个遇到的</p>
+<p><code>replaceAll()</code> 替换全部</p>
+<h4 id="字符串分割"><a href="#字符串分割" class="headerlink" title="字符串分割"></a>字符串分割</h4><p>split(string) 方法通过指定分隔符将字符串分割为数组</p>
+<h4 id="字符串截串"><a href="#字符串截串" class="headerlink" title="字符串截串"></a>字符串截串</h4><p>substring(string) 方法可以截取从第几个下标（0开始，包含第一个开始）到第几个下标（不包含）的字符串</p>
+<h4 id="字符串比较"><a href="#字符串比较" class="headerlink" title="字符串比较"></a>字符串比较</h4><p><code>equals()</code> 区分大小写比较字符串</p>
+<p><code>equalsIgnoreCase()</code> 不区分大小写比较字符串</p>
+<h4 id="字符串小写转大写"><a href="#字符串小写转大写" class="headerlink" title="字符串小写转大写"></a>字符串小写转大写</h4><p>String toUpperCase() 方法将字符串从小写转为大写</p>
+<h3 id="包装类和自动拆装箱"><a href="#包装类和自动拆装箱" class="headerlink" title="包装类和自动拆装箱"></a>包装类和自动拆装箱</h3><table>
+<thead>
+<tr>
+<th>基本数据类型</th>
+<th>包装类</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>byte</td>
+<td>Byte</td>
+</tr>
+<tr>
+<td>short</td>
+<td>Short</td>
+</tr>
+<tr>
+<td>int</td>
+<td>Integer</td>
+</tr>
+<tr>
+<td>long</td>
+<td>Long</td>
+</tr>
+<tr>
+<td>float</td>
+<td>Float</td>
+</tr>
+<tr>
+<td>double</td>
+<td>Double</td>
+</tr>
+<tr>
+<td>boolean</td>
+<td>Boolean</td>
+</tr>
+<tr>
+<td>char</td>
+<td>Character</td>
+</tr>
+</tbody></table>
+<p><code>自动装箱</code>：将基础数据类型自动装换为包装类</p>
+<p><code>自动拆箱</code>：将包装类自动转换为基础数据类型</p>
+<h3 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h3><p>先这样讲 现在有人 但是人有男的 有女的 但是不管是男的还是女的都是人 所以男的和女的可以继承人该有的最基本的东西</p>
+<p>继承可以解决代码复用的问题，一个类可以继承一个类，被继承的类我们称之为【父类】或者【超类】，另一个类称之为【子类】也叫【派生类】，子类可以通过extends关键字获取父类的成员变量和成员方法的能力，除了被private修饰的。在java中是单继承的，这样可以规范代码的实现</p>
+<p><strong>构造一个子类一定会先构造一个父类</strong></p>
+<h3 id="super关键字"><a href="#super关键字" class="headerlink" title="super关键字"></a>super关键字</h3><h4 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h4><p>在子类的成员方法中，访问父类的成员变量</p>
+<p>在子类的成员方法中，访问父类的成员方法</p>
+<p>在子类的构造方法中，访问父类的构造方法</p>
+<h4 id="super调用父类的方法和属性"><a href="#super调用父类的方法和属性" class="headerlink" title="super调用父类的方法和属性"></a>super调用父类的方法和属性</h4><p>先在当前类中寻找</p>
+<p>当前类没有，继续向父类中寻找</p>
+<p>如果还是没有，就向父类的父类继续寻找</p>
+<p>直到到达一个所有类的共同父类，他叫Object</p>
+<p><strong>super构造器只能放在第一行</strong></p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>子类继承了父类所有的非私有的属性和方法，可以直接调用。<br>子类在构造的时候，一定会构造一个父类，默认调用父类的无参构造器</p>
+<p>子类如果希望指定去调用父类的某个构造器， 则显式的调用一下 : super(参数列表)</p>
+<p>super和this当做构造器使用时， 必须放在构造器第一行，所以只能二选一</p>
+<p>java 所有类都是 Object 类的子类, Object 是所有类的基类</p>
+<p>子类最多只能继承一个父类(指直接继承)， java 中是单继承机制，我们可以使用连续继承来实现</p>
+<h4 id="this-amp-super"><a href="#this-amp-super" class="headerlink" title="this&amp;super"></a>this&amp;super</h4><table>
+<thead>
+<tr>
+<th></th>
+<th>this</th>
+<th>super</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>访问方法</td>
+<td>访问本实例的属性，没有会继续向父类检索</td>
+<td>访问父类实例的属性，没有会继续向父类检索</td>
+</tr>
+<tr>
+<td>访问属性</td>
+<td>访问本实例的方法，没有会继续向父类检索</td>
+<td>访问父类实例的方法，没有会继续向父类检索</td>
+</tr>
+<tr>
+<td>访问构造方法</td>
+<td>调用本类的构造器，必须放在第一行，不会向上检索</td>
+<td>调用父类的构造器，必须放在第一行，不会向上检索</td>
+</tr>
+</tbody></table>
+<h3 id="方法重写"><a href="#方法重写" class="headerlink" title="方法重写"></a>方法重写</h3><p>重写一定要保证参数、名字全部一样</p>
+<p>返回值要一样，或者返回父类的子类型</p>
+<h3 id="重载-amp-重写"><a href="#重载-amp-重写" class="headerlink" title="重载&amp;重写"></a>重载&amp;重写</h3><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>范围</th>
+<th>方法名</th>
+<th>形参列表</th>
+<th>返回类型</th>
+<th>权限修饰</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>重载（overload）</td>
+<td>本类</td>
+<td>必须相同</td>
+<td>类型，个数或者顺序不同，名字无所谓</td>
+<td>没有要求</td>
+<td>无要求</td>
+</tr>
+<tr>
+<td>重写（override）</td>
+<td>父子类</td>
+<td>必须相同</td>
+<td>必须相同</td>
+<td>一样，或者子类的返回值是父类的返回值的子类</td>
+<td>子类不能缩小父类的访问权限</td>
+</tr>
+</tbody></table>
+<h3 id="final关键字"><a href="#final关键字" class="headerlink" title="final关键字"></a>final关键字</h3><p>可以修饰变量，方法，以及类</p>
+<h4 id="作用-1"><a href="#作用-1" class="headerlink" title="作用"></a>作用</h4><p>被final修饰的变量不能被修改，这里有两层含义，如果final修饰的是基础数据类型是只不能被修改，如果是引用数据类型就是引用指向不能被修改</p>
+<p>被final修饰的方法不能被重写</p>
+<p>被final修饰的类不能被继承</p>
+<h3 id="Object"><a href="#Object" class="headerlink" title="Object"></a>Object</h3><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>boolean equals(Object obj)</td>
+<td>指示某个其他对象是否与此对象“相等”</td>
+</tr>
+<tr>
+<td>public native int hashCode();</td>
+<td>返回该对象的哈希码值</td>
+</tr>
+<tr>
+<td>String toString()</td>
+<td>返回该对象的字符串表示</td>
+</tr>
+<tr>
+<td>Class&lt;? extendsObject&gt; getClass()</td>
+<td>返回一个对象的运行时类</td>
+</tr>
+<tr>
+<td>void notify()</td>
+<td>唤醒在此对象监视器上等待的单个线程</td>
+</tr>
+<tr>
+<td>void notifyAll()</td>
+<td>唤醒在此对象监视器上等待的所有线程</td>
+</tr>
+<tr>
+<td>void wait()</td>
+<td>导致当前的线程等待，直到其他线程调用此对象的 notify() 方法或 notifyAll() 方法</td>
+</tr>
+<tr>
+<td>void wait(long timeout)</td>
+<td>导致当前的线程等待，直到其他线程调用此对象的 notify() 方法或 notifyAll() 方法，或者超过指定的时间量</td>
+</tr>
+<tr>
+<td>void wait(long timeout, int nanos)</td>
+<td>导致当前的线程等待，直到其他线程调用此对象的 notify()</td>
+</tr>
+<tr>
+<td>protected native Object clone()</td>
+<td>克隆对象，浅拷贝</td>
+</tr>
+<tr>
+<td>protected void finalize()</td>
+<td>垃圾回收器准备释放内存的时候，会先调用finalize()</td>
+</tr>
+</tbody></table>
+<h4 id="hashCode"><a href="#hashCode" class="headerlink" title="hashCode"></a>hashCode</h4><p>一般翻译做“散列”，也有直接音译为“哈希”的，就是把任意长度的输入（又叫做预映射， pre-image），通过散列算法，变换成固定长度的输出，该输出就是散列值</p>
+<h4 id="hashCode特点"><a href="#hashCode特点" class="headerlink" title="hashCode特点"></a>hashCode特点</h4><p>只能通过原文计算出hash值，而且每次计算都一样，不能通过hash值计算原文</p>
+<p>原文的微小变化就能是hash值发生巨大变化</p>
+<p>一个好的hash算法还能尽量避免发生hash值重复的情况，也叫hash碰撞</p>
+<h4 id="hashCode用途"><a href="#hashCode用途" class="headerlink" title="hashCode用途"></a>hashCode用途</h4><p><strong>保存密码</strong></p>
+<p><strong>文件的校验，检查数据的一致性</strong></p>
+<h4 id="常见的Hash摘要算法"><a href="#常见的Hash摘要算法" class="headerlink" title="常见的Hash摘要算法"></a>常见的Hash摘要算法</h4><p><code>Md5</code> 英语：MD5 Message-Digest Algorithm,一种被广泛使用的密码散列函数，可以产生出一个128位（16字节）的散列值（hash value），用于确保信息传输完整一致</p>
+<p><code>SHA1</code> 英语：Secure Hash Algorithm 1，中文名：安全散列算法1,一种密码散列函数,SHA-1可以生成一个被称为消息摘要的160位（20字节）散列值，散列值通常的呈现形式为40个十六进制数</p>
+<p><code>SHA256</code> SHA256算法使用的哈希值长度是256位</p>
+<p><code>SHA512</code> 算法使用的哈希值长度是512位</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    MessageDigest sha512 = MessageDigest.getInstance(<span class="string">&quot;SHA-512&quot;</span>);</span><br><span class="line">    <span class="keyword">byte</span>[] digest = sha512.digest(<span class="string">&quot;123&quot;</span>.getBytes());</span><br><span class="line">    System.out.println(digest.length);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用相对应的算法只需要MessageDigest.getInstance(“SHA-512”);方法中改成相应的算法名即可</strong></p>
+<h4 id="equals"><a href="#equals" class="headerlink" title="equals"></a>equals</h4><p><strong>源码</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">this</span> == obj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="equals-amp-的区别"><a href="#equals-amp-的区别" class="headerlink" title="equals &amp; == 的区别"></a>equals &amp; == 的区别</h4><p>==可以比基础数据类型也可以比较引用数据类型，比较基础数据类型时比较的是具体的值，比较引用数据类型实际上比较的是内存地址</p>
+<p>equals是Object的一个方法，默认的实现就是 ==</p>
+<p>我们可以重写equals方法，是我们的特性需求，比如String就重写了equals方法，所以字符串调用equals比较的是每一个字符</p>
+<p><strong>jdk 8 String重写的equals</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object anObject)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span> == anObject) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (anObject <span class="keyword">instanceof</span> String) &#123;</span><br><span class="line">            String anotherString = (String)anObject;</span><br><span class="line">            <span class="keyword">int</span> n = value.length;</span><br><span class="line">            <span class="keyword">if</span> (n == anotherString.value.length) &#123;</span><br><span class="line">                <span class="keyword">char</span> v1[] = value;</span><br><span class="line">                <span class="keyword">char</span> v2[] = anotherString.value;</span><br><span class="line">                <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">while</span> (n-- != <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (v1[i] != v2[i])</span><br><span class="line">                        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                    i++;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="toString-NaN"><a href="#toString-NaN" class="headerlink" title="toString"></a>toString</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> getClass().getName() + <span class="string">&quot;@&quot;</span> + Integer.toHexString(hashCode());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>对象名 + @ + hashCode</p>
+<h4 id="finalize"><a href="#finalize" class="headerlink" title="finalize()"></a>finalize()</h4><p>java提供finalize()方法，垃圾回收器准备释放内存的时候，会先调用finalize()</p>
+<p><strong>jdk9开始声明已经过时</strong></p>
+<p><strong>不推荐使用</strong></p>
+<h4 id="clone"><a href="#clone" class="headerlink" title="clone()"></a>clone()</h4><p>克隆就是在内存里边赋值一个实例对象。但是Object的克隆方法只能浅拷贝。同时必须实现Cloneable接口</p>
+<p><strong>Object中默认的clone方法，是浅拷贝的</strong></p>
+<h4 id="浅拷贝"><a href="#浅拷贝" class="headerlink" title="浅拷贝"></a>浅拷贝</h4><p>浅拷贝是按位拷贝对象，它会创建一个新对象，这个对象有着原始对象属性值的一份精确拷贝。如果属性是基本类型，拷贝的就是基本类型的值；如果属性是内存地址（引用类型），拷贝的就是内存地址 ，因此如果其中一个对象改变了这个地址，就会影响到另一个对象</p>
+<p><strong>实现对象拷贝的类，必须实现Cloneable接口，并覆写clone()方法。</strong></p>
+<p><code>student</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> <span class="keyword">implements</span>  <span class="title">Cloneable</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">(String name,Integer age)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(Integer age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.toString();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.clone();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>main</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        Student student = <span class="keyword">new</span> Student(<span class="string">&quot;xiaobo&quot;</span>,<span class="number">21</span>);</span><br><span class="line">        Student clone = (Student) student.clone();</span><br><span class="line"></span><br><span class="line">        System.out.println(student);</span><br><span class="line">        System.out.println(clone);</span><br><span class="line"></span><br><span class="line">        System.out.println(student.getName().hashCode());</span><br><span class="line">        System.out.println(clone.getName().hashCode());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>运行结果</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">com.dream.xiaobo.objects.Student@6d6f6e28</span><br><span class="line">com.dream.xiaobo.objects.Student@135fbaa4</span><br><span class="line">-<span class="number">759499924</span>  </span><br><span class="line">-<span class="number">759499924</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="深拷贝"><a href="#深拷贝" class="headerlink" title="深拷贝"></a>深拷贝</h4><p>深拷贝会拷贝所有的属性,并拷贝属性指向的动态分配的内存。当对象和它所引用的对象一起拷贝时即发生深拷贝。深拷贝相比于浅拷贝速度较慢并且花销较大</p>
+<p>如果在拷贝一个对象时，要想让这个拷贝的对象和源对象完全彼此独立，那么在引用链上的每一级对象都要被显式的拷贝。所以创建彻底的深拷贝是非常麻烦的，尤其是在引用关系非常复杂的情况下， 或者在引用链的某一级上引用了一个第三方的对象， 而这个对象没有实现clone方法， 那么在它之后的所有引用的对象都是被共享的</p>
+<p><code>person</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">implements</span> <span class="title">Cloneable</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Integer id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Student student;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(Integer id)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Student <span class="title">getStudent</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> student;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setStudent</span><span class="params">(Student student)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.student = student;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(Student student)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.student = student;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        Person person = (Person) <span class="keyword">super</span>.clone();</span><br><span class="line"></span><br><span class="line">        person.student = (Student) student.clone();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> person;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>student</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> <span class="keyword">implements</span>  <span class="title">Cloneable</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Man man;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Giri giri;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Man <span class="title">getMan</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> man;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setMan</span><span class="params">(Man man)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.man = man;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Giri <span class="title">getGiri</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> giri;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setGiri</span><span class="params">(Giri giri)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.giri = giri;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">private</span> Integer age;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">(String name,Integer age)</span></span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.name = name;</span><br><span class="line">            <span class="keyword">this</span>.age = age;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> name;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.name = name;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> Integer <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> age;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(Integer age)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.age = age;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">(Man man, Giri giri)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.man = man;</span><br><span class="line">        <span class="keyword">this</span>.giri = giri;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">super</span>.toString();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        Student student = (Student) <span class="keyword">super</span>.clone();</span><br><span class="line"></span><br><span class="line">        student.man = (Man) man.clone();</span><br><span class="line"></span><br><span class="line">        student.giri = (Giri) giri.clone();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> student;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>giri</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Giri</span> <span class="keyword">implements</span> <span class="title">Cloneable</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.clone();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>man</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Man</span> <span class="keyword">implements</span> <span class="title">Cloneable</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> name;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.name = name;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">super</span>.clone();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>main</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> CloneNotSupportedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        Person person = <span class="keyword">new</span> Person(<span class="keyword">new</span> Student(<span class="keyword">new</span> Man(),<span class="keyword">new</span> Giri()));</span><br><span class="line"></span><br><span class="line">        Person clone = (Person) person.clone();</span><br><span class="line"></span><br><span class="line">        System.out.println(person == clone);</span><br><span class="line">        System.out.println(person.getStudent() == clone.getStudent());</span><br><span class="line">        System.out.println(person.getStudent().getMan() == clone.getStudent().getMan());</span><br><span class="line">        System.out.println(person.getStudent().getGiri() == clone.getStudent().getGiri());</span><br></pre></td></tr></table></figure>
+
+<p><code>运行结果</code></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">false</span></span><br><span class="line"><span class="keyword">false</span></span><br><span class="line"><span class="keyword">false</span></span><br><span class="line"><span class="keyword">false</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>简单图示剖析</strong><br><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/clone().oq15vhhsfmo.webp" alt="clone()"></p>
+<h3 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h3><h4 id="宏观意义上理解的多态"><a href="#宏观意义上理解的多态" class="headerlink" title="宏观意义上理解的多态"></a>宏观意义上理解的多态</h4><p>有继承</p>
+<p>有重写</p>
+<p>有父类引用指向子类对象</p>
+<h4 id="多态的底层原理"><a href="#多态的底层原理" class="headerlink" title="多态的底层原理"></a>多态的底层原理</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Person person = Math.random() &gt; <span class="number">0.5</span> ? <span class="keyword">new</span> Student() : <span class="keyword">new</span> Teacher();</span><br></pre></td></tr></table></figure>
+
+<p>等于号左侧是确定的，永远不能变，而右侧则不一样了，在代码未执行，其实我们也无法知道</p>
+<p>等于号左边 叫做 【静态类型】，或者叫【编译类型】或者叫【申明类型】，或者叫【外观类型】</p>
+<p>等于号右侧的我们叫【动态类型】，也叫【运行时类型】或者叫【实际类型】</p>
+<p>对于静态类型，jvm在编译的时候就能确定具体调用哪个版本的方法，字节码指令执行时直接调用即可，而动态类型必须等待运行时才能确定类型，与此同时才能同步开展选择方法版本的工作，这个运行时才选择方法调用版本的行为称之为【虚方法分派】</p>
+<h4 id="常量池"><a href="#常量池" class="headerlink" title="常量池"></a>常量池</h4><p>常量池是我们的资源仓库，里边保存了大量的符号引用（就是的你给类、方法、变量的名字），这些符号引用有一部分会在类加载阶段或者第一次使用的时候就被转化为【直接引用】，这种转化叫做【静态解析】，另一部分会在运行期间转化为【直接引用】，这一部分称之为【动态链接】</p>
+<p><strong>例</strong></p>
+<p>假如说你和你的女朋友或者男朋友是异地恋 今天放假 你高兴的要去找你对象，那么你对象就是符号引用 你就是运行时 这个时候你在北京 它在大连 这个时候就可以将你找对象转换为你去大连 这个过程就是【静态解析】</p>
+<p>假如说你的另一半是已经注定好的了，如果你不去寻找，那么最后可能就是注定的那个人，但是在成长的路上可能会遇见你喜欢的人，可能在初中遇见一个，高中遇见一个，大学遇见一个，社会上遇见一个，所以就是不到最后你都不知道那个人会是谁，不知道具体的位置，这个过程就是【动态链接】</p>
+<p><strong>你知道的越多 你不知道的越多 嘿 我是小博 带你一起看我目之所及的世界</strong></p>
+]]></content>
+      <tags>
+        <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>蓝桥杯 大学B组 java基础篇 下</title>
     <url>/posts/2931258348/</url>
     <content><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%83%8F%E4%BB%80%E4%B9%88.y3kep1c7yxs.webp" alt="像什么"></p>
