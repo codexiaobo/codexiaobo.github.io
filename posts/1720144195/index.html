@@ -23,23 +23,40 @@
 
 <link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Code小博">
-<meta property="og:url" content="https://codexiaobo.github.io/index.html">
+<meta name="description" content="《大话数据结构》 阅读整理树树的定义n(n&gt;&#x3D;0)个结点的有限集 有且仅有一个特定的称为根的结点 当n &gt; 1时 其余结点可分为m(m&gt;0)个互不相交的有限集T1,T2,T3…Tm其中每一个集合本身又是一棵树 并且称为根的子树 性质n&gt;0时根结点是唯一的 不可能存在多个根结点 m&gt;0时 子树的个数没有限制 但一定是互不相交的 结点的分类 结点的度  结点拥有的子树数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大话数据结构 树">
+<meta property="og:url" content="https://codexiaobo.github.io/posts/1720144195/index.html">
 <meta property="og:site_name" content="Code小博">
+<meta property="og:description" content="《大话数据结构》 阅读整理树树的定义n(n&gt;&#x3D;0)个结点的有限集 有且仅有一个特定的称为根的结点 当n &gt; 1时 其余结点可分为m(m&gt;0)个互不相交的有限集T1,T2,T3…Tm其中每一个集合本身又是一棵树 并且称为根的子树 性质n&gt;0时根结点是唯一的 不可能存在多个根结点 m&gt;0时 子树的个数没有限制 但一定是互不相交的 结点的分类 结点的度  结点拥有的子树数">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20220310235141.2oe31pjh01m0.webp">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86.2clsx0tdb78k.webp">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%A0%91%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91%EF%BC%881%EF%BC%89.2zcfl5jim080.webp">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%A0%91%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91%EF%BC%882%EF%BC%89.1oqeqmcgm9c0.webp">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%A3%AE%E6%9E%97%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91%EF%BC%881%EF%BC%89.e2bgahcr65k.webp">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E6%A3%AE%E6%9E%97%E8%BD%AC%E4%BA%8C%E5%8F%89%E6%A0%91%EF%BC%882%EF%BC%89.5g3vvddeep00.webp">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E4%BA%8C%E5%8F%89%E6%A0%91%E8%BD%AC%E6%A0%91%EF%BC%881%EF%BC%89.729fdcxooto0.webp">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E4%BA%8C%E5%8F%89%E6%A0%91%E8%BD%AC%E6%A0%91%EF%BC%882%EF%BC%89.6g6ffgzlpo80.webp">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E4%BA%8C%E5%8F%89%E6%A0%91%E8%BD%AC%E6%A3%AE%E6%9E%97%EF%BC%881%EF%BC%89.2gsy1dgsmsw0.webp">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E4%BA%8C%E5%8F%89%E6%A0%91%E8%BD%AC%E6%A3%AE%E6%9E%97%EF%BC%882%EF%BC%89.3kfhpmmxvv20.webp">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91%E5%B8%A6%E6%9D%83.441obvsdwoo0.webp">
+<meta property="article:published_time" content="2022-03-10T16:38:33.000Z">
+<meta property="article:modified_time" content="2022-03-10T16:39:19.702Z">
 <meta property="article:author" content="xiaobo">
+<meta property="article:tag" content="数据结构">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20220310235141.2oe31pjh01m0.webp">
 
 
-<link rel="canonical" href="https://codexiaobo.github.io/">
+<link rel="canonical" href="https://codexiaobo.github.io/posts/1720144195/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:true,&quot;isPost&quot;:false,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:&quot;&quot;,&quot;permalink&quot;:&quot;&quot;,&quot;path&quot;:&quot;index.html&quot;,&quot;title&quot;:&quot;&quot;}</script>
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;codexiaobo.github.io&#x2F;posts&#x2F;1720144195&#x2F;&quot;,&quot;path&quot;:&quot;posts&#x2F;1720144195&#x2F;&quot;,&quot;title&quot;:&quot;大话数据结构 树&quot;}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
-<title>Code小博</title>
+<title>大话数据结构 树 | Code小博</title>
   
 
 
@@ -135,7 +152,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -148,6 +165,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E3%80%8A%E5%A4%A7%E8%AF%9D%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E3%80%8B-%E9%98%85%E8%AF%BB%E6%95%B4%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">《大话数据结构》 阅读整理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%91"><span class="nav-number">1.1.</span> <span class="nav-text">树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%91%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.1.</span> <span class="nav-text">树的定义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%A7%E8%B4%A8"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">性质</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%93%E7%82%B9%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">结点的分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%93%E7%82%B9%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">结点的关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%BF%E6%80%A7%E7%BB%93%E6%9E%84%E4%B8%8E%E6%A0%91%E7%BB%93%E6%9E%84%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-number">1.1.1.4.</span> <span class="nav-text">线性结构与树结构的对比</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E7%9A%84%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.2.</span> <span class="nav-text">数的存储结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%8C%E4%BA%B2%E8%A1%A8%E7%A4%BA%E6%B3%95"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">双亲表示法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%A9%E5%AD%90%E8%A1%A8%E7%A4%BA%E6%B3%95"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">孩子表示法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%A9%E5%AD%90%E5%85%84%E5%BC%9F%E8%A1%A8%E7%A4%BA%E6%B3%95"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">孩子兄弟表示法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.3.</span> <span class="nav-text">二叉树的定义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E7%89%B9%E7%82%B9"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">二叉树的特点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E4%BA%94%E7%A7%8D%E5%9F%BA%E6%9C%AC%E5%BD%A2%E6%80%81"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">二叉树的五种基本形态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E7%9A%84%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">1.1.3.3.</span> <span class="nav-text">特殊的二叉树</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%80%A7%E8%B4%A8"><span class="nav-number">1.1.4.</span> <span class="nav-text">二叉树的性质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.5.</span> <span class="nav-text">二叉树的存储结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%A1%BA%E5%BA%8F%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.5.1.</span> <span class="nav-text">二叉树的顺序存储结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E9%93%BE%E8%A1%A8"><span class="nav-number">1.1.5.2.</span> <span class="nav-text">二叉链表</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">1.1.6.</span> <span class="nav-text">遍历二叉树</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.6.1.</span> <span class="nav-text">二叉树遍历原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E9%81%8D%E5%8E%86%E6%96%B9%E6%B3%95"><span class="nav-number">1.1.6.2.</span> <span class="nav-text">二叉树遍历方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A8%E5%AF%BC%E9%81%8D%E5%8E%86%E7%BB%93%E6%9E%9C"><span class="nav-number">1.1.6.3.</span> <span class="nav-text">推导遍历结果</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%BB%BA%E7%AB%8B"><span class="nav-number">1.1.7.</span> <span class="nav-text">二叉树的建立</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%B4%A2%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">1.1.8.</span> <span class="nav-text">线索二叉树</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%BF%E7%B4%A2%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.8.1.</span> <span class="nav-text">线索二叉树的原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%BF%E7%B4%A2%E8%A1%A8"><span class="nav-number">1.1.8.2.</span> <span class="nav-text">线索表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%BF%E7%B4%A2%E4%BA%8C%E5%8F%89%E6%A0%91-1"><span class="nav-number">1.1.8.3.</span> <span class="nav-text">线索二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%BF%E7%B4%A2%E5%8C%96"><span class="nav-number">1.1.8.4.</span> <span class="nav-text">线索化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%99%E7%BB%93%E7%82%B9%E6%B7%BB%E5%8A%A0%E4%B8%A4%E4%B8%AA%E6%A0%87%E8%AF%86"><span class="nav-number">1.1.8.5.</span> <span class="nav-text">给结点添加两个标识</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%BF%E7%B4%A2%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.1.8.6.</span> <span class="nav-text">线索二叉树的实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%91-%E6%A3%AE%E6%9E%97-%E4%BA%8C%E5%8F%89%E6%A0%91-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">1.1.9.</span> <span class="nav-text">树 森林 二叉树 的关系</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%91%E8%BD%AC%E6%8D%A2%E4%B8%BA%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">1.1.9.1.</span> <span class="nav-text">树转换为二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A3%AE%E6%9E%97%E8%BD%AC%E6%8D%A2%E4%B8%BA%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="nav-number">1.1.9.2.</span> <span class="nav-text">森林转换为二叉树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E8%BD%AC%E6%8D%A2%E4%B8%BA%E6%A0%91"><span class="nav-number">1.1.9.3.</span> <span class="nav-text">二叉树转换为树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E8%BD%AC%E6%8D%A2%E4%B8%BA%E6%A3%AE%E6%9E%97"><span class="nav-number">1.1.9.4.</span> <span class="nav-text">二叉树转换为森林</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%91%E4%B8%8E%E6%A3%AE%E6%9E%97%E7%9A%84%E9%81%8D%E5%8E%86"><span class="nav-number">1.1.9.5.</span> <span class="nav-text">树与森林的遍历</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91"><span class="nav-number">1.1.10.</span> <span class="nav-text">哈夫曼树</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.1.10.1.</span> <span class="nav-text">哈夫曼树的定义</span></a></li></ol></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -226,16 +244,17 @@
 </noscript>
 
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/1720144195/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -248,9 +267,9 @@
       <meta itemprop="name" content="Code小博">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/1720144195/" class="post-title-link" itemprop="url">大话数据结构 树</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          大话数据结构 树
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -265,6 +284,13 @@
     </span>
 
   
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
       </div>
       <div class="post-meta">
     <span class="post-meta-item" title="本文字数">
@@ -290,7 +316,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20220310235141.2oe31pjh01m0.webp" alt="微信图片_20220310235141"></p>
+        <p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20220310235141.2oe31pjh01m0.webp" alt="微信图片_20220310235141"></p>
 <h1 id="《大话数据结构》-阅读整理"><a href="#《大话数据结构》-阅读整理" class="headerlink" title="《大话数据结构》 阅读整理"></a>《大话数据结构》 阅读整理</h1><h2 id="树"><a href="#树" class="headerlink" title="树"></a>树</h2><h3 id="树的定义"><a href="#树的定义" class="headerlink" title="树的定义"></a>树的定义</h3><p>n(n&gt;=0)个结点的有限集</p>
 <p>有且仅有一个特定的称为根的结点</p>
 <p>当n &gt; 1时 其余结点可分为m(m&gt;0)个互不相交的有限集T1,T2,T3…Tm<br>其中每一个集合本身又是一棵树 并且称为根的子树</p>
@@ -571,109 +597,51 @@
 <p>设需要编码的字符集为{d1,d2,…dn} 各个字符在电文中出现的次数或频率集合为{w1,w2,…wn} 以d1,d2,…dn作为叶子结点 以w1,w2…wn作为相应叶子结点的权值来构造一棵哈夫曼树 规定哈夫曼树的左分支代表0 右分支代表1 则从根节点到叶子结点所经过的路径分支组成的0和1的序列便为该结点对应符的编码 </p>
 <p><strong>你知道的越多 你不知道的越多 嘿 我是小博 带你一起看我目之所及的世界……</strong></p>
 
-      
     </div>
 	<div>
 	
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束 <i class="fa fa-paw"></i> 感谢您的阅读-------------</div>
+    
+</div>
+
+     
 	</div>
 	
 	<div>
       
-	</div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/2240375813/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/2240375813/" class="post-title-link" itemprop="url">大话数据结构 栈和队列</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-03-07 21:26:43 / 修改时间：21:27:54" itemprop="dateCreated datePublished" datetime="2022-03-07T21:26:43+08:00">2022-03-07</time>
-    </span>
-
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>5.4k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>5 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E8%88%B9.p0v2y8gtuz4.webp" alt="船"></p>
-<!--sleep-->
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/2240375813/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/posts/1720144195/">大话数据结构 树</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a>小博</p>
+  <p><span>发布时间:</span>2022年03月11日 - 00:38</p>
+  <p><span>最后更新:</span>2022年03月11日 - 00:39</p>
+  <p><span>原始链接:</span><a href="/posts/1720144195/" title="大话数据结构 树">https://codexiaobo.github.io/posts/1720144195/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://codexiaobo.github.io/posts/1720144195/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+      $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+        });
+    });  
+</script>
+
+
       
 	</div>
 
@@ -682,200 +650,39 @@
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/227292080/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/227292080/" class="post-title-link" itemprop="url">大话数据结构 线性表</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-03-06 12:11:52 / 修改时间：12:14:02" itemprop="dateCreated datePublished" datetime="2022-03-06T12:11:52+08:00">2022-03-06</time>
-    </span>
-
-  
+          <div class="reward-container">
+  <div>学习技术分享、感谢您的支持</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="xiaobo 微信">
+        <span>微信</span>
       </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>5.2k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>5 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/22.6ni0lp1aar40.webp" alt="22"></p>
-<!--sleep-->
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/227292080/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
-      
-	</div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/1863985833/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/1863985833/" class="post-title-link" itemprop="url">大话数据结构 绪论 算法</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-03-05 21:46:03 / 修改时间：21:48:37" itemprop="dateCreated datePublished" datetime="2022-03-05T21:46:03+08:00">2022-03-05</time>
-    </span>
-
-  
+      <div>
+        <img src="/images/alipay.png" alt="xiaobo 支付宝">
+        <span>支付宝</span>
       </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>1.5k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
-    </span>
+
+  </div>
 </div>
 
-        </div>
-      </header>
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"># 数据结构</a>
+          </div>
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E7%8B%97%E7%8B%97.cat496pgk1s.webp" alt="狗狗"></p>
-<!--sleep-->
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/1863985833/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
-      
-	</div>
 
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/2240375813/" rel="prev" title="大话数据结构 栈和队列">
+                  <i class="fa fa-chevron-left"></i> 大话数据结构 栈和队列
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
     </footer>
   </article>
 </div>
@@ -883,585 +690,7 @@
 
 
 
-    
 
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/2702675562/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/2702675562/" class="post-title-link" itemprop="url">算法很美 java版 二</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-03-03 17:15:22 / 修改时间：17:16:54" itemprop="dateCreated datePublished" datetime="2022-03-03T17:15:22+08:00">2022-03-03</time>
-    </span>
-
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>4.6k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>4 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E7%B4%AB%E9%9C%9E.2k4oec24kws0.webp" alt="紫霞"></p>
-<!--sleep-->
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/2702675562/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
-      
-	</div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/2593628355/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/2593628355/" class="post-title-link" itemprop="url">算法很美 java版 一</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-03-02 16:21:56 / 修改时间：16:27:15" itemprop="dateCreated datePublished" datetime="2022-03-02T16:21:56+08:00">2022-03-02</time>
-    </span>
-
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>4.2k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>4 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%81%87%E8%B1%A1.396pfl0zdqe0.webp" alt="假象"></p>
-<!--sleep-->
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/2593628355/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
-      
-	</div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/2971595095/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/2971595095/" class="post-title-link" itemprop="url">javaSE 面向对象复习 二</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-02-10 01:42:26 / 修改时间：01:44:00" itemprop="dateCreated datePublished" datetime="2022-02-10T01:42:26+08:00">2022-02-10</time>
-    </span>
-
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>5.9k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>5 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%87%A0%E4%BA%BA%E6%B8%85%E9%86%92.1i3tx4v59rsw.webp" alt="几人清醒"></p>
-<!--sleep-->
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/2971595095/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
-      
-	</div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/399676132/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/399676132/" class="post-title-link" itemprop="url">javaSE 面向对象 复习</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-01-27 09:55:45 / 修改时间：09:57:00" itemprop="dateCreated datePublished" datetime="2022-01-27T09:55:45+08:00">2022-01-27</time>
-    </span>
-
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>9.9k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>9 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%93%91%E5%89%A7.5q1pbp7pdzs0.webp" alt="哑剧"></p>
-<!--sleep-->
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/399676132/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
-      
-	</div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/2931258348/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/2931258348/" class="post-title-link" itemprop="url">蓝桥杯 大学B组 java基础篇 下</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2021-12-28 02:19:37 / 修改时间：02:27:02" itemprop="dateCreated datePublished" datetime="2021-12-28T02:19:37+08:00">2021-12-28</time>
-    </span>
-
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>6.9k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>6 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%83%8F%E4%BB%80%E4%B9%88.y3kep1c7yxs.webp" alt="像什么"></p>
-<!--sleep-->
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/2931258348/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
-      
-	</div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/3652207482/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/3652207482/" class="post-title-link" itemprop="url">蓝桥杯 大学B组 java基础篇 上</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2021-12-26 00:28:07 / 修改时间：00:30:15" itemprop="dateCreated datePublished" datetime="2021-12-26T00:28:07+08:00">2021-12-26</time>
-    </span>
-
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>12k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>11 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/1%E5%8F%B7%E7%BA%BF.2ekzqhzkga4g.webp" alt="1号线"></p>
-<!--sleep-->
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/3652207482/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
-      
-	</div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
 
 </div>
   </main>
