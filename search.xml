@@ -1,6 +1,346 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>日志框架 JUL</title>
+    <url>/posts/626247823/</url>
+    <content><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20220316194438.603k442et1o0.webp" alt="微信图片_20220316194438"></p>
+<!--sleep-->
+
+<span id="more"></span>
+
+<h1 id="日志框架"><a href="#日志框架" class="headerlink" title="日志框架"></a>日志框架</h1><p>日志文件是用于记录系统操作事件的文件集合，可分为事件日志和消息日志。具有处理历史数据、诊断问题的追踪以及理解系统的活动等重要作用</p>
+<p>在计算机中，日志文件是记录在操作系统或其他软件运行中发生的事件或在通信软件的不同用户之间的消息的文件。记录是保持日志的行为。在最简单的情况下，消息被写入单个日志文件</p>
+<p><strong>日志的作用</strong></p>
+<ul>
+<li>调试</li>
+</ul>
+<p>在Java项目调试时，查看栈信息可以方便地知道当前程序的运行状态，输出的日志便于记录程序在之前的运行结果。如果你大量使用System.out或者System.err，这是一种最方便最有效的方法，但显得不够专业</p>
+<ul>
+<li>错误定位</li>
+</ul>
+<p>不要以为项目能正确跑起来就可以高枕无忧，项目在运行一段时候后，可能由于数据问题，网络问题，内存问题等出现异常。这时日志可以帮助开发或者运维人员快速定位错误位置，提出解决方案</p>
+<ul>
+<li>数据分析</li>
+</ul>
+<p>大数据的兴起，使得大量的日志分析成为可能，ELK也让日志分析门槛降低了很多。日志中蕴含了大量的用户数据，包括点击行为，兴趣偏好等，用户画像对于公司下一步的战略方向有一定指引作用</p>
+<p><strong>最常见的普通日志</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">System.out.println();</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">System.err.println();</span><br></pre></td></tr></table></figure>
+
+<h3 id="主流的日志框架"><a href="#主流的日志框架" class="headerlink" title="主流的日志框架"></a>主流的日志框架</h3><p>日志实现（具体干活的）：JUL（java util logging）、logback、log4j、log4j2</p>
+<p>日志门面（指定规则的）：JCL（Jakarta Commons Logging）、slf4j（ Simple Logging Facade for Java）</p>
+<h2 id="JUL-日志框架"><a href="#JUL-日志框架" class="headerlink" title="JUL 日志框架"></a>JUL 日志框架</h2><p>JUL全称Java util Logging是java原生的日志框架，使用时不需要另外引用第三方类库，相对其他日志框 架使用方便，学习简单，能够在小型应用中灵活使用</p>
+<p><code>Loggers</code> 被称为记录器，应用程序通过获取Logger对象，调用其API来发布日志信息。Logger 通常时应用程序访问日志系统的入口程序</p>
+<p><code>Appenders</code> 也被称为Handlers，每个Logger都会关联一组Handlers，Logger会将日志交给关联 Handlers处理，由Handlers负责将日志做记录。Handlers在此是一个抽象，其具体的实现决定了 日志记录的位置可以是控制台、文件、网络上的其他日志服务或操作系统日志等</p>
+<p><code>Layouts</code> 也被称为Formatters，它负责对日志事件中的数据进行转换和格式化。Layouts决定了 数据在一条日志记录中的最终形式</p>
+<p><code>Level</code> 每条日志消息都有一个关联的日志级别。该级别粗略指导了日志消息的重要性和紧迫，我 可以将Level和Loggers，Appenders做关联以便于我们过滤消息</p>
+<p><code>Filters</code> 过滤器，根据需要定制哪些信息会被记录，哪些信息会被放过</p>
+<p><strong>总结</strong></p>
+<p>用户使用Logger来进行日志记录，Logger持有若干个Handler，日志的输出操作是由Handler完成的。 在Handler在输出日志前，会经过Filter的过滤，判断哪些日志级别过滤放行哪些拦截，Handler会将日志内容输出到指定位置（日志文件、控制台等）。Handler在输出日志时会使用Layout，将输出内容进行排版</p>
+<h3 id="日志的级别"><a href="#日志的级别" class="headerlink" title="日志的级别"></a>日志的级别</h3><p>jul中定义的日志级别，从上述例子中我们也看到使用info和warning打印出的日志有不同的前缀，通过给日志设置不同的级别可以清晰的从日志中区分出哪些是基本信息，哪些是调试信息，哪些是严重的异常</p>
+<ul>
+<li>java.util.logging.Level中定义了日志的级别</li>
+</ul>
+<p><code>server</code> 最高值</p>
+<p><code>warning</code> </p>
+<p><code>info</code> 默认级别</p>
+<p><code>config</code></p>
+<p><code>fine</code></p>
+<p><code>finer</code></p>
+<p><code>finest</code> 最低值</p>
+<p><code>OFF</code> 可用来关闭日志记录</p>
+<p><code>ALL</code> 启用所有消息的日志记录</p>
+<h3 id="Logger之间的父子关系"><a href="#Logger之间的父子关系" class="headerlink" title="Logger之间的父子关系"></a>Logger之间的父子关系</h3><p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/JUL%E7%9A%84Logger%E7%9A%84%E7%88%B6%E5%AD%90%E5%85%B3%E7%B3%BB.4j2xkheea9a0.webp" alt="JUL的Logger的父子关系"></p>
+<p>JUL中Logger之间存在父子关系，这种父子关系通过树状结构存储，JUL在初始化时会创建一个顶层 RootLogger作为所有Logger父Logger，存储上作为树状结构的根节点。并父子关系通过名称来关联。默认子Logger会继承父Logger的属性</p>
+<h3 id="常用的转换符"><a href="#常用的转换符" class="headerlink" title="常用的转换符"></a>常用的转换符</h3><table>
+<thead>
+<tr>
+<th>转换符</th>
+<th>详细说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>%s</strong></td>
+<td><strong>字符串类型</strong></td>
+</tr>
+<tr>
+<td>%c</td>
+<td>字符类型</td>
+</tr>
+<tr>
+<td>%b</td>
+<td>布尔类型</td>
+</tr>
+<tr>
+<td><strong>%d（十进制）</strong></td>
+<td><strong>整数类型</strong></td>
+</tr>
+<tr>
+<td>%x（十六进制）</td>
+<td>整数类型（十六进制）</td>
+</tr>
+<tr>
+<td>%o</td>
+<td>整数类型（八进制）</td>
+</tr>
+<tr>
+<td><strong>%f</strong></td>
+<td><strong>浮点类型</strong></td>
+</tr>
+<tr>
+<td>%a</td>
+<td>十六进制浮点类型</td>
+</tr>
+<tr>
+<td>%e</td>
+<td>指数类型</td>
+</tr>
+<tr>
+<td>%n</td>
+<td>换行符</td>
+</tr>
+<tr>
+<td>%tx</td>
+<td>日期与时间类型（x代表不同的日期与时间转换符)</td>
+</tr>
+</tbody></table>
+<h3 id="特殊符号"><a href="#特殊符号" class="headerlink" title="特殊符号"></a>特殊符号</h3><table>
+<thead>
+<tr>
+<th>标志</th>
+<th>说明</th>
+<th>示例</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>+</td>
+<td>为正数或者负数添加符号，因为一般整数不会主动加符号</td>
+<td>(“%+d”,15)</td>
+<td>+15</td>
+</tr>
+<tr>
+<td>0</td>
+<td>数字前面补0，用于对齐</td>
+<td>(“%04d”, 99)</td>
+<td>0099</td>
+</tr>
+<tr>
+<td>空格</td>
+<td>在整数之前添加指定数量的空格</td>
+<td>(“%4d”, 99)</td>
+<td>99</td>
+</tr>
+<tr>
+<td>,</td>
+<td>以“,”对数字分组(常用显示金额)</td>
+<td>(“%,f”, 9999.99)</td>
+<td>9,999.990000</td>
+</tr>
+<tr>
+<td>(</td>
+<td>使用括号包含负数</td>
+<td>(“%(f”, -99.99)</td>
+<td>(99.990000)</td>
+</tr>
+</tbody></table>
+<h3 id="日期处理"><a href="#日期处理" class="headerlink" title="日期处理"></a>日期处理</h3><table>
+<thead>
+<tr>
+<th>标志</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>c</td>
+<td>包括全部日期和时间信息</td>
+<td>周四 10月 21 14:52:10 GMT+08:00 2021</td>
+</tr>
+<tr>
+<td>F</td>
+<td>年-月-日”格式</td>
+<td>2021-10-21</td>
+</tr>
+<tr>
+<td>D</td>
+<td>月/日/年”格式</td>
+<td>10/21/21</td>
+</tr>
+<tr>
+<td>r</td>
+<td>HH:MM:SS PM”格式（12时制）</td>
+<td>02:53:20 下午</td>
+</tr>
+<tr>
+<td>T</td>
+<td>HH:MM:SS”格式（24时制）</td>
+<td>14:53:39</td>
+</tr>
+<tr>
+<td>R</td>
+<td>HH:MM”格式（24时制）</td>
+<td>14:53</td>
+</tr>
+<tr>
+<td>b</td>
+<td>月份本地化</td>
+<td>0月</td>
+</tr>
+<tr>
+<td>y</td>
+<td>两位的年</td>
+<td>21</td>
+</tr>
+<tr>
+<td>Y</td>
+<td>四位的年</td>
+<td>2021</td>
+</tr>
+<tr>
+<td>m</td>
+<td>月</td>
+<td>10</td>
+</tr>
+<tr>
+<td>d</td>
+<td>日</td>
+<td>21</td>
+</tr>
+<tr>
+<td>H</td>
+<td>24小时制的时</td>
+<td>14</td>
+</tr>
+<tr>
+<td>I</td>
+<td>12小时制的时</td>
+<td>2</td>
+</tr>
+<tr>
+<td>M</td>
+<td>分</td>
+<td>57</td>
+</tr>
+<tr>
+<td>S</td>
+<td>秒</td>
+<td>46</td>
+</tr>
+<tr>
+<td>s</td>
+<td>秒为单位的时间戳</td>
+<td>1634799527</td>
+</tr>
+<tr>
+<td>p</td>
+<td>上午还是下午</td>
+<td>下午</td>
+</tr>
+</tbody></table>
+<h3 id="JUL配置"><a href="#JUL配置" class="headerlink" title="JUL配置"></a>JUL配置</h3><ul>
+<li>JULTest</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JULTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span>&#123;</span><br><span class="line">        <span class="comment">//类加载时读取配置文件</span></span><br><span class="line">        LogManager logManager = LogManager.getLogManager();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//寻找配置文件</span></span><br><span class="line">        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(<span class="string">&quot;logger.properties&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line"><span class="comment">//            将配置文件流添加至logManager中</span></span><br><span class="line">            logManager.readConfiguration(inputStream);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger LOGGER = Logger.getLogger(JULTest.class.getName());</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testJuc</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//关闭默认配置</span></span><br><span class="line">        LOGGER.setUseParentHandlers(<span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//手动添加自己的Handler   ConsoleHandler控制台处理器</span></span><br><span class="line">        ConsoleHandler consoleHandler = <span class="keyword">new</span> ConsoleHandler();</span><br><span class="line">        consoleHandler.setFormatter(<span class="keyword">new</span> SimpleFormatter());</span><br><span class="line">        <span class="comment">//将Handler的级别设置为全部显示</span></span><br><span class="line">        consoleHandler.setLevel(Level.ALL);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//手动添加自己的Handler   FileHandler 文件处理器</span></span><br><span class="line">        FileHandler fileHandler = <span class="keyword">new</span> FileHandler(<span class="string">&quot;D:/logs/JULTest.log&quot;</span>,<span class="keyword">true</span>);</span><br><span class="line">        fileHandler.setFormatter(<span class="keyword">new</span> SimpleFormatter());</span><br><span class="line">        fileHandler.setLevel(Level.ALL);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//将配置的Handler添加至LOGGER</span></span><br><span class="line">        LOGGER.addHandler(consoleHandler);</span><br><span class="line"></span><br><span class="line">        LOGGER.addHandler(fileHandler);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//设置日志显示级别</span></span><br><span class="line">        LOGGER.setLevel(Level.ALL);</span><br><span class="line"></span><br><span class="line">        LOGGER.severe(<span class="string">&quot;server: 严重&quot;</span>);</span><br><span class="line"></span><br><span class="line">        LOGGER.warning(<span class="string">&quot;warning: 警告&quot;</span>);</span><br><span class="line"></span><br><span class="line">        LOGGER.info(<span class="string">&quot;info: 信息&quot;</span>);</span><br><span class="line"></span><br><span class="line">        LOGGER.fine(<span class="string">&quot;fine: JUL无显示 因为Leve 低于 info JDK默认级别配置的是info及info以上&quot;</span>);</span><br><span class="line"></span><br><span class="line">        LOGGER.finer(<span class="string">&quot;finer: JUL无显示 因为Leve 低于 info JDK默认级别配置的是info及info以上&quot;</span>);</span><br><span class="line"></span><br><span class="line">        LOGGER.finest(<span class="string">&quot;finest: JUL无显示 因为Leve 低于 info JDK默认级别配置的是info及info以上&quot;</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testParent</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//任何一个Logger都是单例的 名字相同的只有一个</span></span><br><span class="line">        Logger logger = Logger.getLogger(JULTest.class.getName());</span><br><span class="line"></span><br><span class="line"><span class="comment">//        System.out.println(LOGGER.getName());</span></span><br><span class="line"><span class="comment">//        System.out.println(LOGGER == logger);</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">////        Logger parent = logger.getParent();</span></span><br><span class="line"><span class="comment">////</span></span><br><span class="line"><span class="comment">////        System.out.println(parent);</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建Logger对象</span></span><br><span class="line">        Logger logger1 = Logger.getLogger(<span class="string">&quot;com.dream&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//关闭继承的配置</span></span><br><span class="line">        logger1.setUseParentHandlers(<span class="keyword">false</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//控制台配置</span></span><br><span class="line">        ConsoleHandler consoleHandler = <span class="keyword">new</span> ConsoleHandler();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//设置格式</span></span><br><span class="line">        consoleHandler.setFormatter(<span class="keyword">new</span> SimpleFormatter());</span><br><span class="line"></span><br><span class="line">        <span class="comment">//给控制台设置级别</span></span><br><span class="line">        consoleHandler.setLevel(Level.ALL);</span><br><span class="line"></span><br><span class="line">        <span class="comment">///将处理器添加至logger对象</span></span><br><span class="line">        logger1.addHandler(consoleHandler);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//给logger对象设置级别</span></span><br><span class="line">        logger1.setLevel(Level.ALL);</span><br><span class="line"></span><br><span class="line">        logger.info(<span class="string">&quot;info&quot;</span>);</span><br><span class="line"></span><br><span class="line">        logger.fine(<span class="string">&quot;fine&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//        parent = logger.getParent();</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//        System.out.println(parent);</span></span><br><span class="line"><span class="comment">//        System.out.println(logger1.getParent());</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">readConfig</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">        Logger logger = Logger.getLogger(JULTest.class.getName());</span><br><span class="line"></span><br><span class="line">        logger.warning(<span class="string">&quot;warning&quot;</span>);</span><br><span class="line">        logger.finer(<span class="string">&quot;finer&quot;</span>);</span><br><span class="line">        logger.fine(<span class="string">&quot;fine&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            Integer result = <span class="number">1</span> / <span class="number">0</span>;</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            logger.throwing(JULTest.class.getName(),<span class="string">&quot;readConfig&quot;</span>,e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Logger.properties</li>
+</ul>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="comment">#根配置</span></span><br><span class="line"><span class="attr">handlers</span>= <span class="string">java.util.logging.ConsoleHandler</span></span><br><span class="line"><span class="meta">.level</span>= <span class="string">FINE</span></span><br><span class="line"><span class="comment"># 自定义配置</span></span><br><span class="line"><span class="meta">com.dream.xiaobo.handlers</span> = <span class="string">java.util.logging.ConsoleHandler,java.util.logging.FileHandler</span></span><br><span class="line"><span class="meta">com.dream.xiaobo.level</span> = <span class="string">FINER</span></span><br><span class="line"><span class="comment"># 不继承根的配置</span></span><br><span class="line"><span class="meta">com.dream.xiaobo.useParentHandlers</span> = <span class="string">false</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">#文件日志配置</span></span><br><span class="line"><span class="meta">java.util.logging.FileHandler.pattern</span> = <span class="string">D:/logs/java%u.log</span></span><br><span class="line"><span class="meta">java.util.logging.FileHandler.limit</span> = <span class="string">50000</span></span><br><span class="line"><span class="meta">java.util.logging.FileHandler.append</span>=<span class="string">true</span></span><br><span class="line"><span class="meta">java.util.logging.FileHandler.count</span> = <span class="string">1</span></span><br><span class="line"><span class="meta">java.util.logging.FileHandler.maxLocks</span> = <span class="string">100</span></span><br><span class="line"><span class="meta">java.util.logging.FileHandler.formatter</span> = <span class="string">java.util.logging.SimpleFormatter</span></span><br><span class="line"><span class="meta">java.util.logging.FileHandler.level</span> = <span class="string">FINER</span></span><br><span class="line"><span class="meta">java.util.logging.ConsoleHandler.level</span> = <span class="string">FINER</span></span><br><span class="line"></span><br><span class="line"><span class="meta">java.util.logging.ConsoleHandler.formatter</span> = <span class="string">java.util.logging.SimpleFormatter</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Log4j-日志框架"><a href="#Log4j-日志框架" class="headerlink" title="Log4j 日志框架"></a>Log4j 日志框架</h2><p>Log4j是Apache下的一款开源的日志框架</p>
+<h3 id="简单演示"><a href="#简单演示" class="headerlink" title="简单演示"></a>简单演示</h3><ul>
+<li>pom</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;log4j&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;log4j&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;1.2.13&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>java</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger LOGGER = Logger.getLogger(Log4jTest.class);</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testLog4j</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//初始化默认配置</span></span><br><span class="line">        BasicConfigurator.configure();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 日志记录输出</span></span><br><span class="line">        LOGGER.info(<span class="string">&quot;hello log4j&quot;</span>);</span><br><span class="line">        <span class="comment">// 日志级别</span></span><br><span class="line">        LOGGER.fatal(<span class="string">&quot;fatal&quot;</span>); <span class="comment">// 严重错误，一般会造成系统崩溃和终止运行</span></span><br><span class="line">        LOGGER.error(<span class="string">&quot;error&quot;</span>); <span class="comment">// 错误信息，但不会影响系统运行</span></span><br><span class="line">        LOGGER.warn(<span class="string">&quot;warn&quot;</span>); <span class="comment">// 警告信息，可能会发生问题</span></span><br><span class="line">        LOGGER.info(<span class="string">&quot;info&quot;</span>); <span class="comment">// 程序运行信息，数据库的连接、网络、IO操作等</span></span><br><span class="line">        LOGGER.debug(<span class="string">&quot;debug&quot;</span>); <span class="comment">// 调试信息，一般在开发阶段使用，记录程序的变量、参数等</span></span><br><span class="line">        LOGGER.trace(<span class="string">&quot;trace&quot;</span>); <span class="comment">// 追踪信息，记录程序的所有流程信息</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>fatal</code> 指出每个严重的错误事件将会导致应用程序的退出。</p>
+<p><code>error</code> 指出虽然发生错误事件，但仍然不影响系统的继续运行。</p>
+<p><code>warn</code> 表明会出现潜在的错误情形。</p>
+<p><code>info</code> 一般和在粗粒度级别上，强调应用程序的运行全程。</p>
+<p><code>debug</code> 一般用于细粒度级别上，对调试应用程序非常有帮助。</p>
+<p><code>trace</code> 是程序追踪，可以用于输出程序运行中的变量，显示执行的流程。</p>
+<p>两个特殊的级别：OFF，可用来关闭日志记录。 ALL，启用所有消息的日志记录</p>
+<p>一般情况下，我们只使用4个级别，优先级从高到低为 ERROR &gt; WARN &gt; INFO &gt; DEBUG</p>
+<h3 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h3><p>Log4J 主要由 Loggers (日志记录器)、Appenders（输出端）和 Layout（日志格式化器）组成。其中 Loggers 控制日志的输出级别与日志是否输出；Appenders 指定日志的输出方式（输出到控制台、文件 等）；Layout 控制日志信息的输出格式</p>
+<p> Log4J 主要由 Loggers (日志记录器)、Appenders（输出端）和 Layout（日志格式化器）组成。其中 Loggers 控制日志的输出级别与日志是否输出；Appenders 指定日志的输出方式（输出到控制台、文件 等）；Layout 控制日志信息的输出格式</p>
+<h4 id="Loggers"><a href="#Loggers" class="headerlink" title="Loggers"></a>Loggers</h4><p>日志记录器：负责收集处理日志记录，Logger的名字大小写敏感，其命名有继承机制：例如：name为com.dream.xiaobo.Log4j的logger会继承 name为com.dream.xiaobo的logger，和JUL一致。</p>
+<p>Log4J中有一个特殊的logger叫做“root”，他是所有logger的根，也就意味着其他所有的logger都会直接 或者间接地继承自root。root logger可以用Logger.getRootLogger()方法获取。 JUL也有一个名为.的根</p>
+<h3 id="Appenders"><a href="#Appenders" class="headerlink" title="Appenders"></a>Appenders</h3><p>Appender和JUL的Handler很像，用来指定日志输出到哪个地方，可以同时指定日志的输出目的地。Log4j 常用的输出目的地 有以下几种：</p>
+<table>
+<thead>
+<tr>
+<th>输出端类型</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ConsoleAppender</td>
+<td>将日志输出到控制台</td>
+</tr>
+<tr>
+<td>FileAppender</td>
+<td>将日志输出到文件中</td>
+</tr>
+<tr>
+<td>DailyRollingFileAppender</td>
+<td>将日志输出到一个日志文件，并且每天输出到一个新的文件</td>
+</tr>
+<tr>
+<td>RollingFileAppender</td>
+<td>将日志输出到一个日志文件，并且每天输出到一个新的文件</td>
+</tr>
+<tr>
+<td>RollingFileAppender</td>
+<td>把日志信息保存到数据库中</td>
+</tr>
+</tbody></table>
+<h4 id="log4j占位符"><a href="#log4j占位符" class="headerlink" title="log4j占位符"></a>log4j占位符</h4><p>%m 输出代码中指定的日志信息</p>
+<p>%p 输出日志级别，及 DEBUG、INFO 等</p>
+<p>%n 换行符（Windows平台的换行符为 “\n”，Unix 平台为 “\n”）</p>
+<p>%r 输出自应用启动到输出该 log 信息耗费的毫秒数</p>
+<p>%c 输出打印语句所属的类的全名</p>
+<p>%t 输出产生该日志的线程全名</p>
+<p>%d 输出服务器当前时间，默认为 ISO8601，也可以指定格式，如：%d{yyyy年MM月dd日HH:mm:ss}</p>
+<p>%l 输出日志时间发生的位置，包括类名、线程、及在代码中的行数。如：Test.main(Test.java:10)</p>
+<p>%F 输出日志消息产生时所在的文件名称</p>
+<p>%L 输出代码中的行号</p>
+<blockquote>
+<p>%% 输出一个 “%” 字符 可以在 % 与字符之间加上修饰符来控制最小宽度、最大宽度和文本的对其方式。如：</p>
+</blockquote>
+<p>%5c 输出category名称，最小宽度是5，category&lt;5，默认的情况下右对齐</p>
+<p>%-5c 输出category名称，最小宽度是5，category&lt;5，”-“号指定左对齐,会有空格</p>
+<p>%.5c 输出category名称，最大宽度是5，category&gt;5，就会将左边多出的字符截掉，&lt;5不会有空格</p>
+<p>%20.30c category名称&lt;20补空格，并且右对齐，&gt;30字符，就从左边交远销出的字符截掉</p>
+<p><strong>例</strong></p>
+<p>%-d{yyyy-MM-dd HH:mm:ss} [%t:%r] -[%p] %m%n</p>
+<p>打印：日期 [线程:毫秒数] - [日志级别] - 日志信息 换行</p>
+<h3 id="log4j代码整理"><a href="#log4j代码整理" class="headerlink" title="log4j代码整理"></a>log4j代码整理</h3><ul>
+<li>log4jTest</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Log4jTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger LOGGER = Logger.getLogger(Log4jTest.class);</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testLog4j</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//初始化默认配置</span></span><br><span class="line"><span class="comment">//        BasicConfigurator.configure();</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//添加源码自带配置</span></span><br><span class="line"><span class="comment">//        LOGGER.addAppender(new ConsoleAppender(new PatternLayout(&quot;%r [%t] %p %c %x - %m%n&quot;)));</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//        //模拟源码手动添加配置</span></span><br><span class="line"><span class="comment">//        Logger rootLogger = Logger.getRootLogger();</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//        //构建ConsoleAppender</span></span><br><span class="line"><span class="comment">//        ConsoleAppender consoleAppender = new ConsoleAppender();</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//        //ConsoleAppender 需要一个输出流 System.out输出字节流 PrintWriter输出字符流</span></span><br><span class="line"><span class="comment">//        consoleAppender.setWriter(new PrintWriter(System.out));</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//        //需要一个layout</span></span><br><span class="line"><span class="comment">//        Layout layout = new PatternLayout(&quot;%-d&#123;yyyy-MM-dd HH:mm:ss&#125; [%t:%r] -[%p] %m%n&quot;);</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//        //将layout组件添加至consoleAppender</span></span><br><span class="line"><span class="comment">//        consoleAppender.setLayout(layout);</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//        //将consoleAppender组件添加至rootLogger</span></span><br><span class="line"><span class="comment">//        rootLogger.addAppender(consoleAppender);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//        JDBCAppender jdbcAppender = new JDBCAppender();</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//        jdbcAppender.setDriver(&quot;com.mysql.cj.jdbc.Driver&quot;);</span></span><br><span class="line"><span class="comment">//        jdbcAppender.setURL(&quot;jdbc:mysql://localhost:3306/test?useUnicode=true&amp;useSSL=false&amp;characterEncoding=utf-8&amp;serverTimezone=UTC&quot;);</span></span><br><span class="line"><span class="comment">//        jdbcAppender.setUser(&quot;root&quot;);</span></span><br><span class="line"><span class="comment">//        jdbcAppender.setPassword(&quot;xiaobo&quot;);</span></span><br><span class="line"><span class="comment">//        jdbcAppender.setSql(&quot;INSERT INTO log(project_name,create_date,level,category,file_name,thread_name,line,all_category,message) values(&#x27;xiaobo&#x27;,&#x27;%d&#123;yyyy-MM-ddHH:mm:ss&#125;&#x27;,&#x27;%p&#x27;,&#x27;%c&#x27;,&#x27;%F&#x27;,&#x27;%t&#x27;,&#x27;%L&#x27;,&#x27;%l&#x27;,&#x27;%m&#x27;)&quot;);</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//        rootLogger.addAppender(jdbcAppender);</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 日志记录输出</span></span><br><span class="line">        LOGGER.info(<span class="string">&quot;hello log4j&quot;</span>);</span><br><span class="line">        <span class="comment">// 日志级别</span></span><br><span class="line">        LOGGER.fatal(<span class="string">&quot;fatal&quot;</span>); <span class="comment">// 严重错误，一般会造成系统崩溃和终止运行</span></span><br><span class="line">        LOGGER.error(<span class="string">&quot;error&quot;</span>); <span class="comment">// 错误信息，但不会影响系统运行</span></span><br><span class="line">        LOGGER.warn(<span class="string">&quot;warn&quot;</span>); <span class="comment">// 警告信息，可能会发生问题</span></span><br><span class="line">        LOGGER.info(<span class="string">&quot;info&quot;</span>); <span class="comment">// 程序运行信息，数据库的连接、网络、IO操作等</span></span><br><span class="line">        LOGGER.debug(<span class="string">&quot;debug&quot;</span>); <span class="comment">// 调试信息，一般在开发阶段使用，记录程序的变量、参数等</span></span><br><span class="line">        LOGGER.trace(<span class="string">&quot;trace&quot;</span>); <span class="comment">// 追踪信息，记录程序的所有流程信息</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line">            LOGGER.info(<span class="string">&quot;hello log4j&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">log4jConfig</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 日志记录输出</span></span><br><span class="line">        LOGGER.info(<span class="string">&quot;hello log4j&quot;</span>);</span><br><span class="line">        <span class="comment">// 日志级别</span></span><br><span class="line">        LOGGER.fatal(<span class="string">&quot;fatal&quot;</span>); <span class="comment">// 严重错误，一般会造成系统崩溃和终止运行</span></span><br><span class="line">        LOGGER.error(<span class="string">&quot;error&quot;</span>); <span class="comment">// 错误信息，但不会影响系统运行</span></span><br><span class="line">        LOGGER.warn(<span class="string">&quot;warn&quot;</span>); <span class="comment">// 警告信息，可能会发生问题</span></span><br><span class="line">        LOGGER.info(<span class="string">&quot;info&quot;</span>); <span class="comment">// 程序运行信息，数据库的连接、网络、IO操作等</span></span><br><span class="line">        LOGGER.debug(<span class="string">&quot;debug&quot;</span>); <span class="comment">// 调试信息，一般在开发阶段使用，记录程序的变量、参数等</span></span><br><span class="line">        LOGGER.trace(<span class="string">&quot;trace&quot;</span>); <span class="comment">// 追踪信息，记录程序的所有流程信息</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>log4j.properties</li>
+</ul>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Set root logger level to DEBUG and its only appender to A1.</span></span><br><span class="line"><span class="meta">log4j.rootLogger</span>=<span class="string">ALL, A1, DailyRolling</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># 控制台 Appender</span></span><br><span class="line"><span class="meta">log4j.appender.A1</span>=<span class="string">org.apache.log4j.ConsoleAppender</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># 自定义配置</span></span><br><span class="line"><span class="meta">log4j.logger.com.dream.xiaobo</span> =<span class="string">DEBUG, A1, DailyRolling</span></span><br><span class="line"><span class="comment"># 关闭继承根结点的配置</span></span><br><span class="line"><span class="meta">log4j.additivity.com.dream.xiaobo</span> = <span class="string">false</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># PatternLayout  布局</span></span><br><span class="line"><span class="meta">log4j.appender.A1.layout</span>=<span class="string">org.apache.log4j.PatternLayout</span></span><br><span class="line"><span class="meta">log4j.appender.A1.layout.ConversionPattern</span>=<span class="string">%-4r [%t] %-5p %c %x - %m%n</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># 文件 Appender</span></span><br><span class="line"><span class="meta">log4j.appender.FILE</span> = <span class="string">org.apache.log4j.FileAppender</span></span><br><span class="line"><span class="meta">log4j.appender.FILE.File</span> = <span class="string">D:/logs/log4j.log</span></span><br><span class="line"><span class="meta">log4j.appender.FILE.layout</span> = <span class="string">org.apache.log4j.PatternLayout</span></span><br><span class="line"><span class="meta">log4j.appender.FILE.append</span> = <span class="string">true</span></span><br><span class="line"><span class="meta">log4j.appender.FILE.layout.ConversionPattern</span>=<span class="string">%-4r [%t] %-5p %c %x - %m%n</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># JDBC Appender</span></span><br><span class="line"><span class="meta">log4j.appender.JDBC</span> = <span class="string">org.apache.log4j.jdbc.JDBCAppender</span></span><br><span class="line"><span class="meta">log4j.appender.JDBC.Driver</span> = <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line"><span class="meta">log4j.appender.JDBC.URL</span> = <span class="string">jdbc:mysql://localhost:3306/test?useSSL=false&amp;useUnicode=true&amp;characterEncoding=utf8&amp;serverTimezone=UTC</span></span><br><span class="line"><span class="meta">log4j.appender.JDBC.User</span> = <span class="string">root</span></span><br><span class="line"><span class="meta">log4j.appender.JDBC.Password</span> = <span class="string">xiaobo</span></span><br><span class="line"><span class="meta">log4j.appender.JDBC.Sql</span> = <span class="string">INSERT INTO log(project_name,create_date,level,category,file_name,thread_name,line,all_category,message) values(&#x27;xiaobo&#x27;,&#x27;%d&#123;yyyy-MM-ddHH:mm:ss&#125;&#x27;,&#x27;%p&#x27;,&#x27;%c&#x27;,&#x27;%F&#x27;,&#x27;%t&#x27;,&#x27;%L&#x27;,&#x27;%l&#x27;,&#x27;%m&#x27;)</span></span><br><span class="line"><span class="meta">log4j.appender.JDBC.layout</span> = <span class="string">org.apache.log4j.PatternLayout</span></span><br><span class="line"><span class="meta">log4j.appender.JDBC.layout.ConversionPattern</span>=<span class="string">%-4r [%t] %-5p %c %x - %m%n</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># 滚动生成文件日志 Appender RollingFileAppender 通过文件大小来控制的</span></span><br><span class="line"><span class="meta">log4j.appender.RollingFile</span> = <span class="string">org.apache.log4j.RollingFileAppender</span></span><br><span class="line"><span class="meta">log4j.appender.RollingFile.File</span> = <span class="string">D:/logs/log4j.log</span></span><br><span class="line"><span class="meta">log4j.appender.RollingFile.append</span> = <span class="string">true</span></span><br><span class="line"><span class="meta">log4j.appender.RollingFile.maximumFileSize</span> = <span class="string">1</span></span><br><span class="line"><span class="meta">log4j.appender.RollingFile.maxBackupIndex</span> = <span class="string">1</span></span><br><span class="line"></span><br><span class="line"><span class="meta">log4j.appender.RollingFile.layout</span> =<span class="string">org.apache.log4j.PatternLayout</span></span><br><span class="line"><span class="meta">log4j.appender.RollingFile.layout.ConversionPattern</span>=<span class="string">%-4r [%t] %-5p %c %x - %m%n</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># 滚动生成文件日志 Appender DailyRollingFileAppender 通过日期来控制的</span></span><br><span class="line"><span class="meta">log4j.appender.DailyRolling</span> = <span class="string">org.apache.log4j.DailyRollingFileAppender</span></span><br><span class="line"><span class="meta">log4j.appender.DailyRolling.File</span> = <span class="string">D:/logs/log4j.log</span></span><br><span class="line"><span class="meta">log4j.appender.DailyRolling.append</span> = <span class="string">true</span></span><br><span class="line"></span><br><span class="line"><span class="meta">log4j.appender.DailyRolling.layout</span> =<span class="string">org.apache.log4j.PatternLayout</span></span><br><span class="line"><span class="meta">log4j.appender.DailyRolling.layout.ConversionPattern</span>=<span class="string">%-4r [%t] %-5p %c %x - %m%n</span></span><br></pre></td></tr></table></figure>
+
+
+<p><strong>本篇文章 仅供自己学习整理 方便阅读 参考b站某UP主 如有侵权 通知即删</strong></p>
+<p><strong>你知道的越多 你不知道的越多 嘿 我是小博 带你一起看我目之所及的世界……</strong></p>
+]]></content>
+      <tags>
+        <tag>java</tag>
+        <tag>日志框架</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>大话数据结构 树</title>
     <url>/posts/1720144195/</url>
     <content><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20220310235141.2oe31pjh01m0.webp" alt="微信图片_20220310235141"></p>
