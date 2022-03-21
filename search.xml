@@ -1,6 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>日志框架 JCL slf4j</title>
+    <url>/posts/1217569774/</url>
+    <content><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%87%BA%E8%87%AA%E6%9C%AC%E5%BF%83.4mwolyvi7pk0.webp" alt="出自本心"></p>
+<!--sleep-->
+
+<span id="more"></span>
+
+<h1 id="日志框架"><a href="#日志框架" class="headerlink" title="日志框架"></a>日志框架</h1><h2 id="日志门面"><a href="#日志门面" class="headerlink" title="日志门面"></a>日志门面</h2><p>日志门面就是为了解决这个问题而出现的一种技术，日志门面是规范，其他的实现按照规范实现各自的日志框架即可，我们基于日志门面编程即可</p>
+<p>常见的日志门面： JCL、slf4j</p>
+<p>常见的日志实现： JUL、log4j、logback、log4j2</p>
+<p>日志框架出现的历史顺序：</p>
+<p>log4j –&gt;JUL–&gt;JCL–&gt; slf4j –&gt; logback –&gt; log4j2</p>
+<h2 id="slf4j-日志门面"><a href="#slf4j-日志门面" class="headerlink" title="slf4j 日志门面"></a>slf4j 日志门面</h2><p>简单日志门面(Simple Logging Facade For Java) SLF4J 主要是为了给 Java 日志访问提供一套标准、规范的 API 框架，其主要意义在于提供接口，具体的实现可以交由其他日志框架</p>
+<p>SLF4J 是目前市面上最流行的日志门面</p>
+<h3 id="slf4j-的两个功能"><a href="#slf4j-的两个功能" class="headerlink" title="slf4j 的两个功能"></a>slf4j 的两个功能</h3><ul>
+<li><p>日志框架的绑定</p>
+</li>
+<li><p>日志框架的桥接</p>
+</li>
+</ul>
+<h3 id="阿里日志规约"><a href="#阿里日志规约" class="headerlink" title="阿里日志规约"></a>阿里日志规约</h3><p>应用中不可直接使用日志系统（Log4j、Logback）中的 API，而应依赖使用日志框架 SLF4J 中的 API。使用门面模式的日志框架，有利于维护和各个类的日志处理方法统一。</p>
+<p>日志文件推荐至少保存 15 天，因为有些异常具备以“周”为频次发生的特点。</p>
+<p>应用中的扩展日志（如打点、临时监控、访问日志等）命名方式：appName_logType_logName.log。logType 为日志类型，推荐分类有 stats/monitor/visit 等；</p>
+<p>logName 为日志描述。这种命名的好处：通过文件名就可以知道日志文件属于哪个应用，哪种类型，有什么目的，这也有利于归类查找。</p>
+<p>对 trace/debug/info 级别的日志输出，必须使用条件输出形式或者占位符的方式。</p>
+<p>避免重复打印日志，否则会浪费磁盘空间。务必在日志配置文件中设置 additivity=false。</p>
+<p>异常信息应该包括两类：案发现场信息和异常堆栈信息。如果不处理，那么通过关键字向上抛出。</p>
+<p>谨慎地记录日志。生产环境禁止输出 debug 日志；有选择地输出 info 日志；如果使用 warn 记录刚上线时的业务行为信息，一定要注意日志输出量的问题，避免吧服务器磁盘撑爆，并及时删除这些观察日志。</p>
+<p>可以使用 warn 日志级别记录用户输入参数错误的情况，避免当用户投诉时无所适从</p>
+<h3 id="slf4j-简单使用"><a href="#slf4j-简单使用" class="headerlink" title="slf4j 简单使用"></a>slf4j 简单使用</h3><ul>
+<li>pom</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--        slf4j日志门面依赖--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.27<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--        slf4j简单的日志实现依赖--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-simple<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.27<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>java</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Logger LOGGER = LoggerFactory.getLogger(Slf4jTest.class.getName());</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testSlf4j</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        LOGGER.error(<span class="string">&quot;error&quot;</span>);</span><br><span class="line">        LOGGER.warn(<span class="string">&quot;warn&quot;</span>);</span><br><span class="line">        LOGGER.info(<span class="string">&quot;info&quot;</span>);</span><br><span class="line">        LOGGER.debug(<span class="string">&quot;debug&quot;</span>);</span><br><span class="line">        LOGGER.trace(<span class="string">&quot;trace&quot;</span>);</span><br><span class="line">        <span class="comment">// 使用占位符输出日志信息</span></span><br><span class="line">        LOGGER.info(<span class="string">&quot;&#123;&#125;今年&#123;&#125;岁了！&quot;</span>, <span class="string">&quot;xiaobo&quot;</span>, <span class="number">22</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Integer result = <span class="number">1</span> / <span class="number">0</span>;</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            LOGGER.info(<span class="string">&quot;这是异常&quot;</span>,e);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="slf4j-绑定其他日志实现"><a href="#slf4j-绑定其他日志实现" class="headerlink" title="slf4j 绑定其他日志实现"></a>slf4j 绑定其他日志实现</h3><h4 id="绑定-JUL-实现"><a href="#绑定-JUL-实现" class="headerlink" title="绑定 JUL 实现"></a>绑定 JUL 实现</h4><ul>
+<li>pom</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--        slf4j日志门面依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.27<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--        slf4j绑定log4j日志实现--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-jdk14<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.25<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="绑定-log4j-实现"><a href="#绑定-log4j-实现" class="headerlink" title="绑定 log4j 实现"></a>绑定 log4j 实现</h4><ul>
+<li>pom</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--slf4j core 使用slf4j必須添加--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.27<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--        slf4j绑定log4j日志实现--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-log4j12<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.27<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--        log4j日志实现依赖--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>log4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>log4j<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.17<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="slf4-桥接其他日志框架"><a href="#slf4-桥接其他日志框架" class="headerlink" title="slf4 桥接其他日志框架"></a>slf4 桥接其他日志框架</h3><p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/%E6%97%A5%E5%BF%97%E6%A1%86%E6%9E%B6%E7%9A%84%E6%A1%A5%E6%8E%A5.4mk2vyzql8g0.webp" alt="日志框架的桥接"></p>
+<p>您依赖的某些组件依赖于 SLF4J 以外的日志记录 API。您也可以假设这些组件在不久的将来不会切换到 SLF4J。为了解决这种情况，SLF4J 附带了几个桥接模块，这些模块将对 log4j，JCL 和 java.util.logging API 的调用重定向</p>
+<p>还用 log4j 的 api 写代码，但是具体的实现给你抽离了，我们依赖了一个中间层，这个层其实是用旧的 api 操作 slf4j，而不是操作具体的实现</p>
+<h4 id="桥接步骤"><a href="#桥接步骤" class="headerlink" title="桥接步骤"></a>桥接步骤</h4><ul>
+<li><p>1、先去除之前老的日志框架的依赖，必须去掉</p>
+</li>
+<li><p>2、添加 SLF4J 提供的桥接组件，这个组件就是模仿之前老的日志写了一套相同的 api，只不过这个 api 是在调用 slf4j 的 api</p>
+</li>
+<li><p>3、为项目添加 SLF4J 的具体实现</p>
+</li>
+</ul>
+<p><strong>示例</strong></p>
+<ul>
+<li>pom</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 桥接的组件 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>log4j-over-slf4j<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.27<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.27<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>slf4j-simple<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.27<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>之前名字叫 log4j 之后修改为 log4j_back</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Log4j_back</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">log4j</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;log4j&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>slf4j</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Slf4j</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">myLog</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>slf4jimpl</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Slf4j_JUL</span> <span class="keyword">implements</span> <span class="title">Slf4j</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">myLog</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;slf4j&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>log4j</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Log4j</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">log4j</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        Slf4j_JUL slf4j_jul = <span class="keyword">new</span> Slf4j_JUL();</span><br><span class="line"></span><br><span class="line">        slf4j_jul.myLog();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>client</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Client</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Log4j log4j = <span class="keyword">new</span> Log4j();</span><br><span class="line">        log4j.log4j();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="slf4j-提供的桥接器"><a href="#slf4j-提供的桥接器" class="headerlink" title="slf4j 提供的桥接器"></a>slf4j 提供的桥接器</h4><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- log4j--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>log4j-over-slf4j<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.27<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- jul --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jul-to-slf4j<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.27<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--jcl --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.slf4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jcl-over-slf4j<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.7.27<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>1、jcl-over-slf4j.jar 和 slf4j-jcl.jar 不能同时部署。前一个 jar 文件将导致 JCL 将日志系统的选择委托给 SLF4J，后一个 jar 文件将导致 SLF4J 将日志系统的选择委托给 JCL，从而导致无限循环。</p>
+</li>
+<li><p>2、log4j-over-slf4j.jar 和 slf4j-log4j12.jar 不能同时出现</p>
+</li>
+<li><p>3、jul-to-slf4j.jar 和 slf4j-jdk14.jar 不能同时出现</p>
+</li>
+<li><p>4、所有的桥接都只对 Logger 日志记录器对象有效，如果程序中调用了内部的配置类或者是 Appender,Filter 等对象，将无法产生效果。</p>
+</li>
+</ul>
+<h2 id="JCL-日志门面"><a href="#JCL-日志门面" class="headerlink" title="JCL 日志门面"></a>JCL 日志门面</h2><p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/java/%E6%97%A5%E5%BF%97%E9%97%A8%E9%9D%A2%E4%B8%8E%E6%97%A5%E5%BF%97%E5%AE%9E%E7%8E%B0.5k6auhhwfjg0.webp" alt="日志门面与日志实现"></p>
+<p>全称为 Jakarta Commons Logging，是 Apache 提供的一个通用日志 API</p>
+<p>JCL 有两个基本的抽象类：Log(基本记录器)和 LogFactory(负责创建 Log 实例)</p>
+<ul>
+<li>pom</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>commons-logging<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-logging<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里的<code>LoggerFactory.getLogger</code>依赖的是 log4j 的日志实现</p>
+<h3 id="为什么要使用日志门面"><a href="#为什么要使用日志门面" class="headerlink" title="为什么要使用日志门面"></a>为什么要使用日志门面</h3><p>面向接口开发，不再依赖具体的实现类。减少代码的耦合</p>
+<p>项目通过导入不同的日志实现类，可以灵活的切换日志框架</p>
+<p>统一 API，方便开发者学习和使用</p>
+<p>统一配置便于项目日志的管理</p>
+<blockquote>
+<p>本篇文章 仅供自己学习整理 方便阅读 参考b站某UP主 如有侵权 通知即删</p>
+</blockquote>
+<p><strong>你知道的越多 你不知道的越多 嘿 我是小博 带你一起看我目之所及的世界……</strong></p>
+]]></content>
+      <tags>
+        <tag>-java -日志框架</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>日志框架 JUL</title>
     <url>/posts/626247823/</url>
     <content><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20220316194438.603k442et1o0.webp" alt="微信图片_20220316194438"></p>
