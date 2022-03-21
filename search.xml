@@ -344,6 +344,10 @@
     <title>大话数据结构 树</title>
     <url>/posts/1720144195/</url>
     <content><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20220310235141.2oe31pjh01m0.webp" alt="微信图片_20220310235141"></p>
+<!--sleep-->
+
+<span id="more"></span>
+
 <h1 id="《大话数据结构》-阅读整理"><a href="#《大话数据结构》-阅读整理" class="headerlink" title="《大话数据结构》 阅读整理"></a>《大话数据结构》 阅读整理</h1><h2 id="树"><a href="#树" class="headerlink" title="树"></a>树</h2><h3 id="树的定义"><a href="#树的定义" class="headerlink" title="树的定义"></a>树的定义</h3><p>n(n&gt;=0)个结点的有限集</p>
 <p>有且仅有一个特定的称为根的结点</p>
 <p>当n &gt; 1时 其余结点可分为m(m&gt;0)个互不相交的有限集T1,T2,T3…Tm<br>其中每一个集合本身又是一棵树 并且称为根的子树</p>
