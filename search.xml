@@ -1,6 +1,306 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>spring 复习整理二</title>
+    <url>/posts/2916426880/</url>
+    <content><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20220426220935.2mt2ny4ewq00.webp" alt="微信截图_20220426220935"></p>
+<!--sleep-->
+
+<span id="more"></span>
+
+<h1 id="spring-复习整理二（仗剑走天涯）"><a href="#spring-复习整理二（仗剑走天涯）" class="headerlink" title="spring 复习整理二（仗剑走天涯）"></a>spring 复习整理二（仗剑走天涯）</h1><h2 id="Bean的作用域"><a href="#Bean的作用域" class="headerlink" title="Bean的作用域"></a>Bean的作用域</h2><table>
+<thead>
+<tr>
+<th>scope</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>singleto</td>
+<td>每个bean在ioc容器中都是独一无二的单例形式</td>
+</tr>
+<tr>
+<td>prototype</td>
+<td>将单个beanDifination定义为，spring容器可以【实例化任意数量】的对象实例</td>
+</tr>
+<tr>
+<td>request</td>
+<td>将单个beanDifination限定为单个HTTP请求的生命周期。 也就是说，每个HTTP请求都有自己的bean实例，它是在单个beanDifination的后面创建的。 仅在web环境中的Spring【ApplicationContext】的上下文中有效</td>
+</tr>
+<tr>
+<td>session</td>
+<td>将单个beanDifination定义为HTTP 【Session】的生命周期。 仅在web环境中的Spring 【ApplicationContext】的上下文中有效</td>
+</tr>
+<tr>
+<td>application</td>
+<td>将单个beanDifination定义为【ServletContext】的生命周期。 仅在web环境中的Spring 【ApplicationContext】的上下文中有效</td>
+</tr>
+<tr>
+<td>websocket</td>
+<td>将单个beanDifination作用域定义为【WebSocket】的生命周期。 仅在web环境中的Spring【ApplicationContext】的上下文中有效</td>
+</tr>
+</tbody></table>
+<h2 id="生命周期回调"><a href="#生命周期回调" class="headerlink" title="生命周期回调"></a>生命周期回调</h2><h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><ul>
+<li>接口形式(不建议使用)</li>
+</ul>
+<p>org.springframework.beans.factory.InitializingBean.InitializingBean的接口允许bean在容器设置了bean上的所有必要属性之后执行【初始化工作】。【InitializingBean】接口指定了一个方法 这种接口形式将你的代码与Spring的代码耦合在一起 所以不建议使用</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">afterPropertiesSet</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>xml配置</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">&quot;a&quot;</span> <span class="attr">class</span>=<span class="string">&quot;com.dream.xiaobo.entity.A&quot;</span></span></span><br><span class="line"><span class="tag">          <span class="attr">autowire</span>=<span class="string">&quot;byType&quot;</span> <span class="attr">init-method</span>=<span class="string">&quot;init&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>init-method=&quot;init&quot;</code>:为这个Bean的init方法设置为初始化功能</p>
+<ul>
+<li>注解形式<br>jdk8自带<code>@PostConstruct</code></li>
+</ul>
+<p>jdk8以上 引入依赖</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>javax.annotation<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>javax.annotation-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.3.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>注意 在spring中要想使用注解需要先开启注解功能 在Bean中引入相应的规范文档</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">xmlns:p=&quot;http://www.springframework.org/schema/p&quot;</span><br><span class="line"></span><br><span class="line">http://www.springframework.org/schema/context</span><br><span class="line">        https://www.springframework.org/schema/context/spring-context.xsd</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--    开启spring注解 自动装载到容器当中 需要引入命名空间以及规范文档--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:annotation-config</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@PostConstruct</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;init&quot;</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="销毁"><a href="#销毁" class="headerlink" title="销毁"></a>销毁</h3><ul>
+<li>接口形式</li>
+</ul>
+<p>实现org.springframework.beans.factory.DisposableBean接口可以让bean在管理它的容器被销毁时获得回调。 ‘ DisposableBean ‘接口指定了一个方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>xml形式</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">name</span>=<span class="string">&quot;a&quot;</span> <span class="attr">class</span>=<span class="string">&quot;com.dream.xiaobo.entity.A&quot;</span></span></span><br><span class="line"><span class="tag">          <span class="attr">autowire</span>=<span class="string">&quot;byType&quot;</span> <span class="attr">destroy-method</span>=<span class="string">&quot;destroy&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>destroy-method=&quot;destroy&quot;</code>:为这个Bean的destroy方法设置销毁功能</p>
+<ul>
+<li>注解形式</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@PreDestroy</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;destroy&quot;</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="默认初始化和销毁方法"><a href="#默认初始化和销毁方法" class="headerlink" title="默认初始化和销毁方法"></a>默认初始化和销毁方法</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">default-init-method</span>=<span class="string">&quot;init&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>规定方法名为init和destory</p>
+<h3 id="ApplicationContextAware-和-BeanNameAware"><a href="#ApplicationContextAware-和-BeanNameAware" class="headerlink" title="ApplicationContextAware 和 BeanNameAware"></a>ApplicationContextAware 和 BeanNameAware</h3><ul>
+<li>ApplicationContextAware</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ApplicationContextAware</span> <span class="keyword">extends</span> <span class="title">Aware</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">setApplicationContext</span><span class="params">(ApplicationContext applicationContext)</span> <span class="keyword">throws</span> BeansException</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>BeanNameAware</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BeanNameAware</span> <span class="keyword">extends</span> <span class="title">Aware</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">setBeanName</span><span class="params">(String name)</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Other-Aware-Interfaces"><a href="#Other-Aware-Interfaces" class="headerlink" title="Other Aware Interfaces"></a>Other Aware Interfaces</h3><table>
+<thead>
+<tr>
+<th>命名</th>
+<th>依赖注入</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ApplicationContextAware</td>
+<td>将ApplicationContext注入bean当中</td>
+</tr>
+<tr>
+<td>ApplicationEventPublisherAware</td>
+<td>将ApplicationEventPublisherAware注入bean当中</td>
+</tr>
+<tr>
+<td>BeanClassLoaderAware</td>
+<td>将类加载器用于装入bean类</td>
+</tr>
+<tr>
+<td>BeanFactoryAware</td>
+<td>将BeanFactory注入bean当中</td>
+</tr>
+<tr>
+<td>BeanNameAware</td>
+<td>将bean的名称注入bean中</td>
+</tr>
+<tr>
+<td>ResourceLoaderAware</td>
+<td>配置了用于访问资源的加载器</td>
+</tr>
+<tr>
+<td>ServletConfigAware</td>
+<td>当前的’ ServletConfig ‘容器运行。 仅在web感知的Spring ‘ ApplicationContext ‘中有效</td>
+</tr>
+<tr>
+<td>ServletContextAware</td>
+<td>当前运行容器的“ServletContext”。 仅在web感知的Spring ‘ ApplicationContext ‘中有效</td>
+</tr>
+</tbody></table>
+<h2 id="基于注解的容器配置"><a href="#基于注解的容器配置" class="headerlink" title="基于注解的容器配置"></a>基于注解的容器配置</h2><h3 id="Autowired"><a href="#Autowired" class="headerlink" title="@Autowired"></a>@Autowired</h3><p>自动装配，有byType的语义</p>
+<h3 id="Autowired使用场所"><a href="#Autowired使用场所" class="headerlink" title="@Autowired使用场所"></a>@Autowired使用场所</h3><p>可以将@Autowired注解应用到传统的 setter方法</p>
+<p>可以将注解应用到具有任意名称和多个参数的方法</p>
+<p>可以将 @Autowired 应用到字段上（<strong>常用</strong>），甚至可以将它与构造函数混合使用</p>
+<p>可以将 @Autowired 应用到数组、list、set集合上</p>
+<p>可以将@Autowired 应用到Map集合上 只要期望的键类型是“String”，也可以自动连接。 映射值包含预期类型的所有bean，键包含相应的bean名</p>
+<p><strong>注意</strong></p>
+<p>默认情况下，当给定注入点没有可用的匹配候选bean时，自动装配将失败。 对于声明的数组、集合或映射，至少需要一个匹配元素</p>
+<p>通过将<code>@Autowired</code>中的 required 属性设置为 false 来让框架跳过它</p>
+<h3 id="Primary"><a href="#Primary" class="headerlink" title="@Primary"></a>@Primary</h3><p><code>@Primary</code>表示当多个bean可以作为一个依赖项的候选bean时，应该优先考虑某个特定bean。 如果在候选bean中恰好存在一个主要的bean，那么它将成为自动连接的值</p>
+<h3 id="Qualifier"><a href="#Qualifier" class="headerlink" title="@Qualifier"></a>@Qualifier</h3><p>通过使用 @Qualifier 注解，我们可以消除需要注入哪个 bean 的问题</p>
+<h3 id="Resouse"><a href="#Resouse" class="headerlink" title="@Resouse"></a>@Resouse</h3><p>JSR-250的 【@Resource】注解(‘ javax.annotation.Resource ‘)来支持注入</p>
+<p>@Resource 带有一个name属性 默认情况下，Spring将该值解释为要注入的bean名 换句话说，它遵循by-name语义</p>
+<p>如果没有显式指定名称，则默认名称为【字段名或setter方法的参数名】。 对于字段，它接受字段名。 对于setter方法，它采用bean属性名</p>
+<p>先根据by-name进行注入 如果根据by-name没有找到 会根据by-type继续注入</p>
+<h2 id="ClassPath扫描"><a href="#ClassPath扫描" class="headerlink" title="ClassPath扫描"></a>ClassPath扫描</h2><h3 id="xml方式扫描"><a href="#xml方式扫描" class="headerlink" title="xml方式扫描"></a>xml方式扫描</h3><p>XML来指定配置元数据 这些元数据在Spring容器启动时被扫描，每一个bean的元数据对应生成一个“BeanDefinition”</p>
+<p>前面介绍到的都是这种xml方式的扫描</p>
+<h3 id="注解方式扫描"><a href="#注解方式扫描" class="headerlink" title="注解方式扫描"></a>注解方式扫描</h3><p>使用注解 通过扫描筛选并在容器中注册了相应beanDifination的类。 这样就不需要使用XML来执行bean注册</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OrderController</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OrderService</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OrderDao</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ComponentScan(value = &quot;com.dream.xiaobo&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppConfig</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:p</span>=<span class="string">&quot;http://www.springframework.org/schema/p&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:context</span>=<span class="string">&quot;http://www.springframework.org/schema/context&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="string"><span class="tag">        https://www.springframework.org/schema/beans/spring-beans.xsd</span></span></span><br><span class="line"><span class="string"><span class="tag">        http://www.springframework.org/schema/context</span></span></span><br><span class="line"><span class="string"><span class="tag">        https://www.springframework.org/schema/context/spring-context.xsd&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--    开启扫描 开启scan 也 意味着开启了annotation-config --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">&quot;com.dream.xiaobo&quot;</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><a href="context:component-scan">context:component-scan</a> 的使用会隐式启用 <a href="context:annotation-config">context:annotation-config</a>，当使用 <a href="context:component-scan">context:component-scan</a>时，通常不需要包含<a href="context:annotation-config">context:annotation-config</a>元素</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestIoc</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        AnnotationConfigApplicationContext appConfig = <span class="keyword">new</span> AnnotationConfigApplicationContext(AppConfig.class);</span><br><span class="line"></span><br><span class="line">        OrderService bean = appConfig.getBean(OrderService.class);</span><br><span class="line">        LOGGER.info(<span class="string">&quot;&#123;&#125;&quot;</span>,bean);</span><br><span class="line"></span><br><span class="line">        ApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">&quot;scan.xml&quot;</span>);</span><br><span class="line"></span><br><span class="line">        OrderService orderService = context.getBean(OrderService.class);</span><br><span class="line"></span><br><span class="line">        LOGGER.info(<span class="string">&quot;&#123;&#125;&quot;</span>,orderService);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>@Component</code> 是任何spring管理组件的通用注解</p>
+<p><code>@Repository</code>、<code>@Service</code>和<code>@Controller</code>是 <code>@Component</code> 用于更具体用例的注解（分别在持久性、服务和表示层中）。这些注解对于我们对特定bean进行批量处理时是有帮助的</p>
+<p><code>@Configuration</code> 可以理解为等同于xml配置</p>
+<p><code>ComponentScan</code> 要扫描的包</p>
+<h3 id="组件命名"><a href="#组件命名" class="headerlink" title="组件命名"></a>组件命名</h3><p>当组件作为扫描过程的一部分被自动检测时，它的bean名是由该扫描器所知道的“BeanNameGenerator”策略生成的</p>
+<h3 id="自动检测组件提供scope"><a href="#自动检测组件提供scope" class="headerlink" title="自动检测组件提供scope"></a>自动检测组件提供scope</h3><p>与spring管理的组件一样，自动检测组件的默认和最常见的作用域是“单例”。 然而，有时您需要一个不同的范围，可以由’ @Scope ‘注解指定</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Scope(&quot;prototype&quot;)</span></span><br><span class="line"><span class="meta">@Repository</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> class <span class="title">Test</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用过滤器自定义扫描"><a href="#使用过滤器自定义扫描" class="headerlink" title="使用过滤器自定义扫描"></a>使用过滤器自定义扫描</h3><p>默认情况下，带有@Component、@Repository、@Service、@Controller、@Configuration注解的类是一定能被筛选器选中并进行注册的候选组件。 但是，您可以通过应用自定义过滤器来修改和扩展此行为，自由定制筛选哪些或不包含那些组件。 将它们作为@ComponentScan注解的includeFilters 或 excludeFilters 属性添加 每个筛选器元素都需要’ type ‘和’ expression ‘属性</p>
+<table>
+<thead>
+<tr>
+<th>过滤方式</th>
+<th>示例表达式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>annotation (默认)</td>
+<td>org.example.SomeAnnotation</td>
+<td>要在目标组件的类型级别上“存在”或“元注解存在”的注解</td>
+</tr>
+<tr>
+<td>assignable</td>
+<td>org.example.SomeClass</td>
+<td>指定要排除的bean的类</td>
+</tr>
+<tr>
+<td>aspectj</td>
+<td>org.example..*Service+</td>
+<td>要被目标组件匹配的AspectJ类型表达式</td>
+</tr>
+<tr>
+<td>regex</td>
+<td>org.example.Default.*</td>
+<td>由目标组件的类名匹配的正则表达式</td>
+</tr>
+<tr>
+<td>custom</td>
+<td>org.example.MyTypeFilter</td>
+<td>org.springframework.core.type的自定义实现，TypeFilter”接口</td>
+</tr>
+</tbody></table>
+<ul>
+<li>注解形式</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration()</span></span><br><span class="line"><span class="meta">@ComponentScan(basePackages = &quot;com.dream.xiaobo&quot;,</span></span><br><span class="line"><span class="meta">        includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION),</span></span><br><span class="line"><span class="meta">        excludeFilters = @ComponentScan.Filter(Repository.class)</span></span><br><span class="line"><span class="meta">)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppConfig</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>xml形式</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">&quot;com.dream.xiaobo&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">context:include-filter</span> <span class="attr">type</span>=<span class="string">&quot;annotation&quot;</span> <span class="attr">expression</span>=<span class="string">&quot;org.springframework.stereotype.Service&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">context:exclude-filter</span> <span class="attr">type</span>=<span class="string">&quot;annotation&quot;</span> <span class="attr">expression</span>=<span class="string">&quot;org.springframework.stereotype.Repository&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">context:component-scan</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Bean和-Configuration"><a href="#Bean和-Configuration" class="headerlink" title="@Bean和@Configuration"></a>@Bean和@Configuration</h3><p>@Bean注解用于指示一个方法，该方法负责 实例化、配置和初始化 一个由Spring IoC容器管理的新对象</p>
+<p>@Configuration注解的一个类表明它的主要目的是作为beanDifination的源，我们通常称之为 配置类。 此外，@Configuration 类允许通过调用同一类中的其他 @Bean 方法来 定义bean间的依赖关系</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyConfiguration</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@Qualifier(value = &quot;orders&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Orders <span class="title">orders</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Orders();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">user</span><span class="params">(<span class="meta">@Qualifier(&quot;orders&quot;)</span> Orders orders)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        User user = <span class="keyword">new</span> User();</span><br><span class="line"></span><br><span class="line">        user.setOrders(orders);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> user;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestIoc</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        AnnotationConfigApplicationContext appConfig = <span class="keyword">new</span> AnnotationConfigApplicationContext(AppConfig.class);</span><br><span class="line"></span><br><span class="line">        MyConfiguration bean = appConfig.getBean(MyConfiguration.class);</span><br><span class="line"></span><br><span class="line">        LOGGER.info(<span class="string">&quot;&#123;&#125;&quot;</span>,bean.user(bean.orders()));</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="生命周期回调-1"><a href="#生命周期回调-1" class="headerlink" title="生命周期回调"></a>生命周期回调</h3><p>如果一个bean实现了’ InitializingBean ‘、’ DisposableBean ‘或’ Lifecycle ‘，则容器会调用它们各自的方法</p>
+<p>@Bean注解支持指定任意的初始化和销毁回调方法，就像Spring XML在’ bean ‘元素上的’ init-method ‘和’ destroy-method ‘属性一样</p>
+<h3 id="指定Bean的范围"><a href="#指定Bean的范围" class="headerlink" title="指定Bean的范围"></a>指定Bean的范围</h3><p>Spring包含了【@Scope】注解，可以指定bean的范围</p>
+<p>默认的作用域是 singleton ，可以用 @Scope 注解来覆盖它</p>
+<h3 id="Bean别名"><a href="#Bean别名" class="headerlink" title="Bean别名"></a>Bean别名</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Bean(&#123;&quot;dataSource&quot;， &quot;A-dataSource&quot;， &quot;B-dataSource&quot;&#125;)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Bean描述"><a href="#Bean描述" class="headerlink" title="Bean描述"></a>Bean描述</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Description(&quot;Provides a basic example of a bean&quot;)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Configuration"><a href="#Configuration" class="headerlink" title="@Configuration"></a>@Configuration</h3><p>@Configuration 是一个类级注解，指示一个对象是beanDifination的源。@Configuration类通过@Bean带注解的方法声明bean</p>
+<p>当@Bean方法在没有标注@Configuration的类中声明时，它们被认为是在【lite】模式下处理的。 在【@Component】中声明的Bean方法甚至在一个普通的类中声明的Bean方法都被认为是【lite】。在这样的场景中，【@Bean】方法是一种通用工厂方法机制。</p>
+<p>与@Configuration 不同，【lite】模式下 【@Bean】方法不能【声明bean】间的【依赖关系】。 因此，这样的【@Bean】方法不应该调用其他【@Bean】下的方法。 每个这样的方法实际上只是特定bean引用的工厂方法，没有任何特殊的运行时语义。</p>
+<p>在一般情况下，@Bean方法要在【@Configuration】类中声明，这种功能情况下，会使用【full】模式，因此交叉方法引用会被重定向到容器的生命周期管理。 这可以防止通过常规Java调用意外调用相同的Bean，这有助于减少在【lite】模式下操作时难以跟踪的微妙错误</p>
+<h3 id="import"><a href="#import" class="headerlink" title="@import"></a>@import</h3><p>引用另一个配置类</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConfigImportA</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ImportA <span class="title">testImport</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ImportA();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@Import(ConfigImportA.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">configImportB</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> configImportB <span class="title">testImport</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> configImportB();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="java结合xml"><a href="#java结合xml" class="headerlink" title="java结合xml"></a>java结合xml</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">&lt;context:property-placeholder location=<span class="string">&quot;classpath:/com/acme/jdbc.properties&quot;</span>/&gt;</span><br></pre></td></tr></table></figure>
+
+<p><code>context:property-placeholder</code>:引入配置文件</p>
+<h3 id="BeanFactory和FactoryBean"><a href="#BeanFactory和FactoryBean" class="headerlink" title="BeanFactory和FactoryBean"></a>BeanFactory和FactoryBean</h3><h4 id="BeanFactory"><a href="#BeanFactory" class="headerlink" title="BeanFactory"></a>BeanFactory</h4><p>Bean工厂 负责管理我们的Bean 通过他我们可以从容器中去检索Bean</p>
+<h4 id="FactoryBean"><a href="#FactoryBean" class="headerlink" title="FactoryBean"></a>FactoryBean</h4><p>工厂Bean 可以创建复杂对象 他拥有三个方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"> <span class="meta">@Nullable</span></span><br><span class="line"><span class="function">T <span class="title">getObject</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Nullable</span></span><br><span class="line">Class&lt;?&gt; getObjectType();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">default</span> <span class="keyword">boolean</span> <span class="title">isSingleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>getobject</code> 拿到对应的类</p>
+<p><code>getObjectType</code> 拿到对应类的类型</p>
+<p><code>isSingleton</code> 判断是否为单例</p>
+<h3 id="环境抽象"><a href="#环境抽象" class="headerlink" title="环境抽象"></a>环境抽象</h3><p>接口是一个抽象，集成在容器中，它模拟了应用程序环境的两个关键方面:profiles and properties</p>
+<h4 id="profiles"><a href="#profiles" class="headerlink" title="profiles"></a>profiles</h4><p>Profiles在核心容器中提供了一种机制，允许在不同环境中注册不同的Bean</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@ComponentScan(&quot;com.dream.xiaobo&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DataSourceConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@Profile(&quot;prod&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DataSource <span class="title">proDataSource</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;生产环境&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ProDatabase();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@Profile(&quot;dev&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> DataSource <span class="title">devDataSource</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;开发环境&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> DevDatasource();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DevDatasource</span> <span class="keyword">implements</span> <span class="title">DataSource</span> </span>&#123;</span><br><span class="line">    <span class="comment">//此处为实现的方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProDatabase</span> <span class="keyword">implements</span> <span class="title">DataSource</span> </span>&#123;</span><br><span class="line">   <span class="comment">//此处为实现的方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestIoc</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        AnnotationConfigApplicationContext applicationContext = <span class="keyword">new</span> AnnotationConfigApplicationContext();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//        激活环境</span></span><br><span class="line">        applicationContext.getEnvironment().setActiveProfiles(<span class="string">&quot;prod&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//        扫包</span></span><br><span class="line">        applicationContext.scan(<span class="string">&quot;com.dream.xiaobo&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//        刷新</span></span><br><span class="line">        applicationContext.refresh();</span><br><span class="line"></span><br><span class="line"><span class="comment">//        使用</span></span><br><span class="line">        DataSource bean = applicationContext.getBean(DataSource.class);</span><br><span class="line"></span><br><span class="line">        LOGGER.info(<span class="string">&quot;&#123;&#125;&quot;</span>, bean);</span><br></pre></td></tr></table></figure>
+
+<p><strong>虚拟机参数方式</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">-Dspring.profiles.active=dev</span><br></pre></td></tr></table></figure>
+
+<p><strong>编程式</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">applicationContext.getEnvironment().setActiveProfiles(<span class="string">&quot;prod&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="properties"><a href="#properties" class="headerlink" title="properties"></a>properties</h4><p>Spring的【环境抽象】提供了对【属性】的搜索操作</p>
+<p><strong>编程对象式</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyPropertySource</span> <span class="keyword">extends</span> <span class="title">PropertySource</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Properties properties = <span class="keyword">new</span> Properties();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyPropertySource</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(name);</span><br><span class="line">        properties.put(<span class="string">&quot;xiaobo&quot;</span>,<span class="string">&quot;properties&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">getProperty</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> properties.get(s);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestIoc</span><span class="params">()</span></span>&#123;</span><br><span class="line">        AnnotationConfigApplicationContext applicationContext = <span class="keyword">new</span> AnnotationConfigApplicationContext();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ConfigurableEnvironment environment = applicationContext.getEnvironment();</span><br><span class="line"></span><br><span class="line">        MutablePropertySources propertySources = environment.getPropertySources();</span><br><span class="line">        propertySources.addFirst(<span class="keyword">new</span> MyPropertySource(<span class="string">&quot;my&quot;</span>));</span><br><span class="line"></span><br><span class="line">        applicationContext.refresh();</span><br><span class="line"></span><br><span class="line">        String xiaobo = environment.getProperty(<span class="string">&quot;xiaobo&quot;</span>);</span><br><span class="line"></span><br><span class="line">        LOGGER.info(xiaobo);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>@PropertySource</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@PropertySource(&quot;classpath:myconfig.properties&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AConfig</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Value(&quot;$&#123;path&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">private</span> String path;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;A&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;path=&#x27;&quot;</span> + path + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">TestIoc</span><span class="params">()</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">        AnnotationConfigApplicationContext applicationContext = <span class="keyword">new</span> AnnotationConfigApplicationContext(AConfig.class);</span><br><span class="line"></span><br><span class="line">        AConfig bean = applicationContext.getBean(AConfig.class);</span><br><span class="line"></span><br><span class="line">        LOGGER.info(<span class="string">&quot;&#123;&#125;&quot;</span>,bean);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p><strong>你知道的越多 你不知道的越多 嘿 我是小博 带你一起看我目之所及的世界……</strong></p>
+]]></content>
+      <tags>
+        <tag>java</tag>
+        <tag>spring</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>spring 复习整理一</title>
     <url>/posts/2522155561/</url>
     <content><![CDATA[<p><img src="https://cdn.jsdelivr.net/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E6%95%85%E4%BA%8B%E7%9A%84%E5%BC%80%E5%A4%B4.62a18swt4s00.webp" alt="故事的开头"></p>
