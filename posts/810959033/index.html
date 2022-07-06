@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/./images/favicon32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/./images/favicon16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;codexiaobo.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Pisces&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;},&quot;path&quot;:&quot;&#x2F;search.xml&quot;,&quot;localsearch&quot;:{&quot;enable&quot;:true,&quot;trigger&quot;:&quot;auto&quot;,&quot;top_n_per_article&quot;:1,&quot;unescape&quot;:false,&quot;preload&quot;:false}}</script><script src="/js/config.js"></script>
+
+<link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="408 &amp; 计算机组成原理 &amp; 计算机系统概述">
+<meta property="og:url" content="https://codexiaobo.github.io/posts/810959033/index.html">
+<meta property="og:site_name" content="Code小博">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%8A%A0%E8%BD%BD%E6%9B%B4%E5%A4%9A.5hy5gld489c0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AD%98%E5%82%A8%E5%99%A8.622qxsnjq3c0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/408/%E5%AD%98%E5%82%A8%E5%99%A8%E5%AD%98%E6%94%BE%E5%8C%BA%E5%9F%9F.5xbf5j06etg0.webp">
+<meta property="og:image" content="https://git.poker/codexiaobo/image/blob/main/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%A1%AC%E4%BB%B6%E7%BB%84%E6%88%90.359b8p3l3s80.webp?raw=true">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/408/%E6%8C%87%E4%BB%A4%E7%9A%84%E5%BD%A2%E5%BC%8F.3ltt24wfuu00.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/408/%E6%8C%87%E4%BB%A4%E7%9A%84%E6%93%8D%E4%BD%9C%E7%A0%81.2zdpo7e0gnc0.webp">
+<meta property="article:published_time" content="2022-07-06T09:45:48.000Z">
+<meta property="article:modified_time" content="2022-07-06T09:48:31.548Z">
+<meta property="article:author" content="xiaobo">
+<meta property="article:tag" content="计算机组成原理">
+<meta property="article:tag" content="408">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%8A%A0%E8%BD%BD%E6%9B%B4%E5%A4%9A.5hy5gld489c0.webp">
+
+
+<link rel="canonical" href="https://codexiaobo.github.io/posts/810959033/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;codexiaobo.github.io&#x2F;posts&#x2F;810959033&#x2F;&quot;,&quot;path&quot;:&quot;posts&#x2F;810959033&#x2F;&quot;,&quot;title&quot;:&quot;408 &amp; 计算机组成原理 &amp; 计算机系统概述&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>408 & 计算机组成原理 & 计算机系统概述 | Code小博</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Code小博" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+  
+  <a href="https://codexiaobo.github.io" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+  
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Code小博</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#408-amp-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86-amp-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">408 &amp; 计算机组成原理 &amp; 计算机系统概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.1.</span> <span class="nav-text">计算机系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8A%9F%E8%83%BD"><span class="nav-number">1.1.1.</span> <span class="nav-text">计算机的基本功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A1%AC%E4%BB%B6%E6%9C%89%E5%93%AA%E4%BA%9B"><span class="nav-number">1.1.2.</span> <span class="nav-text">计算机硬件有哪些</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%94%E5%A4%A7%E5%8A%9F%E8%83%BD%E9%83%A8%E4%BB%B6"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">五大功能部件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8E%B0%E5%9C%A8%E8%AE%A4%E4%B8%BA%E7%9A%84%E4%BA%94%E5%A4%A7%E7%BB%84%E6%88%90%E9%83%A8%E5%88%86"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">现在认为的五大组成部分</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%80%8E%E4%B9%88%E5%B7%A5%E4%BD%9C%E7%9A%84"><span class="nav-number">1.1.3.</span> <span class="nav-text">计算机怎么工作的</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4"><span class="nav-number">1.2.</span> <span class="nav-text">指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.2.1.</span> <span class="nav-text">计算程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E7%9A%84%E5%BD%A2%E5%BC%8F"><span class="nav-number">1.2.2.</span> <span class="nav-text">指令的形式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.2.3.</span> <span class="nav-text">存储程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E6%8E%A7%E5%88%B6"><span class="nav-number">1.2.4.</span> <span class="nav-text">程序控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%AF-%E8%AF%BA%E4%BE%9D%E6%9B%BC%E8%AE%BE%E8%AE%A1%E6%80%9D%E6%83%B3"><span class="nav-number">1.2.5.</span> <span class="nav-text">冯.诺依曼设计思想</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%AF-%E8%AF%BA%E4%BE%9D%E6%9B%BC%E6%80%9D%E6%83%B3%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%A6%81%E7%82%B9"><span class="nav-number">1.2.5.1.</span> <span class="nav-text">冯.诺依曼思想的基本要点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E5%91%A8%E6%9C%9F"><span class="nav-number">1.2.6.</span> <span class="nav-text">指令周期</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%BD%AF%E4%BB%B6%E7%BB%84%E6%88%90"><span class="nav-number">1.3.</span> <span class="nav-text">计算机软件组成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E7%9A%84%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.3.1.</span> <span class="nav-text">目的程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.3.2.</span> <span class="nav-text">汇编程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BA%90%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.3.3.</span> <span class="nav-text">源程序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%9A%84%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="nav-number">1.4.</span> <span class="nav-text">计算机的性能指标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%BA%E5%99%A8%E5%AD%97%E9%95%BF"><span class="nav-number">1.4.1.</span> <span class="nav-text">机器字长</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%9E%E5%90%90%E9%87%8F"><span class="nav-number">1.4.2.</span> <span class="nav-text">吞吐量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%93%8D%E5%BA%94%E6%97%B6%E9%97%B4"><span class="nav-number">1.4.3.</span> <span class="nav-text">响应时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E7%8E%87"><span class="nav-number">1.4.4.</span> <span class="nav-text">利用率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BA%BF%E5%AE%BD%E5%BA%A6"><span class="nav-number">1.4.5.</span> <span class="nav-text">总线宽度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E5%99%A8%E5%AE%B9%E9%87%8F"><span class="nav-number">1.4.6.</span> <span class="nav-text">存储器容量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E5%99%A8%E5%B8%A6%E5%AE%BD"><span class="nav-number">1.4.7.</span> <span class="nav-text">存储器带宽</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E9%A2%91-%E6%97%B6%E9%92%9F%E5%91%A8%E6%9C%9F"><span class="nav-number">1.4.8.</span> <span class="nav-text">主频&#x2F;时钟周期</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BB%E9%A2%91"><span class="nav-number">1.4.8.1.</span> <span class="nav-text">主频</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%B6%E9%92%9F%E5%91%A8%E6%9C%9F"><span class="nav-number">1.4.8.2.</span> <span class="nav-text">时钟周期</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cpu%E6%89%A7%E8%A1%8C%E6%97%B6%E9%97%B4"><span class="nav-number">1.4.9.</span> <span class="nav-text">cpu执行时间</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CPI"><span class="nav-number">1.4.9.1.</span> <span class="nav-text">CPI</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IPC"><span class="nav-number">1.4.9.2.</span> <span class="nav-text">IPC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MIPS"><span class="nav-number">1.4.9.3.</span> <span class="nav-text">MIPS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MFLOPS"><span class="nav-number">1.4.9.4.</span> <span class="nav-text">MFLOPS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TFLOPS"><span class="nav-number">1.4.9.5.</span> <span class="nav-text">TFLOPS</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="xiaobo"
+      src="/images/xiaobo.png">
+  <p class="site-author-name" itemprop="name">xiaobo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">64</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://codexiaobo.github.io/" title="GitHub → https:&#x2F;&#x2F;codexiaobo.github.io"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/6557440727/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;6557440727&#x2F;profile?rightmod&#x3D;1&amp;wvr&#x3D;6&amp;mod&#x3D;personinfo&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.baidu.com/" title="https:&#x2F;&#x2F;www.baidu.com" rel="noopener" target="_blank">百度</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/" title="https:&#x2F;&#x2F;www.zhihu.com" rel="noopener" target="_blank">知乎</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.csdn.net/" title="https:&#x2F;&#x2F;www.csdn.net" rel="noopener" target="_blank">CSDN</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bilibili.com/" title="https:&#x2F;&#x2F;www.bilibili.com" rel="noopener" target="_blank">哔哩哔哩</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+	<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=440208476&auto=1&height=66"></iframe>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/810959033/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/xiaobo.png">
+      <meta itemprop="name" content="xiaobo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code小博">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          408 & 计算机组成原理 & 计算机系统概述
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-07-06 17:45:48 / 修改时间：17:48:31" itemprop="dateCreated datePublished" datetime="2022-07-06T17:45:48+08:00">2022-07-06</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%8A%A0%E8%BD%BD%E6%9B%B4%E5%A4%9A.5hy5gld489c0.webp" alt="加载更多"></p>
+<!--sleep-->
+
+<span id="more"></span>
+
+<h1 id="408-amp-计算机组成原理-amp-计算机系统概述"><a href="#408-amp-计算机组成原理-amp-计算机系统概述" class="headerlink" title="408 &amp; 计算机组成原理 &amp; 计算机系统概述"></a>408 &amp; 计算机组成原理 &amp; 计算机系统概述</h1><h2 id="计算机系统"><a href="#计算机系统" class="headerlink" title="计算机系统"></a>计算机系统</h2><p>由硬件和软件组成</p>
+<ul>
+<li>硬件</li>
+</ul>
+<p>组成计算机的各种设备实体 是物质基础</p>
+<ul>
+<li>软件</li>
+</ul>
+<p>指各种程序和文件</p>
+<h3 id="计算机的基本功能"><a href="#计算机的基本功能" class="headerlink" title="计算机的基本功能"></a>计算机的基本功能</h3><p>数据加工</p>
+<p>数据保存</p>
+<p>数据传送</p>
+<p>操作控制</p>
+<p>……</p>
+<h3 id="计算机硬件有哪些"><a href="#计算机硬件有哪些" class="headerlink" title="计算机硬件有哪些"></a>计算机硬件有哪些</h3><h4 id="五大功能部件"><a href="#五大功能部件" class="headerlink" title="五大功能部件"></a>五大功能部件</h4><ul>
+<li>运算器(ALU)</li>
+</ul>
+<p>进行加减乘除等算术运算，逻辑运算</p>
+<p>计算机中采用二进制数</p>
+<p>位数越多，计算精度越高</p>
+<p>目前计算机位数一般为 8位、16位、32位、64位</p>
+<ul>
+<li>控制器</li>
+</ul>
+<p>计算机中发号施令的部件，他控制计算机的所有部件有条不絮地进行工作</p>
+<p>控制器的任务是从内存中取出解题步骤加以分析，然后执行某种操作</p>
+<p><strong>步骤</strong></p>
+<p>取指令 –&gt; 分析指令 –&gt; 执行指令</p>
+<p>保证指令按规定序列自动连续地执行</p>
+<p>对各种异常情况和请求及时响应和处理</p>
+<ul>
+<li>存储器</li>
+</ul>
+<p>保存或记忆解题的程序(指令)和数据</p>
+<p>在运算前把参加运算的数据和解题步骤通过输入输出设备送到存储器中保存起来</p>
+<p>存储的是0或1表示的二进制代码</p>
+<p>采用半导体器件作为存储器 一个半导体触发器可以记忆一位二进制代码</p>
+<p><strong>存储元</strong></p>
+<p>保存一个二进制位的触发器</p>
+<p><strong>存储单元</strong></p>
+<p>若干个存储元构成一个存储单元</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AD%98%E5%82%A8%E5%99%A8.622qxsnjq3c0.webp" alt="计算机系统的存储器"></p>
+<p><strong>地址</strong></p>
+<p>存储器是由许多存储单元组成，每个存储单元的编号称为地址</p>
+<p><strong>存储容量</strong></p>
+<p>存储器所有存储单元的总数 单位 KB、MB、GB、TB 存储容量越大 计算机记忆存储存的信息越多</p>
+<p><strong>外存储器</strong></p>
+<p>磁盘存储器、光盘存储器等</p>
+<p>高速缓存，主存储器，虚拟存储器组成多级存储器系统，是计算机存储程序和数据的部件</p>
+<p>存储器可存放二进制码形式的指令，称为代码区</p>
+<p>存储器可存放二进制码形式的数据，称为数据区</p>
+<p>一般将指令和数据分开存</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/408/%E5%AD%98%E5%82%A8%E5%99%A8%E5%AD%98%E6%94%BE%E5%8C%BA%E5%9F%9F.5xbf5j06etg0.webp" alt="存储器存放区域"></p>
+<ul>
+<li>输入设备</li>
+</ul>
+<p>把人们所熟悉的某种信息形式变换为机器内部所能接受和识别的二进制信息形式</p>
+<ul>
+<li>输出设备</li>
+</ul>
+<p>把计算机处理的结果变换为人和其他机器所能接收和识别的信息形式</p>
+<p>输入/输出设备称为外围设备，简称外设，不能直接与主机（运算器、控制器、内存）相连，通过适配器部件与主机相连</p>
+<p><img src="https://git.poker/codexiaobo/image/blob/main/408/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E7%9A%84%E7%A1%AC%E4%BB%B6%E7%BB%84%E6%88%90.359b8p3l3s80.webp?raw=true" alt="计算机系统的硬件组成"></p>
+<h4 id="现在认为的五大组成部分"><a href="#现在认为的五大组成部分" class="headerlink" title="现在认为的五大组成部分"></a>现在认为的五大组成部分</h4><ul>
+<li>cpu</li>
+</ul>
+<p>运算器，控制器</p>
+<ul>
+<li>存储器</li>
+<li>输入设备</li>
+<li>输出设备</li>
+<li>总线</li>
+</ul>
+<h3 id="计算机怎么工作的"><a href="#计算机怎么工作的" class="headerlink" title="计算机怎么工作的"></a>计算机怎么工作的</h3><p>设备通过总线和接口连接在一起 构成一台完整的计算机</p>
+<h2 id="指令"><a href="#指令" class="headerlink" title="指令"></a>指令</h2><h3 id="计算程序"><a href="#计算程序" class="headerlink" title="计算程序"></a>计算程序</h3><p>每一个基本操作就叫做一条指令，解算某一问题的一串指令序列叫做计算程序 简称程序</p>
+<h3 id="指令的形式"><a href="#指令的形式" class="headerlink" title="指令的形式"></a>指令的形式</h3><p>由两部分组成，操作码 + 地址码 <img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/408/%E6%8C%87%E4%BB%A4%E7%9A%84%E5%BD%A2%E5%BC%8F.3ltt24wfuu00.webp" alt="指令的形式"></p>
+<ul>
+<li>操作码</li>
+</ul>
+<p>不同的指令操作码不同，操作码唯一</p>
+<p>指出指令所进行的操作 加、减、乘、除、取数、存数等</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/408/%E6%8C%87%E4%BB%A4%E7%9A%84%E6%93%8D%E4%BD%9C%E7%A0%81.2zdpo7e0gnc0.webp" alt="指令的操作码"></p>
+<ul>
+<li>地址码</li>
+</ul>
+<p>参加运算的数据应从存储器的哪个单元取，运算的结果应存到哪个单元</p>
+<h3 id="存储程序"><a href="#存储程序" class="headerlink" title="存储程序"></a>存储程序</h3><p>指令存放到存储器中</p>
+<h3 id="程序控制"><a href="#程序控制" class="headerlink" title="程序控制"></a>程序控制</h3><p>控制器依靠存储的程序来控制全机协调地完成计算任务</p>
+<h3 id="冯-诺依曼设计思想"><a href="#冯-诺依曼设计思想" class="headerlink" title="冯.诺依曼设计思想"></a>冯.诺依曼设计思想</h3><p>存储程序并按地址执行</p>
+<h4 id="冯-诺依曼思想的基本要点"><a href="#冯-诺依曼思想的基本要点" class="headerlink" title="冯.诺依曼思想的基本要点"></a>冯.诺依曼思想的基本要点</h4><ul>
+<li>采用二进制形式表示数据和指令</li>
+<li>有输入设备、输出设备、运算器、存储器和控制器五大部件组成</li>
+<li>采用存储程序方式（核心思想）</li>
+<li>指令和数据以同等地位存于存储器、可按地址寻访，程序和数据统一存储</li>
+<li>指令由操作码和地址码组成</li>
+</ul>
+<h3 id="指令周期"><a href="#指令周期" class="headerlink" title="指令周期"></a>指令周期</h3><p>一条指令从存储器中取出开始到达执行结束的总时间</p>
+<p>由取指周期和执行周期组成</p>
+<ul>
+<li>取指周期</li>
+</ul>
+<p>取指令的一段时间</p>
+<ul>
+<li>执行周期</li>
+</ul>
+<p>执行指令的一段时间</p>
+<h2 id="计算机软件组成"><a href="#计算机软件组成" class="headerlink" title="计算机软件组成"></a>计算机软件组成</h2><h3 id="目的程序"><a href="#目的程序" class="headerlink" title="目的程序"></a>目的程序</h3><p>用计算机语言编写的程序，计算机可以完全识别并能执行的</p>
+<h3 id="汇编程序"><a href="#汇编程序" class="headerlink" title="汇编程序"></a>汇编程序</h3><p>约定的文字、符号和数字按规定的格式来表示各种不同的指令，再用特殊符号表示指令来编写程序</p>
+<h3 id="源程序"><a href="#源程序" class="headerlink" title="源程序"></a>源程序</h3><p>用算法语言编写的程序 识别需进行编译</p>
+<h2 id="计算机的性能指标"><a href="#计算机的性能指标" class="headerlink" title="计算机的性能指标"></a>计算机的性能指标</h2><h3 id="机器字长"><a href="#机器字长" class="headerlink" title="机器字长"></a>机器字长</h3><p>处理机运算器中一次能够完成二进制运算的位数</p>
+<p>字长越长 计算精度越高 与cpu中的寄存器位数有关</p>
+<h3 id="吞吐量"><a href="#吞吐量" class="headerlink" title="吞吐量"></a>吞吐量</h3><p>一台计算机在某一时间间隔内能够处理的信息量，单位是字节/秒(B/S)</p>
+<h3 id="响应时间"><a href="#响应时间" class="headerlink" title="响应时间"></a>响应时间</h3><p>从输入有效到系统产生响应之间的时间度量例 微秒(10^-6 S)、纳秒(10^-9 S)</p>
+<h3 id="利用率"><a href="#利用率" class="headerlink" title="利用率"></a>利用率</h3><p>在给定时间间隔内 系统实际使用的时间所占的比率，一般用百分比表示</p>
+<h3 id="总线宽度"><a href="#总线宽度" class="headerlink" title="总线宽度"></a>总线宽度</h3><p>一般指cpu中运算器与存储器之间进行互连的内部总线二进制位数</p>
+<h3 id="存储器容量"><a href="#存储器容量" class="headerlink" title="存储器容量"></a>存储器容量</h3><p>存储器中所有存储单元的总数目 KB、MB、GB、TB </p>
+<p>存储器容量越大 记忆的二进制数越多</p>
+<h3 id="存储器带宽"><a href="#存储器带宽" class="headerlink" title="存储器带宽"></a>存储器带宽</h3><p>存储器的速度指标 单位时间内从存储器读出的二进制数信息量 一般用字节数/秒表示</p>
+<h3 id="主频-时钟周期"><a href="#主频-时钟周期" class="headerlink" title="主频/时钟周期"></a>主频/时钟周期</h3><h4 id="主频"><a href="#主频" class="headerlink" title="主频"></a>主频</h4><p>cpu工作节拍受主时钟控制，主时钟不断产生固定频率的时钟，主时钟的频率(f)，叫cpu主频，度量单位是MHz（兆赫兹）、GHz（吉赫兹）</p>
+<p>1KHz = 10^3</p>
+<p>1MHz = 10^6</p>
+<h4 id="时钟周期"><a href="#时钟周期" class="headerlink" title="时钟周期"></a>时钟周期</h4><p>主频的倒数称为cput的时钟周期（T），T=1/f，度量单位是微秒、纳秒</p>
+<h3 id="cpu执行时间"><a href="#cpu执行时间" class="headerlink" title="cpu执行时间"></a>cpu执行时间</h3><p>表示cpu执行一段程序所占用的cpu时间</p>
+<p>cpu执行时间 = cpu时钟周期数 * cpu时钟周期长</p>
+<h4 id="CPI"><a href="#CPI" class="headerlink" title="CPI"></a>CPI</h4><p>表示每条指令周期数，执行一条指令所需的平均时钟周期数</p>
+<p>CPI = 执行某段程序所需的CPU时钟周期数 / 该程序包含的指令条数</p>
+<h4 id="IPC"><a href="#IPC" class="headerlink" title="IPC"></a>IPC</h4><p>一个平均时钟周期所执行的指令数</p>
+<h4 id="MIPS"><a href="#MIPS" class="headerlink" title="MIPS"></a>MIPS</h4><p>每秒百万条指令数</p>
+<p>MIPS = 指令条数 / 程序执行时间 * 10^6</p>
+<p>MIPS值越大 机器速度越快</p>
+<h4 id="MFLOPS"><a href="#MFLOPS" class="headerlink" title="MFLOPS"></a>MFLOPS</h4><p>每秒百万次浮点操作数</p>
+<p>MFLOPS = 程序中给的浮点操作次数 / 程序执行时间 * 10^6</p>
+<p>只用来衡量机器浮点操作的性能，不能体现机器的整体性能</p>
+<h4 id="TFLOPS"><a href="#TFLOPS" class="headerlink" title="TFLOPS"></a>TFLOPS</h4><p>表示每秒万亿次浮点操作次数，该技术指标一般在超级计算机中使用</p>
+<p><strong>你知道的越多 你不知道的越多 嘿 我是小博 带你一起看我目之所及的世界……</strong></p>
+
+    </div>
+	<div>
+	
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束 <i class="fa fa-paw"></i> 感谢您的阅读-------------</div>
+    
+</div>
+
+     
+	</div>
+	
+	<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/posts/810959033/">408 & 计算机组成原理 & 计算机系统概述</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a>小博</p>
+  <p><span>发布时间:</span>2022年07月06日 - 17:45</p>
+  <p><span>最后更新:</span>2022年07月06日 - 17:48</p>
+  <p><span>原始链接:</span><a href="/posts/810959033/" title="408 & 计算机组成原理 & 计算机系统概述">https://codexiaobo.github.io/posts/810959033/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://codexiaobo.github.io/posts/810959033/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+      $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+        });
+    });  
+</script>
+
+
+      
+	</div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>学习技术分享、感谢您的支持</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="xiaobo 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="xiaobo 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/" rel="tag"># 计算机组成原理</a>
+              <a href="/tags/408/" rel="tag"># 408</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/120786435/" rel="prev" title="spring mvc复习整理三">
+                  <i class="fa fa-chevron-left"></i> spring mvc复习整理三
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaobo</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">596k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">9:02</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+<span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+<script>
+    var now = new Date(); 
+    function createtime() { 
+        var grt= new Date("06/07/2021 10:15:49");//在此处修改你的建站时间，格式：月/日/年 时:分:秒
+        now.setTime(now.getTime()+250); 
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 "; 
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+    } 
+setInterval("createtime()",250);
+</script>
+
+
+
+
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+ 
+  
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+
+ 
+</body>
+</html>
