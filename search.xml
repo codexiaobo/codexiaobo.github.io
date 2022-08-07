@@ -1,6 +1,412 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Redis 进阶一</title>
+    <url>/posts/1308773244/</url>
+    <content><![CDATA[<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E7%A0%B4%E7%94%B5%E8%84%91.1t8vi7nqf4ow.webp" alt="破电脑"></p>
+<!--sleep-->
+<span id="more"></span>
+
+<h1 id="Redis进阶"><a href="#Redis进阶" class="headerlink" title="Redis进阶"></a>Redis进阶</h1><h2 id="Redis的持久化"><a href="#Redis的持久化" class="headerlink" title="Redis的持久化"></a>Redis的持久化</h2><p>在redis当中，提供了两种数据持久化的方式，分别为RDB以及AOF，且Redis默认开启的数据持久化方式为RDB方式</p>
+<h3 id="RDB持久化"><a href="#RDB持久化" class="headerlink" title="RDB持久化"></a>RDB持久化</h3><p>Redis会定期保存数据快照至一个rbd文件中，并在启动时自动加载rdb文件，恢复之前保存的数据</p>
+<h4 id="手动修改"><a href="#手动修改" class="headerlink" title="手动修改"></a>手动修改</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">save [seconds] [changes] </span><br></pre></td></tr></table></figure>
+
+<p>可通过SAVE或者BGSAVE命令手动触发RDB快照保存</p>
+<p>在seconds秒内如果发生了changes次数据修改，则进行一次RDB快照保存</p>
+<blockquote>
+<p>SAVE和BGSAVE区别</p>
+</blockquote>
+<p><code>SAVE</code> 和 <code>BGSAVE</code> 两个命令都会调用 rdbSave 函数</p>
+<p><code>SAVE</code> 直接调用 rdbSave ，阻塞 Redis 主进程，直到保存完成为止。在主进程阻塞期间，服务器不能处理客户端的任何请求。</p>
+<p><code>BGSAVE</code> 则 fork 出一个子进程，子进程负责调用 rdbSave ，并在保存完成之后向主进程发送信号，通知保存已完成。 Redis 服务器在BGSAVE 执行期间仍然可以继续处理客户端的请求</p>
+<h4 id="RDB配置文件"><a href="#RDB配置文件" class="headerlink" title="RDB配置文件"></a>RDB配置文件</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">save  900 1  </span><br><span class="line">save  300 10  </span><br><span class="line">save  60 10000  </span><br><span class="line">save 5 1  </span><br></pre></td></tr></table></figure>
+
+<p>redis的配置文件默认自带的存储机制。表示每隔多少秒，有多少个key发生变化就生成一份dump.rdb文件，作为redis的快照文件</p>
+<p>例：save 60 10000 表示在60秒内，有10000个key发生变化，就会生成一份redis的快照</p>
+<h4 id="重新启动redis服务"><a href="#重新启动redis服务" class="headerlink" title="重新启动redis服务"></a>重新启动redis服务</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ps -ef | grep redis  </span><br><span class="line">bin/redis-cli -h 192.168.200.131 shutdown  </span><br><span class="line">bin/redis-server redis.conf </span><br></pre></td></tr></table></figure>
+
+<h3 id="AOF持久化"><a href="#AOF持久化" class="headerlink" title="AOF持久化"></a>AOF持久化</h3><p>AOF持久方式时，Redis会把每一个写请求都记录在一个日志文件里。在Redis重启时，会把AOF文件中记录的所有写操作顺序执行一遍，确保数据恢复到最新</p>
+<h4 id="开启AOF"><a href="#开启AOF" class="headerlink" title="开启AOF"></a>开启AOF</h4><p>AOF默认是关闭的，要开启，进行配置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">appendonly  yes </span><br></pre></td></tr></table></figure>
+
+<h4 id="AOF配置"><a href="#AOF配置" class="headerlink" title="AOF配置"></a>AOF配置</h4><p><code>appendfsync no</code>：不进行fsync，将flush文件的时机交给OS决定，速度最快</p>
+<p><code>appendfsync always</code>：每写入一条日志就进行一次fsync操作，数据安全性最高，但速度最慢</p>
+<p><code>appendfsync everysec</code>：折中的做法，交由后台线程每秒fsync一次</p>
+<h4 id="AOF-rewrite"><a href="#AOF-rewrite" class="headerlink" title="AOF rewrite"></a>AOF rewrite</h4><p>可以重写AOF文件，只保留能够把数据恢复到最新状态的最小写操作集</p>
+<p>AOF rewrite可以通过BGREWRITEAOF命令触发，也可以配置Redis定期自动进行</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">auto-aof-rewrite-percentage 100  </span><br><span class="line">auto-aof-rewrite-min-size 64mb  </span><br></pre></td></tr></table></figure>
+
+<p>Redis在每次AOF rewrite时，会记录完成rewrite后的AOF日志大小，当AOF日志大小在该基础上增长了100%后，自动进行AOF rewrite</p>
+<p>auto-aof-rewrite-min-size最开始的AOF文件必须要触发这个文件才触发，后面的每次重写就不会根据这个变量了。该变量仅初始化启动Redis有效</p>
+<h4 id="AOF优点"><a href="#AOF优点" class="headerlink" title="AOF优点"></a>AOF优点</h4><ul>
+<li><p>安全 启用appendfsync为always时，任何已写入的数据都不会丢失，使用在启用appendfsync everysec也至多只会丢失1秒的数据</p>
+</li>
+<li><p>AOF文件在发生断电等问题时也不会损坏，即使出现了某条日志只写入了一半的情况，也可以使用redis-check-aof工具轻松修复</p>
+</li>
+<li><p>AOF文件易读，可修改，在进行某些错误的数据清除操作后，只要AOF文件没有rewrite，就可以把AOF文件备份出来，把错误的命令删除，然后恢复数据</p>
+</li>
+</ul>
+<h4 id="AOF的缺点"><a href="#AOF的缺点" class="headerlink" title="AOF的缺点"></a>AOF的缺点</h4><ul>
+<li><p>AOF文件比RDB文件更大</p>
+</li>
+<li><p>性能消耗比RDB高</p>
+</li>
+<li><p>数据恢复速度比RDB慢</p>
+</li>
+</ul>
+<h4 id="制定合理的持久化策略："><a href="#制定合理的持久化策略：" class="headerlink" title="制定合理的持久化策略："></a>制定合理的持久化策略：</h4><p>AOF + fsync always的设置虽然能够绝对确保数据安全，但每个操作都会触发一次fsync，会对Redis的性能有比较明显的影响</p>
+<p>AOF + fsync every second是比较好的折中方案，每秒fsync一次</p>
+<p>AOF + fsync never会提供AOF持久化方案下的最优性能</p>
+<p>使用RDB持久化通常会提供比使用AOF更高的性能，但需要注意RDB的策略配置</p>
+<h2 id="Redis事务"><a href="#Redis事务" class="headerlink" title="Redis事务"></a>Redis事务</h2><p>Redis 事务的本质是一组命令的集合。事务支持一次执行多个命令，一个事务中所有命令都会被序列化。在事务执行过程，会按照顺序串行化执行队列中的命令，其他客户端提交的命令请求不会插入到事务执行命令序列中</p>
+<p><strong>Redis事务就是一次性、顺序性、排他性的执行一个队列中的一系列命令</strong></p>
+<h3 id="Redis事务没有隔离级别的概念"><a href="#Redis事务没有隔离级别的概念" class="headerlink" title="Redis事务没有隔离级别的概念"></a>Redis事务没有隔离级别的概念</h3><p>批量操作在发送 EXEC 命令前被放入队列缓存，并不会被实际执行，也就不存在事务内的查询要看到事务里的更新，事务外查询不能看到</p>
+<h3 id="Redis不保证原子性"><a href="#Redis不保证原子性" class="headerlink" title="Redis不保证原子性"></a>Redis不保证原子性</h3><p>Redis中，单条命令是原子性执行的，但事务不保证原子性，且没有回滚。事务中任意命令执行失败，其余的命令仍会被执行</p>
+<h3 id="一个事务执行的阶段"><a href="#一个事务执行的阶段" class="headerlink" title="一个事务执行的阶段"></a>一个事务执行的阶段</h3><ul>
+<li><p>第一阶段：开始事务</p>
+</li>
+<li><p>第二阶段：命令入队</p>
+</li>
+<li><p>第三阶段：执行事务</p>
+</li>
+</ul>
+<h4 id="Redis事务相关命令"><a href="#Redis事务相关命令" class="headerlink" title="Redis事务相关命令"></a>Redis事务相关命令</h4><ul>
+<li>MULTI</li>
+</ul>
+<p>开启事务，redis会将后续的命令逐个放入队列中，然后使用EXEC命令来原子化执行这个命令队列</p>
+<ul>
+<li>EXEC</li>
+</ul>
+<p>执行事务中的所有操作命令</p>
+<ul>
+<li>DISCARD</li>
+</ul>
+<p>取消事务，放弃执行事务块中的所有命令</p>
+<ul>
+<li>WATCH</li>
+</ul>
+<p>监视一个或多个key，如果事务在执行前，这个key（或多个key）被其他命令修改，则事务被中断，不会执行事务中的任何命令</p>
+<ul>
+<li>UNWATCH</li>
+</ul>
+<p>取消WATCH对所有key的监视</p>
+<h3 id="Redis不支持事务回滚"><a href="#Redis不支持事务回滚" class="headerlink" title="Redis不支持事务回滚"></a>Redis不支持事务回滚</h3><p>Redis之所以保持这样简易的事务，完全是为了保证高并发下的核心问题——性能</p>
+<h2 id="数据删除与淘汰策略"><a href="#数据删除与淘汰策略" class="headerlink" title="数据删除与淘汰策略"></a>数据删除与淘汰策略</h2><h3 id="过期数据"><a href="#过期数据" class="headerlink" title="过期数据"></a>过期数据</h3><h4 id="Redis中的数据特征"><a href="#Redis中的数据特征" class="headerlink" title="Redis中的数据特征"></a>Redis中的数据特征</h4><p>Redis是一种内存级数据库，所有数据均存放在内存中，内存中的数据可以通过TTL指令获取其状态</p>
+<p>TTL返回的值有三种情况：正数，-1，-2</p>
+<p><code>正数</code>：代表该数据在内存中还能存活的时间</p>
+<p><code>-1</code>：永久有效的数据</p>
+<p><code>-2</code> ：已经过期的数据 或被删除的数据 或 未定义的数据</p>
+<p>删除策略就是针对已过期数据的处理策略</p>
+<h4 id="时效性数据的存储"><a href="#时效性数据的存储" class="headerlink" title="时效性数据的存储"></a>时效性数据的存储</h4><p>过期数据是一块独立的存储空间，Hash结构，field是内存地址，value是过期时间，保存了所有key的过期描述，在最终进行过期处理的时候，对该空间的数据进行检测， 当时间到期之后通过field找到内存该地址处的数据，然后进行相关操作</p>
+<h3 id="数据删除策略"><a href="#数据删除策略" class="headerlink" title="数据删除策略"></a>数据删除策略</h3><h4 id="数据删除策略的目标"><a href="#数据删除策略的目标" class="headerlink" title="数据删除策略的目标"></a>数据删除策略的目标</h4><p>在内存占用与CPU占用之间寻找一种平衡，顾此失彼都会造成整体redis性能的下降，甚至引发服务器宕机或 内存泄露</p>
+<h4 id="定时删除"><a href="#定时删除" class="headerlink" title="定时删除"></a>定时删除</h4><p>创建一个定时器，当key设置有过期时间，且过期时间到达时，由定时器任务立即执行对键的删除操作</p>
+<blockquote>
+<p>优点</p>
+</blockquote>
+<p>节约内存，到时就删除，快速释放掉不必要的内存占用</p>
+<blockquote>
+<p>缺点</p>
+</blockquote>
+<p>CPU压力很大，无论CPU此时负载量多高，均占用CPU，会影响redis服务器响应时间和指令吞吐量</p>
+<blockquote>
+<p>总结<br>用处理器性能换取存储空间（拿时间换空间）</p>
+</blockquote>
+<h4 id="惰性删除"><a href="#惰性删除" class="headerlink" title="惰性删除"></a>惰性删除</h4><p>数据到达过期时间，不做处理。等下次访问该数据时，我们需要判断，如果未过期，返回数据，发现已过期，删除，返回不存在</p>
+<blockquote>
+<p>优点</p>
+</blockquote>
+<p>节约CPU性能，发现必须删除的时候才删除</p>
+<blockquote>
+<p>缺点</p>
+</blockquote>
+<p>内存压力很大，出现长期占用内存的数据</p>
+<blockquote>
+<p>总结</p>
+</blockquote>
+<p>用存储空间换取处理器性能（拿空间换时间）</p>
+<h4 id="定期删除"><a href="#定期删除" class="headerlink" title="定期删除"></a>定期删除</h4><p>周期性轮询redis库中的时效性数据，采用随机抽取的策略，利用过期数据占比的方式控制删除频度</p>
+<blockquote>
+<p>定期删除策略</p>
+</blockquote>
+<ul>
+<li><p>Redis启动服务器初始化时，读取配置server.hz的值，默认为10</p>
+</li>
+<li><p>每秒钟执行server.hz次serverCron()——–&gt;databasesCron()———&gt;activeExpireCycle()</p>
+</li>
+<li><p>activeExpireCycle()对每个expires[*]逐一进行检测，每次执行耗时：250ms/server.hz</p>
+</li>
+<li><p>对某个expires[*]检测时，随机挑选W个key检测</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">如果key超时，删除key</span><br><span class="line"></span><br><span class="line">如果一轮中删除的key的数量&gt;W*25%，循环该过程</span><br><span class="line"></span><br><span class="line">如果一轮中删除的key的数量≤W*25%，检查下一个expires[*]，0-15循环</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>W取值=ACTIVE_EXPIRE_CYCLE_LOOKUPS_PER_LOOP属性值参数current_db用于记录activeExpireCycle() 进入哪个expires[*] 执行</p>
+</li>
+<li><p>如果activeExpireCycle()执行时间到期，下次从current_db继续向下执行</p>
+</li>
+</ul>
+<blockquote>
+<p>特点</p>
+</blockquote>
+<p>CPU性能占用设置有峰值，检测频度可自定义设置</p>
+<p>内存压力不是很大，长期占用内存的冷数据会被持续清理</p>
+<blockquote>
+<p>总结</p>
+</blockquote>
+<p>周期性抽查存储空间（随机抽查，重点抽查）</p>
+<h3 id="数据淘汰策略（逐出算法）"><a href="#数据淘汰策略（逐出算法）" class="headerlink" title="数据淘汰策略（逐出算法）"></a>数据淘汰策略（逐出算法）</h3><p>简单明了，内存不够了，redis要临时删除一些数据为当前指令清理存储空间。清理数据的策略称为逐出算法</p>
+<h4 id="策略配置"><a href="#策略配置" class="headerlink" title="策略配置"></a>策略配置</h4><ul>
+<li>最大可使用内存，即占用物理内存的比例，默认值为0，表示不限制。生产环境中根据需求设定，通常设置在50%以上</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">maxmemory ?mb</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>每次选取待删除数据的个数，采用随机获取数据的方式作为待检测删除数据</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">maxmemory-samples count</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>对数据进行删除的选择策略</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">maxmemory-policy policy</span><br></pre></td></tr></table></figure>
+
+<p>policy策略一共3类8种</p>
+<blockquote>
+<p>第一类 检测易失数据（可能会过期的数据集server.db[i].expires ） 同一个库</p>
+</blockquote>
+<p><code>volatile-lru</code>：挑选最近最少使用的数据淘汰      least recently used</p>
+<p><code>volatile-lfu</code>：挑选最近使用次数最少的数据淘汰   least frequently used</p>
+<p><code>volatile-ttl</code>：挑选将要过期的数据淘汰</p>
+<p><code>volatile-random</code>：任意选择数据淘汰</p>
+<p><img src="https://git.poker/codexiaobo/image/blob/main/java/redis-policy%E7%AD%96%E7%95%A5.4j4eqs30cf40.webp?raw=true" alt="redis-policy策略"></p>
+<blockquote>
+<p>第二类：检测全库数据（所有数据集server.db[i].dict ）</p>
+</blockquote>
+<p><code>allkeys-lru</code>：挑选最近最少使用的数据淘汰</p>
+<p><code>allkeLyRs-lfu</code>：挑选最近使用次数最少的数据淘汰</p>
+<p><code>allkeys-random</code>：任意选择数据淘汰，相当于随机</p>
+<blockquote>
+<p>第三类：放弃数据驱逐</p>
+</blockquote>
+<p><code>no-enviction（驱逐）</code>：禁止驱逐数据(redis4.0中默认策略)，会引发OOM(Out Of Memory)</p>
+<p>淘汰策略配置到这个属性上</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">maxmemory-policy volatile-lru</span><br></pre></td></tr></table></figure>
+
+<h2 id="Redis的主从复制架构"><a href="#Redis的主从复制架构" class="headerlink" title="Redis的主从复制架构"></a>Redis的主从复制架构</h2><h3 id="当今互联网的三高架构"><a href="#当今互联网的三高架构" class="headerlink" title="当今互联网的三高架构"></a>当今互联网的三高架构</h3><p>不是高血糖，高血压，和高血脂呦</p>
+<h4 id="高并发"><a href="#高并发" class="headerlink" title="高并发"></a>高并发</h4><p>应用要提供某一业务要能支持很多客户端同时访问的能力</p>
+<h4 id="高性能"><a href="#高性能" class="headerlink" title="高性能"></a>高性能</h4><p>性能带给我们最直观的感受就是：速度快，时间短</p>
+<h4 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h4><p>一年中应用服务正常运行的时间占全年时间的百分比</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">4小时27分15秒+11分36秒+2分16秒=4小时41分7秒=16867秒</span><br><span class="line"></span><br><span class="line">1年=3652460*60=31536000秒</span><br><span class="line"></span><br><span class="line">可用性=（31536000-16867）/31536000*100%=99.9465151%</span><br></pre></td></tr></table></figure>
+
+<p>业界可用性目标5个9，即99.999%，即服务器年宕机时长低于315秒，约5.25分钟</p>
+<h3 id="单点Redis可能出现的问题"><a href="#单点Redis可能出现的问题" class="headerlink" title="单点Redis可能出现的问题"></a>单点Redis可能出现的问题</h3><h4 id="机器故障"><a href="#机器故障" class="headerlink" title="机器故障"></a>机器故障</h4><ul>
+<li>问题</li>
+</ul>
+<p>硬盘故障、系统崩溃</p>
+<ul>
+<li>实质</li>
+</ul>
+<p>数据丢失，很可能对业务造成灾难性打击</p>
+<h4 id="容量瓶颈"><a href="#容量瓶颈" class="headerlink" title="容量瓶颈"></a>容量瓶颈</h4><ul>
+<li>问题</li>
+</ul>
+<p>内存不足</p>
+<ul>
+<li>本质</li>
+</ul>
+<p>硬件条件跟不上</p>
+<ul>
+<li>解决思路</li>
+</ul>
+<p>为了避免单点Redis服务器故障，准备多台服务器，互相连通。将数据复制多个副本保存在不同的服务器上，连接在一起，并保证数据是同步的。即使有其中一台服务器宕机，其他服务器依然可以继续提供服务，实现Redis的高可用，同时实现数据冗余备份</p>
+<p><img src="https://git.poker/codexiaobo/image/blob/main/java/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6.3fet6my2c4w0.webp?raw=true" alt="主从复制"></p>
+<p><code>master</code> 提供数据方，主服务器，主节点，主库主客户端</p>
+<p><code>slave</code> 接收数据方，从服务器，从节点，从库</p>
+<h3 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h3><p>主从复制即将master中的数据即时、有效的复制到slave中</p>
+<ul>
+<li>特点</li>
+</ul>
+<p>一个master可以拥有多个slave，一个slave只对应一个master</p>
+<ul>
+<li>职责</li>
+</ul>
+<p><strong>master</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">写数据</span><br><span class="line">执行写操作时，将出现变化的数据自动同步到slave</span><br><span class="line">读数据（可忽略）</span><br></pre></td></tr></table></figure>
+
+<p><strong>slave</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">读数据</span><br><span class="line">写数据（禁止）</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://git.poker/codexiaobo/image/blob/main/java/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E6%A6%82%E5%BF%B5.7elp2wpuay80.webp?raw=true" alt="主从复制概念"></p>
+<h4 id="主从复制的作用"><a href="#主从复制的作用" class="headerlink" title="主从复制的作用"></a>主从复制的作用</h4><p><code>读写分离</code>：master写、slave读，提高服务器的读写负载能力</p>
+<p><code>负载均衡</code>：基于主从结构，配合读写分离，由slave分担master负载，并根据需求的变化，改变slave的数 量，通过多个从节点分担数据读取负载，大大提高Redis服务器并发量与数据吞吐量</p>
+<p><code>故障恢复</code>：当master出现问题时，由slave提供服务，实现快速的故障恢复</p>
+<p><code>数据冗余</code>：实现数据热备份，是持久化之外的一种数据冗余方式</p>
+<p><code>高可用基石</code>：基于主从复制，构建哨兵模式与集群，实现Redis的高可用方案</p>
+<h3 id="主从复制工作流程"><a href="#主从复制工作流程" class="headerlink" title="主从复制工作流程"></a>主从复制工作流程</h3><ul>
+<li><p>建立连接阶段（即准备阶段）</p>
+</li>
+<li><p>数据同步阶段</p>
+</li>
+<li><p>命令传播阶段（反复同步）<br><img src="https://git.poker/codexiaobo/image/blob/main/java/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%A4%A7%E8%87%B4%E6%B5%81%E7%A8%8B.27orjksfiakg.webp?raw=true" alt="主从复制大致流程"></p>
+</li>
+</ul>
+<h4 id="阶段一：建立连接"><a href="#阶段一：建立连接" class="headerlink" title="阶段一：建立连接"></a>阶段一：建立连接</h4><p><img src="https://git.poker/codexiaobo/image/blob/main/java/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%E8%BF%87%E7%A8%8B.3a8t8kr9yuq0.webp?raw=true" alt="主从复制建立连接过程"></p>
+<p>当前状态：</p>
+<p>slave：保存master的地址与端口</p>
+<p>master：保存slave的端口</p>
+<p>总体：之间创建了socket 连接</p>
+<blockquote>
+<p>master与slave互联 命令</p>
+</blockquote>
+<ul>
+<li>方式一：客户端发送命令</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">slaveof masterip masterport</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方式二：启动服务器参数</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">redis-server --slaveof masterip masterport</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>方式三：服务器配置（主流方式）</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">slaveof masterip masterport</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>slave系统信息</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">master_link_down_since_seconds</span><br><span class="line">masterhost &amp; masterport</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>master系统信息</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">uslave_listening_port(多个)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>master与slave断开连接 命令</p>
+</blockquote>
+<p>断开slave与master的连接，slave断开连接后，不会删除已有数据，只是不再接受master发送的数据</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">slaveof no one</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>授权访问</p>
+</blockquote>
+<ul>
+<li>master客户端发送命令设置密码</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">requirepass password</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>master配置文件设置密码</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">config set requirepass password</span><br><span class="line">config get requirepass</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>slave客户端发送命令设置密码</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">auth password</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>slave配置文件设置密码</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">masterauth password</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>slave启动服务器设置密码</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">redis-server –a password</span><br></pre></td></tr></table></figure>
+
+<h4 id="阶段二：数据同步"><a href="#阶段二：数据同步" class="headerlink" title="阶段二：数据同步"></a>阶段二：数据同步</h4><p><img src="https://git.poker/codexiaobo/image/blob/main/java/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5%E8%BF%87%E7%A8%8B.5s41kyyrys00.webp?raw=true" alt="主从复制数据同步过程"></p>
+<p>当前状态：</p>
+<p>slave：具有master端全部数据，包含RDB过程接收的数据</p>
+<p>master：保存slave当前数据同步的位置</p>
+<p>总体：之间完成了数据克隆</p>
+<p><strong>数据同步阶段master说明</strong></p>
+<ul>
+<li><p>如果master数据量巨大，数据同步阶段应避开流量高峰期，避免造成master阻塞，影响业务正常执行</p>
+</li>
+<li><p>复制缓冲区大小设定不合理，会导致数据溢出。如进行全量复制周期太长，进行部分复制时发现数据已经存在丢失的情况，必须进行第二次全量复制，致使slave陷入死循环状态。</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">repl-backlog-size ?mb</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>master单机内存占用主机内存的比例不应过大，建议使用50%-70%的内存，留下30%-50%的内存用于执 行bgsave命令和创建复制缓冲区</li>
+</ul>
+<p><strong>数据同步阶段slave说明</strong></p>
+<ul>
+<li>为避免slave进行全量复制、部分复制时服务器响应阻塞或数据不同步，建议关闭此期间的对外服务</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">slave-serve-stale-data yes|no</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>数据同步阶段，master发送给slave信息可以理解master是slave的一个客户端，主动向slave发送命令</p>
+</li>
+<li><p>多个slave同时对master请求数据同步，master发送的RDB文件增多，会对带宽造成巨大冲击，如果master带宽不足，因此数据同步需要根据业务需求，适量错峰</p>
+</li>
+<li><p>slave过多时，建议调整拓扑结构，由一主多从结构变为树状结构，中间的节点既是master，也是 slave。注意使用树状结构时，由于层级深度，导致深度越高的slave与最顶层master间数据同步延迟较大，数据一致性变差，应谨慎选择</p>
+</li>
+</ul>
+<p><strong>小提示</strong></p>
+<p>设计Redis架构时，一开始就要想好了用几主几从，然后把他们启动其起来</p>
+<h4 id="阶段三：命令传播"><a href="#阶段三：命令传播" class="headerlink" title="阶段三：命令传播"></a>阶段三：命令传播</h4><p>当master数据库状态被修改后，导致主从服务器数据库状态不一致，此时需要让主从数据同步到一致的状态，同步的动作称为命令传播</p>
+<p>master将接收到的数据变更命令发送给slave，slave接收命令后执行命令</p>
+<p><strong>部分复制</strong><br>介绍一下三个核心要素</p>
+<ul>
+<li>服务器的运行 id（run id）</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">服务器运行ID（runid）</span><br><span class="line"></span><br><span class="line">概念：服务器运行ID是每一台服务器每次运行的身份识别码，一台服务器多次运行可以生成多个运行id</span><br><span class="line"></span><br><span class="line">组成：运行id由40位字符组成，是一个随机的十六进制字符</span><br><span class="line">例如：fdc9ff13b9bbaab28db42b3d50f852bb5e3fcdce</span><br><span class="line"></span><br><span class="line">作用：运行id被用于在服务器间进行传输，识别身份</span><br><span class="line">如果想两次操作均对同一台服务器进行，必须每次操作携带对应的运行id，用于对方识别</span><br><span class="line"></span><br><span class="line">实现方式：运行id在每台服务器启动时自动生成的，master在首次连接slave时，会将自己的运行ID发送给slave，</span><br><span class="line">slave保存此ID，通过info Server命令，可以查看节点的runid</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>主服务器的复制积压缓冲区</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">复制缓冲区</span><br><span class="line"></span><br><span class="line">概念：复制缓冲区，又名复制积压缓冲区，是一个先进先出（FIFO）的队列，用于存储服务器执行过的命令，每次传播命令，master都会将传播的命令记录下来，并存储在复制缓冲区</span><br><span class="line">	复制缓冲区默认数据存储空间大小是1M</span><br><span class="line">	当入队元素的数量大于队列长度时，最先入队的元素会被弹出，而新元素会被放入队列</span><br><span class="line">作用：用于保存master收到的所有指令（仅影响数据变更的指令，例如set，select）</span><br><span class="line"></span><br><span class="line">数据来源：当master接收到主客户端的指令时，除了将指令执行，会将该指令存储到缓冲区中</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>主从服务器的复制偏移量</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">偏移量</span><br><span class="line"></span><br><span class="line">概念：一个数字，描述复制缓冲区中的指令字节位置</span><br><span class="line"></span><br><span class="line">分类：</span><br><span class="line"></span><br><span class="line">master复制偏移量：记录发送给所有slave的指令字节对应的位置（多个）</span><br><span class="line">slave复制偏移量：记录slave接收master发送过来的指令字节对应的位置（一个）</span><br><span class="line">作用：同步信息，比对master与slave的差异，当slave断线后，恢复数据使用</span><br><span class="line"></span><br><span class="line">数据来源：</span><br><span class="line"></span><br><span class="line">master端：发送一次记录一次</span><br><span class="line">slave端：接收一次记录一次</span><br></pre></td></tr></table></figure>
+
+<p><strong>字节值工作原理</strong></p>
+<ul>
+<li><p>通过offset区分不同的slave当前数据传播的差异</p>
+</li>
+<li><p>master记录已发送的信息对应的offset</p>
+</li>
+<li><p>slave记录已接收的信息对应的offset</p>
+</li>
+</ul>
+<p><img src="https://git.poker/codexiaobo/image/blob/main/java/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%91%BD%E4%BB%A4%E4%BC%A0%E6%92%AD%E8%BF%87%E7%A8%8B.54pe05pq3400.webp?raw=true" alt="主从复制部分复制"></p>
+<h4 id="三个阶段整体工作流程"><a href="#三个阶段整体工作流程" class="headerlink" title="三个阶段整体工作流程"></a>三个阶段整体工作流程</h4><p><img src="https://git.poker/codexiaobo/image/blob/main/java/%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E6%9B%B4%E6%96%B0%E6%B5%81%E7%A8%8B.7509l07k3dw.webp?raw=true" alt="主从复制更新流程"></p>
+<h3 id="心跳机制"><a href="#心跳机制" class="headerlink" title="心跳机制"></a>心跳机制</h3><p>进入命令传播阶段候，master与slave间需要进行信息交换，使用心跳机制进行维护，实现双方连接保持在线</p>
+<h4 id="master心跳任务"><a href="#master心跳任务" class="headerlink" title="master心跳任务"></a>master心跳任务</h4><p><code>内部指令</code>：PING</p>
+<p><code>周期</code>：由repl-ping-slave-period决定，默认10秒</p>
+<p><code>作用</code>：判断slave是否在线</p>
+<p><code>查询</code>：INFO replication 获取slave最后一次连接时间间隔，lag项维持在0或1视为正常</p>
+<h4 id="slave心跳任务"><a href="#slave心跳任务" class="headerlink" title="slave心跳任务"></a>slave心跳任务</h4><p><code>内部指令</code>：REPLCONF ACK {offset}</p>
+<p><code>周期</code>：1秒</p>
+<p><code>作用1</code>：汇报slave自己的复制偏移量，获取最新的数据变更指令</p>
+<p><code>作用2</code>：判断master是否在线</p>
+<h4 id="心跳阶段可能发生的问题"><a href="#心跳阶段可能发生的问题" class="headerlink" title="心跳阶段可能发生的问题"></a>心跳阶段可能发生的问题</h4><p>当slave多数掉线，或延迟过高时，master为保障数据稳定性，将拒绝所有信息同步</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">min-slaves-to-write 2</span><br><span class="line">min-slaves-max-lag 8</span><br></pre></td></tr></table></figure>
+
+<p>slave数量少于2个，或者所有slave的延迟都大于等于8秒时，强制关闭master写功能，停止数据同步</p>
+<ul>
+<li><p>slave数量由slave发送REPLCONF ACK命令做确认</p>
+</li>
+<li><p>slave延迟由slave发送REPLCONF ACK命令做确认</p>
+</li>
+</ul>
+<p><img src="https://git.poker/codexiaobo/image/blob/main/java/%E5%BF%83%E8%B7%B3%E6%9C%BA%E5%88%B6.4lzzrtg1ky00.webp?raw=true" alt="心跳机制"></p>
+<p><strong>你知道的越多 你不知道的越多 嘿 我是小博 带你一起看我目之所及的世界</strong></p>
+]]></content>
+      <tags>
+        <tag>redis</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Redis 复习一</title>
     <url>/posts/2950641035/</url>
     <content><![CDATA[<p><img src="https://git.poker/codexiaobo/image/blob/main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20220805003622.30fiu87806s0.webp?raw=true" alt="微信图片_20220805003622"></p>
