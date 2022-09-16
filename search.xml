@@ -39,35 +39,35 @@
 <h2 id="Linux安装nginx"><a href="#Linux安装nginx" class="headerlink" title="Linux安装nginx"></a>Linux安装nginx</h2><h3 id="虚拟机安装Linux"><a href="#虚拟机安装Linux" class="headerlink" title="虚拟机安装Linux"></a>虚拟机安装Linux</h3><p>首先下载一个liunx镜像，然后使用虚拟机配置就可以了，系统安装完之后配置虚拟机的liunx网卡配置，使其可以进行上网，首先修改其配置文件，指令为<code>cd /etc/sysconfig/network-scripts/</code>然后修改其文件 指令 <code>vi ifcfg-ens33</code></p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">TC0YPE=Ethernet</span><br><span class="line">PROXY_METHOD=none</span><br><span class="line">BROWSER_ONLY=no</span><br><span class="line">BOOTPROTO=<span class="keyword">static</span></span><br><span class="line">DEFROUTE=yes</span><br><span class="line">IPV4_FAILURE_FATAL=no</span><br><span class="line">IPV6INIT=yes</span><br><span class="line">IPV6_AUTOCONF=yes</span><br><span class="line">IPV6_DEFROUTE=yes</span><br><span class="line">IPV6_FAILURE_FATAL=no</span><br><span class="line">IPV6_ADDR_GEN_MODE=stable-privacy</span><br><span class="line">NAME=ens33</span><br><span class="line">UUID=d713ec89-fbca-42ff-8d10-3768d86f12a1</span><br><span class="line">DEVICE=ens33</span><br><span class="line">ONBOOT=yes</span><br><span class="line">IPADDR=<span class="number">192.168</span><span class="number">.117</span><span class="number">.200</span></span><br><span class="line">NETMASK=<span class="number">255.255</span><span class="number">.255</span><span class="number">.0</span></span><br><span class="line">GATEWAY=<span class="number">192.168</span><span class="number">.117</span><span class="number">.2</span></span><br><span class="line">DNS1=<span class="number">114.114</span><span class="number">.114</span><span class="number">.114</span></span><br><span class="line">DNS2=<span class="number">114.114</span><span class="number">.115</span><span class="number">.115</span></span><br></pre></td></tr></table></figure>
 
-<p>这里面修改的有BOOTPROTO=static 设置为static静态，ONBOOT=yes设置为yes然后后面是新增的配置</p>
+<p>这里面修改的有BOOTPROTO=static 设置为<code>static</code>静态，<code>ONBOOT=yes</code>设置为<code>yes</code>然后后面是新增的配置</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">IPADDR=<span class="number">192.168</span><span class="number">.117</span><span class="number">.200</span></span><br><span class="line">NETMASK=<span class="number">255.255</span><span class="number">.255</span><span class="number">.0</span></span><br><span class="line">GATEWAY=<span class="number">192.168</span><span class="number">.117</span><span class="number">.2</span></span><br><span class="line">DNS1=<span class="number">114.114</span><span class="number">.114</span><span class="number">.114</span></span><br><span class="line">DNS2=<span class="number">114.114</span><span class="number">.115</span><span class="number">.115</span></span><br></pre></td></tr></table></figure>
 
-<p>然后重启网卡 指令为：systemctl restart network</p>
-<p>ip addr 查看网卡信息</p>
-<p>ping <a href="http://www.baidu.com/">www.baidu.com</a> 测试是否可以上网，检验是否连通</p>
-<h3 id="linux安装nginx"><a href="#linux安装nginx" class="headerlink" title="linux安装nginx"></a>linux安装nginx</h3><p>安装wget工具 yum install wget -y</p>
-<p>安装vim工具 yum install vim -y</p>
-<p>安装netstat工具 yum install net-tools -y</p>
-<p>然后解压 tar -zxvf nginx-1.22.0.tar.gz </p>
-<p>然后对其进行配置 ./configure –prefix=/data/nginx –user=nginx –group=nginx  –with-http_ssl</p>
-<p>创建存放nginx的目录 mkdir /data/nginx -p</p>
-<p>sbin/目录特殊进行设置 useradd nginx -M -s /sbin/nologin</p>
-<p>编译安装 make &amp;&amp; make install</p>
-<p>进入其sbin目录 cd sbin/</p>
-<p>运行nginx ./nginx</p>
-<p>查看其运行状态 netstat -nplt    或者   ps -aux | grep nginx</p>
-<p>查看端口号（额外命令） netstat -ano | findstr 端口号     或者    netstat -anp | grep 端口号</p>
-<p>暂时关闭所有防火墙 systemctl stop firewalld</p>
-<p>永久关闭防火墙 systemctl disable firewalld</p>
-<p>重启防火墙 systemctl enable firewalld</p>
-<p>查看防火墙状态 systemctl status firewalld</p>
-<p>此时就可以访问了 我这里面访问的地址是 192.162.117.200 这个是你linux的网卡地址</p>
-<p>curl 地址 linux中地址访问</p>
-<h4 id="nginx基本命令"><a href="#nginx基本命令" class="headerlink" title="nginx基本命令"></a>nginx基本命令</h4><p>./mginx 启动</p>
-<p>nginx -s stop 立马关闭</p>
-<p>nginx -s quit 优雅关闭，处理完没处理好的请求后关闭</p>
-<p>nginx -s reload 重新加载配置文件</p>
-<p>nginx -s reopening the log files 用来打开日志文件，这样nginx会把新日志信息写入这个新的文件中</p>
+<p>然后重启网卡 指令为：<code>systemctl restart network</code></p>
+<p><code>ip addr</code> 查看网卡信息</p>
+<p><code>ping www.baidu.com</code> 测试是否可以上网，检验是否连通</p>
+<h3 id="linux安装nginx"><a href="#linux安装nginx" class="headerlink" title="linux安装nginx"></a>linux安装nginx</h3><p>安装wget工具 <code>yum install wget -y</code></p>
+<p>安装vim工具 <code>yum install vim -y</code></p>
+<p>安装netstat工具 <code>yum install net-tools -y</code></p>
+<p>然后解压 <code>tar -zxvf nginx-1.22.0.tar.gz </code></p>
+<p>然后对其进行配置 <code>./configure --prefix=/data/nginx --user=nginx --group=nginx  --with-http_ssl</code></p>
+<p>创建存放nginx的目录 <code>mkdir /data/nginx -p</code></p>
+<p>sbin/目录特殊进行设置 <code>useradd nginx -M -s /sbin/nologin</code></p>
+<p>编译安装 <code>make &amp;&amp; make install</code></p>
+<p>进入其sbin目录 <code>cd sbin/</code></p>
+<p>运行<code>nginx ./nginx</code></p>
+<p>查看其运行状态 <code>netstat -nplt</code>    或者   <code>ps -aux | grep nginx</code></p>
+<p>查看端口号（额外命令） <code>netstat -ano | findstr 端口号</code>     或者    <code>netstat -anp | grep 端口号</code></p>
+<p>暂时关闭所有防火墙 <code>systemctl stop firewalld</code></p>
+<p>永久关闭防火墙 <code>systemctl disable firewalld</code></p>
+<p>重启防火墙 <code>systemctl enable firewalld</code></p>
+<p>查看防火墙状态 <code>systemctl status firewalld</code></p>
+<p>此时就可以访问了 我这里面访问的地址是 <code>192.162.117.200</code> 这个是你linux的网卡地址</p>
+<p><code>curl 地址 linux中地址访问</code></p>
+<h4 id="nginx基本命令"><a href="#nginx基本命令" class="headerlink" title="nginx基本命令"></a>nginx基本命令</h4><p><code>./mginx</code> 启动</p>
+<p><code>nginx -s stop</code> 立马关闭</p>
+<p><code>nginx -s quit</code> 优雅关闭，处理完没处理好的请求后关闭</p>
+<p><code>nginx -s reload</code> 重新加载配置文件</p>
+<p><code>nginx -s reopening the log files</code> 用来打开日志文件，这样nginx会把新日志信息写入这个新的文件中</p>
 <h2 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a>nginx配置</h2><p>首先这里先介绍一下目录结构 </p>
 <p><code>conf</code> nginx的主要配置在这里配置着</p>
 <p><code>html</code> 项目存放在这里</p>
