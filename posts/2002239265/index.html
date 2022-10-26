@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/./images/favicon32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/./images/favicon16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;codexiaobo.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Pisces&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;},&quot;path&quot;:&quot;&#x2F;search.xml&quot;,&quot;localsearch&quot;:{&quot;enable&quot;:true,&quot;trigger&quot;:&quot;auto&quot;,&quot;top_n_per_article&quot;:1,&quot;unescape&quot;:false,&quot;preload&quot;:false}}</script><script src="/js/config.js"></script>
+
+<link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring cloud 三">
+<meta property="og:url" content="https://codexiaobo.github.io/posts/2002239265/index.html">
+<meta property="og:site_name" content="Code小博">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221026132251.30eqhfzf2do0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/config%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E6%B5%81%E7%A8%8B.1rb2b93ptj5s.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/stream%E7%BB%84%E4%BB%B6.17e8v7h5dz9c.webp">
+<meta property="article:published_time" content="2022-10-26T05:24:44.000Z">
+<meta property="article:modified_time" content="2022-10-26T05:26:41.270Z">
+<meta property="article:author" content="xiaobo">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="spring cloud">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221026132251.30eqhfzf2do0.webp">
+
+
+<link rel="canonical" href="https://codexiaobo.github.io/posts/2002239265/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;codexiaobo.github.io&#x2F;posts&#x2F;2002239265&#x2F;&quot;,&quot;path&quot;:&quot;posts&#x2F;2002239265&#x2F;&quot;,&quot;title&quot;:&quot;spring cloud 三&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>spring cloud 三 | Code小博</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Code小博" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+  
+  <a href="https://codexiaobo.github.io" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+  
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Code小博</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#spring-cloud"><span class="nav-number">1.</span> <span class="nav-text">spring cloud</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83"><span class="nav-number">1.1.</span> <span class="nav-text">分布式配置中心</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Config"><span class="nav-number">1.1.1.</span> <span class="nav-text">Config</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#config%E4%BD%BF%E7%94%A8"><span class="nav-number">1.1.2.</span> <span class="nav-text">config使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEconfig-server%E6%9C%8D%E5%8A%A1%E6%A8%A1%E5%9D%97"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">配置config-server服务模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%A8%A1%E5%9D%97%E8%AF%BB%E5%8F%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">其他模块读取配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Config%E5%88%B7%E6%96%B0%E8%AF%BB%E5%8F%96%E8%BF%9C%E7%A8%8B%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">Config刷新读取远程配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Config-%E9%9B%86%E6%88%90"><span class="nav-number">1.1.2.4.</span> <span class="nav-text">Config 集成</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringCloud-Bus%E6%B6%88%E6%81%AF%E6%80%BB%E7%BA%BF"><span class="nav-number">1.2.</span> <span class="nav-text">SpringCloud Bus消息总线</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">1.2.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E6%8B%9F"><span class="nav-number">1.2.2.</span> <span class="nav-text">模拟</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringCloud-Stream%E6%B6%88%E6%81%AF%E9%A9%B1%E5%8A%A8"><span class="nav-number">1.3.</span> <span class="nav-text">SpringCloud Stream消息驱动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#stream-%E7%BB%84%E4%BB%B6"><span class="nav-number">1.3.1.</span> <span class="nav-text">stream 组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E6%8B%9F-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">模拟</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#stream-provider%E6%A8%A1%E5%9D%97"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">stream-provider模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#stream-consumer%E6%A8%A1%E5%9D%97"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">stream-consumer模块</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringCloud-Sleuth%E5%88%86%E5%B8%83%E5%BC%8F%E8%AF%B7%E6%B1%82%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA"><span class="nav-number">1.4.</span> <span class="nav-text">SpringCloud Sleuth分布式请求链路追踪</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BDzipkin-jar"><span class="nav-number">1.4.1.</span> <span class="nav-text">下载zipkin.jar</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="xiaobo"
+      src="/images/xiaobo.png">
+  <p class="site-author-name" itemprop="name">xiaobo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">78</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://codexiaobo.github.io/" title="GitHub → https:&#x2F;&#x2F;codexiaobo.github.io"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/6557440727/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;6557440727&#x2F;profile?rightmod&#x3D;1&amp;wvr&#x3D;6&amp;mod&#x3D;personinfo&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.baidu.com/" title="https:&#x2F;&#x2F;www.baidu.com" rel="noopener" target="_blank">百度</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/" title="https:&#x2F;&#x2F;www.zhihu.com" rel="noopener" target="_blank">知乎</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.csdn.net/" title="https:&#x2F;&#x2F;www.csdn.net" rel="noopener" target="_blank">CSDN</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bilibili.com/" title="https:&#x2F;&#x2F;www.bilibili.com" rel="noopener" target="_blank">哔哩哔哩</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+	<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=440208476&auto=1&height=66"></iframe>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/2002239265/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/xiaobo.png">
+      <meta itemprop="name" content="xiaobo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code小博">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          spring cloud 三
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-10-26 13:24:44 / 修改时间：13:26:41" itemprop="dateCreated datePublished" datetime="2022-10-26T13:24:44+08:00">2022-10-26</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>7.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221026132251.30eqhfzf2do0.webp" alt="微信图片_20221026132251"></p>
+<!--sleep-->
+
+<span id="more"></span>
+
+<h1 id="spring-cloud"><a href="#spring-cloud" class="headerlink" title="spring cloud"></a>spring cloud</h1><h2 id="分布式配置中心"><a href="#分布式配置中心" class="headerlink" title="分布式配置中心"></a>分布式配置中心</h2><h3 id="Config"><a href="#Config" class="headerlink" title="Config"></a>Config</h3><p>当需要服务器特别特别多的时候，我们不能每次都配置yml，然后再重新启动，因为太多了，这是我们可以集中管理配置文件，根据不同环境不同配置，动态化的配置更新，当配置信息改变时，不需要重启即可更新配置信息到服务</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/config%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E6%B5%81%E7%A8%8B.1rb2b93ptj5s.webp" alt="config配置中心流程"></p>
+<h3 id="config使用"><a href="#config使用" class="headerlink" title="config使用"></a>config使用</h3><h4 id="配置config-server服务模块"><a href="#配置config-server服务模块" class="headerlink" title="配置config-server服务模块"></a>配置config-server服务模块</h4><ul>
+<li>pom</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-config-server<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>application.yml</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 端口号</span></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">9527</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 服务名</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">config-server</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># spring cloud config</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="attr">server:</span></span><br><span class="line">        <span class="comment"># git 的 远程仓库地址</span></span><br><span class="line">        <span class="attr">git:</span></span><br><span class="line">          <span class="attr">uri:</span> <span class="string">https://gitee.com/codexiaobo/config-server.git</span></span><br><span class="line">      <span class="attr">label:</span> <span class="string">master</span> <span class="comment"># 分支配置</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>app</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableConfigServer</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConfigServerApp</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(ConfigServerApp.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>http://localhost:9527/master/provider-dev.yml</code>即可查看到远程的配置文件</p>
+<h4 id="其他模块读取配置文件"><a href="#其他模块读取配置文件" class="headerlink" title="其他模块读取配置文件"></a>其他模块读取配置文件</h4><ul>
+<li>pom</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--config client --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-config<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>application.yml</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置config-server地址</span></span><br><span class="line"><span class="comment"># 配置获得配置文件的名称等信息</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="comment"># 配置config-server地址</span></span><br><span class="line">      <span class="attr">uri:</span> <span class="string">http://localhost:9527</span></span><br><span class="line">      <span class="comment"># 配置获得配置文件的名称等信息</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">provider</span> <span class="comment"># 文件名</span></span><br><span class="line">      <span class="attr">profile:</span> <span class="string">dev</span> <span class="comment"># profile指定</span></span><br><span class="line">      <span class="attr">label:</span> <span class="string">master</span> <span class="comment"># 分支</span></span><br></pre></td></tr></table></figure>
+
+<p>但是这样只是静态的读取，因为当远程仓库修改时，我们不能将几千个机器上的服务重启啊，这样运维人员就傻了，效率太低，所以我们要让他们动态的读取到远程仓库的配置文件</p>
+<h4 id="Config刷新读取远程配置文件"><a href="#Config刷新读取远程配置文件" class="headerlink" title="Config刷新读取远程配置文件"></a>Config刷新读取远程配置文件</h4><p>客户端引入</p>
+<ul>
+<li>pom</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>controller使用 <code>@RefreshScope</code></p>
+<p><code>bootstrap.yml</code> 添加</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">management:</span></span><br><span class="line">  <span class="attr">endpoints:</span></span><br><span class="line">    <span class="attr">web:</span></span><br><span class="line">      <span class="attr">exposure:</span></span><br><span class="line">        <span class="attr">include:</span> <span class="string">&#x27;*&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>cmd 中发送请求 刷新 <code>curl -X POST http://localhost:8080/actuator/refresh</code></p>
+<p>这里我们只是配置了一个config-server，如果挂了，就发生了单点故障了，所以我们不能写死，要从注册中心中拿到config-server</p>
+<h4 id="Config-集成"><a href="#Config-集成" class="headerlink" title="Config 集成"></a>Config 集成</h4><p>将config-server注册到注册中心</p>
+<ul>
+<li>pom</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- eureka-client --&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-netflix-eureka-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>从注册中心中读到config-server</p>
+<ul>
+<li>application.yml</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置config-server地址</span></span><br><span class="line"><span class="comment"># 配置获得配置文件的名称等信息</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="comment"># 配置config-server地址</span></span><br><span class="line">      <span class="comment">#uri: http://localhost:9527</span></span><br><span class="line">      <span class="comment"># 配置获得配置文件的名称等信息</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">config</span> <span class="comment"># 文件名</span></span><br><span class="line">      <span class="attr">profile:</span> <span class="string">dev</span> <span class="comment"># profile指定，  config-dev.yml</span></span><br><span class="line">      <span class="attr">label:</span> <span class="string">master</span> <span class="comment"># 分支</span></span><br><span class="line"><span class="comment">#     在注册中心中拿到config-server </span></span><br><span class="line">      <span class="attr">discovery:</span></span><br><span class="line">        <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">        <span class="attr">service-id:</span> <span class="string">CONFIG-SERVER</span></span><br><span class="line"></span><br><span class="line"><span class="attr">management:</span></span><br><span class="line">  <span class="attr">endpoints:</span></span><br><span class="line">    <span class="attr">web:</span></span><br><span class="line">      <span class="attr">exposure:</span></span><br><span class="line">        <span class="attr">include:</span> <span class="string">&#x27;*&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="SpringCloud-Bus消息总线"><a href="#SpringCloud-Bus消息总线" class="headerlink" title="SpringCloud Bus消息总线"></a>SpringCloud Bus消息总线</h2><p>远程的配置文件更新了，运维只需要发一个请求，所有用到这个配置文件的几百个应用更新了</p>
+<p>消息总线可以为微服务做监控，也可以实现应用程序之间相通信</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>就是发送一个请求，然后运用rabbitmq的订阅发布模式通知多份配置文件更新</p>
+<h3 id="模拟"><a href="#模拟" class="headerlink" title="模拟"></a>模拟</h3><ul>
+<li>config-server和config-client</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- bus --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-bus-amqp<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>bootstrap.yml</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置config-server地址</span></span><br><span class="line"><span class="comment"># 配置获得配置文件的名称等信息</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="comment"># 配置config-server地址</span></span><br><span class="line"><span class="comment">#      uri: http://localhost:9527</span></span><br><span class="line">      <span class="comment"># 配置获得配置文件的名称等信息</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">provider</span> <span class="comment"># 文件名</span></span><br><span class="line">      <span class="attr">profile:</span> <span class="string">dev</span> <span class="comment"># profile指定，  config-dev.yml</span></span><br><span class="line">      <span class="attr">label:</span> <span class="string">master</span> <span class="comment"># 分支</span></span><br><span class="line"><span class="comment">#      在注册中心中拿到config-server</span></span><br><span class="line">      <span class="attr">discovery:</span></span><br><span class="line">        <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">        <span class="attr">service-id:</span> <span class="string">CONFIG-SERVER</span></span><br><span class="line">  <span class="comment">#配置rabbitmq信息</span></span><br><span class="line">  <span class="attr">rabbitmq:</span></span><br><span class="line">    <span class="attr">host:</span> <span class="string">localhost</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">5672</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">xiaobo</span></span><br><span class="line">    <span class="attr">password:</span> <span class="string">xiaobo</span></span><br><span class="line">    <span class="attr">virtual-host:</span> <span class="string">/</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 暴露bus的刷新端点</span></span><br><span class="line"><span class="attr">management:</span></span><br><span class="line">  <span class="attr">endpoints:</span></span><br><span class="line">    <span class="attr">web:</span></span><br><span class="line">      <span class="attr">exposure:</span></span><br><span class="line">        <span class="attr">include:</span> <span class="string">&#x27;bus-refresh&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>config-server模块application.yml</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 端口号</span></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">9527</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 服务名</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">config-server</span></span><br><span class="line">  <span class="comment">#配置rabbitmq信息</span></span><br><span class="line">  <span class="attr">rabbitmq:</span></span><br><span class="line">    <span class="attr">host:</span> <span class="string">localhost</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">5672</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">xiaobo</span></span><br><span class="line">    <span class="attr">password:</span> <span class="string">xiaobo</span></span><br><span class="line">    <span class="attr">virtual-host:</span> <span class="string">/</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># spring cloud config</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="attr">server:</span></span><br><span class="line">        <span class="comment"># git 的 远程仓库地址</span></span><br><span class="line">        <span class="attr">git:</span></span><br><span class="line">          <span class="attr">uri:</span> <span class="string">https://gitee.com/codexiaobo/config-server.git</span></span><br><span class="line">      <span class="attr">label:</span> <span class="string">master</span> <span class="comment"># 分支配置</span></span><br><span class="line"></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">    <span class="attr">service-url:</span></span><br><span class="line">      <span class="attr">defaultZone:</span> <span class="string">http://localhost:8761/eureka</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 暴露bus的刷新端点</span></span><br><span class="line"><span class="attr">management:</span></span><br><span class="line">  <span class="attr">endpoints:</span></span><br><span class="line">    <span class="attr">web:</span></span><br><span class="line">      <span class="attr">exposure:</span></span><br><span class="line">        <span class="attr">include:</span> <span class="string">&#x27;bus-refresh&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>curl -X POST http://localhost:9527/actuator/bus-refresh</code> 模拟发送请求修改</p>
+<h2 id="SpringCloud-Stream消息驱动"><a href="#SpringCloud-Stream消息驱动" class="headerlink" title="SpringCloud Stream消息驱动"></a>SpringCloud Stream消息驱动</h2><p>Spring Cloud Stream 是一个构建消息驱动微服务应用的框架</p>
+<p>Stream对消息中间件的进一步封装，可以做到代码层面对中间件的无感知，甚至于动态的切换中间件，就类似JDBC，使得微服务开发的高度解耦</p>
+<p>Spring Cloud Stream目前支持两种消息中间件RabbitMQ和Kafka</p>
+<h3 id="stream-组件"><a href="#stream-组件" class="headerlink" title="stream 组件"></a>stream 组件</h3><p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/stream%E7%BB%84%E4%BB%B6.17e8v7h5dz9c.webp" alt="stream组件"></p>
+<p><code>binding</code> :通过配置把应用和spring cloud stream 的 binder 绑定在一起</p>
+<p><code>output</code> :发送消息 Channel，内置 Source接口</p>
+<p><code>input</code> :接收消息 Channel，内置 Sink接口</p>
+<h3 id="模拟-1"><a href="#模拟-1" class="headerlink" title="模拟"></a>模拟</h3><h4 id="stream-provider模块"><a href="#stream-provider模块" class="headerlink" title="stream-provider模块"></a>stream-provider模块</h4><ul>
+<li>pom</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--spring boot web--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- stream --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-stream-rabbit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>application.yml</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8000</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">stream:</span></span><br><span class="line">      <span class="attr">binders:</span></span><br><span class="line">        <span class="attr">xbclass_binder:</span> <span class="comment"># 自定义的绑定器名称</span></span><br><span class="line">          <span class="attr">type:</span> <span class="string">rabbit</span> <span class="comment"># 绑定器类型</span></span><br><span class="line">          <span class="attr">environment:</span> <span class="comment"># 指定mq的环境</span></span><br><span class="line">            <span class="attr">spring:</span></span><br><span class="line">              <span class="attr">rabbitmq:</span></span><br><span class="line">                <span class="attr">host:</span> <span class="string">localhost</span></span><br><span class="line">                <span class="attr">port:</span> <span class="number">5672</span></span><br><span class="line">                <span class="attr">username:</span> <span class="string">xiaobo</span></span><br><span class="line">                <span class="attr">password:</span> <span class="string">xiaobo</span></span><br><span class="line">                <span class="attr">virtual-host:</span> <span class="string">/</span></span><br><span class="line">      <span class="attr">bindings:</span></span><br><span class="line">        <span class="attr">output:</span> <span class="comment"># channel名称</span></span><br><span class="line">          <span class="attr">binder:</span> <span class="string">xbclass_binder</span> <span class="comment">#指定使用哪一个binder</span></span><br><span class="line">          <span class="attr">destination:</span> <span class="string">xblclass_exchange</span> <span class="comment"># 消息目的地</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>MessageProvider</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="comment">// 声明这个类是stream的发送者</span></span><br><span class="line"><span class="meta">@EnableBinding(Source.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MessageProvider</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> MessageChannel output;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 发送消息至rabbitmq</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> msg</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">send</span><span class="params">(String msg)</span></span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">//        发送消息</span></span><br><span class="line">        <span class="keyword">boolean</span> send = output.send(MessageBuilder.withPayload(msg).build());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (send) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;发送消息成功&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;发送消息失败&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>ProviderController</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping(value = &quot;/stream&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProviderController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> MessageProvider messageProvider;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(value = &quot;/send&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">send</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        messageProvider.send(<span class="string">&quot;我发送一条消息&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;success&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>StreamProviderApp</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamProviderApp</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(StreamProviderApp.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="stream-consumer模块"><a href="#stream-consumer模块" class="headerlink" title="stream-consumer模块"></a>stream-consumer模块</h4><ul>
+<li>application.yml</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">9000</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">stream:</span></span><br><span class="line">      <span class="attr">binders:</span></span><br><span class="line">        <span class="attr">xbclass_binder:</span> <span class="comment"># 自定义的绑定器名称</span></span><br><span class="line">          <span class="attr">type:</span> <span class="string">rabbit</span> <span class="comment"># 绑定器类型</span></span><br><span class="line">          <span class="attr">environment:</span> <span class="comment"># 指定mq的环境</span></span><br><span class="line">            <span class="attr">spring:</span></span><br><span class="line">              <span class="attr">rabbitmq:</span></span><br><span class="line">                <span class="attr">host:</span> <span class="string">localhost</span></span><br><span class="line">                <span class="attr">port:</span> <span class="number">5672</span></span><br><span class="line">                <span class="attr">username:</span> <span class="string">xiaobo</span></span><br><span class="line">                <span class="attr">password:</span> <span class="string">xiaobo</span></span><br><span class="line">                <span class="attr">virtual-host:</span> <span class="string">/</span></span><br><span class="line">      <span class="attr">bindings:</span></span><br><span class="line">        <span class="attr">input:</span> <span class="comment"># channel名称</span></span><br><span class="line">          <span class="attr">binder:</span> <span class="string">xbclass_binder</span> <span class="comment">#指定使用哪一个binder</span></span><br><span class="line">          <span class="attr">destination:</span> <span class="string">xblclass_exchange</span> <span class="comment"># 消息目的地</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>StreamConsumer</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> xiaobo</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2022/10/26 - 11:20</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@EnableBinding(Sink.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamConsumer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@StreamListener(Sink.INPUT)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">listenerConsumer</span><span class="params">(Message message)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(message);</span><br><span class="line">        System.out.println(message.getPayload());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>App</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamConsumerApp</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(StreamConsumerApp.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="SpringCloud-Sleuth分布式请求链路追踪"><a href="#SpringCloud-Sleuth分布式请求链路追踪" class="headerlink" title="SpringCloud Sleuth分布式请求链路追踪"></a>SpringCloud Sleuth分布式请求链路追踪</h2><p>一个工具,在整个分布式系统中能跟踪一个用户请求的过程，捕获这些跟踪数据，构建微服务的整个调用链的视图</p>
+<h3 id="下载zipkin-jar"><a href="#下载zipkin-jar" class="headerlink" title="下载zipkin.jar"></a>下载zipkin.jar</h3><p><a target="_blank" rel="noopener" href="https://repo1.maven.org/maven2/io/zipkin/zipkin-server/">点击下载</a></p>
+<p><a target="_blank" rel="noopener" href="https://repo1.maven.org/maven2/io/zipkin/zipkin-server/">https://repo1.maven.org/maven2/io/zipkin/zipkin-server/</a></p>
+<ul>
+<li>运行</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar ***.jar</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>服务提供方和消费方分别引入 sleuth 和 zipkin 依赖</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- sleuth-zipkin --&gt;</span></span><br><span class="line"><span class="comment">&lt;!--&lt;dependency&gt;</span></span><br><span class="line"><span class="comment">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span></span><br><span class="line"><span class="comment">    &lt;artifactId&gt;spring-cloud-starter-sleuth&lt;/artifactId&gt;</span></span><br><span class="line"><span class="comment">&lt;/dependency&gt;--&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-zipkin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>配置服务提供方和服务消费方</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  zipkin:</span><br><span class="line">    base-url: http:<span class="comment">//localhost:9411/  # 设置zipkin的服务端路径</span></span><br><span class="line">  sleuth:</span><br><span class="line">    sampler:</span><br><span class="line">      probability: <span class="number">1</span> # 采集率 默认 <span class="number">0.1</span> 百分之十。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>访问</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="http://localhost:9411/">http://localhost:9411/</a></p>
+<p><strong>正确的开始，微小的长进，然后持续，嘿，我是小博，带你一起看我目之所及的世界……</strong></p>
+
+    </div>
+	<div>
+	
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束 <i class="fa fa-paw"></i> 感谢您的阅读-------------</div>
+    
+</div>
+
+     
+	</div>
+	
+	<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/posts/2002239265/">spring cloud 三</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a>小博</p>
+  <p><span>发布时间:</span>2022年10月26日 - 13:24</p>
+  <p><span>最后更新:</span>2022年10月26日 - 13:26</p>
+  <p><span>原始链接:</span><a href="/posts/2002239265/" title="spring cloud 三">https://codexiaobo.github.io/posts/2002239265/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://codexiaobo.github.io/posts/2002239265/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+      $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+        });
+    });  
+</script>
+
+
+      
+	</div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>学习技术分享、感谢您的支持</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="xiaobo 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="xiaobo 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"># java</a>
+              <a href="/tags/spring-cloud/" rel="tag"># spring cloud</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/142858353/" rel="prev" title="RabbitMQ 二">
+                  <i class="fa fa-chevron-left"></i> RabbitMQ 二
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaobo</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">819k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">12:24</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+<span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+<script>
+    var now = new Date(); 
+    function createtime() { 
+        var grt= new Date("06/07/2021 10:15:49");//在此处修改你的建站时间，格式：月/日/年 时:分:秒
+        now.setTime(now.getTime()+250); 
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 "; 
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+    } 
+setInterval("createtime()",250);
+</script>
+
+
+
+
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+ 
+  
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+
+ 
+</body>
+</html>

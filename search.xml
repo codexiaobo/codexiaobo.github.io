@@ -1,6 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>spring cloud 三</title>
+    <url>/posts/2002239265/</url>
+    <content><![CDATA[<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221026132251.30eqhfzf2do0.webp" alt="微信图片_20221026132251"></p>
+<!--sleep-->
+
+<span id="more"></span>
+
+<h1 id="spring-cloud"><a href="#spring-cloud" class="headerlink" title="spring cloud"></a>spring cloud</h1><h2 id="分布式配置中心"><a href="#分布式配置中心" class="headerlink" title="分布式配置中心"></a>分布式配置中心</h2><h3 id="Config"><a href="#Config" class="headerlink" title="Config"></a>Config</h3><p>当需要服务器特别特别多的时候，我们不能每次都配置yml，然后再重新启动，因为太多了，这是我们可以集中管理配置文件，根据不同环境不同配置，动态化的配置更新，当配置信息改变时，不需要重启即可更新配置信息到服务</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/config%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E6%B5%81%E7%A8%8B.1rb2b93ptj5s.webp" alt="config配置中心流程"></p>
+<h3 id="config使用"><a href="#config使用" class="headerlink" title="config使用"></a>config使用</h3><h4 id="配置config-server服务模块"><a href="#配置config-server服务模块" class="headerlink" title="配置config-server服务模块"></a>配置config-server服务模块</h4><ul>
+<li>pom</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-config-server<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>application.yml</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 端口号</span></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">9527</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 服务名</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">config-server</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># spring cloud config</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="attr">server:</span></span><br><span class="line">        <span class="comment"># git 的 远程仓库地址</span></span><br><span class="line">        <span class="attr">git:</span></span><br><span class="line">          <span class="attr">uri:</span> <span class="string">https://gitee.com/codexiaobo/config-server.git</span></span><br><span class="line">      <span class="attr">label:</span> <span class="string">master</span> <span class="comment"># 分支配置</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>app</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableConfigServer</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConfigServerApp</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(ConfigServerApp.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>http://localhost:9527/master/provider-dev.yml</code>即可查看到远程的配置文件</p>
+<h4 id="其他模块读取配置文件"><a href="#其他模块读取配置文件" class="headerlink" title="其他模块读取配置文件"></a>其他模块读取配置文件</h4><ul>
+<li>pom</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--config client --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-config<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>application.yml</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 配置config-server地址</span></span><br><span class="line"><span class="comment"># 配置获得配置文件的名称等信息</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="comment"># 配置config-server地址</span></span><br><span class="line">      <span class="attr">uri:</span> <span class="string">http://localhost:9527</span></span><br><span class="line">      <span class="comment"># 配置获得配置文件的名称等信息</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">provider</span> <span class="comment"># 文件名</span></span><br><span class="line">      <span class="attr">profile:</span> <span class="string">dev</span> <span class="comment"># profile指定</span></span><br><span class="line">      <span class="attr">label:</span> <span class="string">master</span> <span class="comment"># 分支</span></span><br></pre></td></tr></table></figure>
+
+<p>但是这样只是静态的读取，因为当远程仓库修改时，我们不能将几千个机器上的服务重启啊，这样运维人员就傻了，效率太低，所以我们要让他们动态的读取到远程仓库的配置文件</p>
+<h4 id="Config刷新读取远程配置文件"><a href="#Config刷新读取远程配置文件" class="headerlink" title="Config刷新读取远程配置文件"></a>Config刷新读取远程配置文件</h4><p>客户端引入</p>
+<ul>
+<li>pom</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>controller使用 <code>@RefreshScope</code></p>
+<p><code>bootstrap.yml</code> 添加</p>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">management:</span></span><br><span class="line">  <span class="attr">endpoints:</span></span><br><span class="line">    <span class="attr">web:</span></span><br><span class="line">      <span class="attr">exposure:</span></span><br><span class="line">        <span class="attr">include:</span> <span class="string">&#x27;*&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>cmd 中发送请求 刷新 <code>curl -X POST http://localhost:8080/actuator/refresh</code></p>
+<p>这里我们只是配置了一个config-server，如果挂了，就发生了单点故障了，所以我们不能写死，要从注册中心中拿到config-server</p>
+<h4 id="Config-集成"><a href="#Config-集成" class="headerlink" title="Config 集成"></a>Config 集成</h4><p>将config-server注册到注册中心</p>
+<ul>
+<li>pom</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- eureka-client --&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">         <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-netflix-eureka-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>从注册中心中读到config-server</p>
+<ul>
+<li>application.yml</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 配置config-server地址</span></span><br><span class="line"><span class="comment"># 配置获得配置文件的名称等信息</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="comment"># 配置config-server地址</span></span><br><span class="line">      <span class="comment">#uri: http://localhost:9527</span></span><br><span class="line">      <span class="comment"># 配置获得配置文件的名称等信息</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">config</span> <span class="comment"># 文件名</span></span><br><span class="line">      <span class="attr">profile:</span> <span class="string">dev</span> <span class="comment"># profile指定，  config-dev.yml</span></span><br><span class="line">      <span class="attr">label:</span> <span class="string">master</span> <span class="comment"># 分支</span></span><br><span class="line"><span class="comment">#     在注册中心中拿到config-server </span></span><br><span class="line">      <span class="attr">discovery:</span></span><br><span class="line">        <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">        <span class="attr">service-id:</span> <span class="string">CONFIG-SERVER</span></span><br><span class="line"></span><br><span class="line"><span class="attr">management:</span></span><br><span class="line">  <span class="attr">endpoints:</span></span><br><span class="line">    <span class="attr">web:</span></span><br><span class="line">      <span class="attr">exposure:</span></span><br><span class="line">        <span class="attr">include:</span> <span class="string">&#x27;*&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="SpringCloud-Bus消息总线"><a href="#SpringCloud-Bus消息总线" class="headerlink" title="SpringCloud Bus消息总线"></a>SpringCloud Bus消息总线</h2><p>远程的配置文件更新了，运维只需要发一个请求，所有用到这个配置文件的几百个应用更新了</p>
+<p>消息总线可以为微服务做监控，也可以实现应用程序之间相通信</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>就是发送一个请求，然后运用rabbitmq的订阅发布模式通知多份配置文件更新</p>
+<h3 id="模拟"><a href="#模拟" class="headerlink" title="模拟"></a>模拟</h3><ul>
+<li>config-server和config-client</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- bus --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-bus-amqp<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>bootstrap.yml</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 配置config-server地址</span></span><br><span class="line"><span class="comment"># 配置获得配置文件的名称等信息</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="comment"># 配置config-server地址</span></span><br><span class="line"><span class="comment">#      uri: http://localhost:9527</span></span><br><span class="line">      <span class="comment"># 配置获得配置文件的名称等信息</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">provider</span> <span class="comment"># 文件名</span></span><br><span class="line">      <span class="attr">profile:</span> <span class="string">dev</span> <span class="comment"># profile指定，  config-dev.yml</span></span><br><span class="line">      <span class="attr">label:</span> <span class="string">master</span> <span class="comment"># 分支</span></span><br><span class="line"><span class="comment">#      在注册中心中拿到config-server</span></span><br><span class="line">      <span class="attr">discovery:</span></span><br><span class="line">        <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">        <span class="attr">service-id:</span> <span class="string">CONFIG-SERVER</span></span><br><span class="line">  <span class="comment">#配置rabbitmq信息</span></span><br><span class="line">  <span class="attr">rabbitmq:</span></span><br><span class="line">    <span class="attr">host:</span> <span class="string">localhost</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">5672</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">xiaobo</span></span><br><span class="line">    <span class="attr">password:</span> <span class="string">xiaobo</span></span><br><span class="line">    <span class="attr">virtual-host:</span> <span class="string">/</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 暴露bus的刷新端点</span></span><br><span class="line"><span class="attr">management:</span></span><br><span class="line">  <span class="attr">endpoints:</span></span><br><span class="line">    <span class="attr">web:</span></span><br><span class="line">      <span class="attr">exposure:</span></span><br><span class="line">        <span class="attr">include:</span> <span class="string">&#x27;bus-refresh&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>config-server模块application.yml</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 端口号</span></span><br><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">9527</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 服务名</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">application:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">config-server</span></span><br><span class="line">  <span class="comment">#配置rabbitmq信息</span></span><br><span class="line">  <span class="attr">rabbitmq:</span></span><br><span class="line">    <span class="attr">host:</span> <span class="string">localhost</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">5672</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">xiaobo</span></span><br><span class="line">    <span class="attr">password:</span> <span class="string">xiaobo</span></span><br><span class="line">    <span class="attr">virtual-host:</span> <span class="string">/</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># spring cloud config</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="attr">server:</span></span><br><span class="line">        <span class="comment"># git 的 远程仓库地址</span></span><br><span class="line">        <span class="attr">git:</span></span><br><span class="line">          <span class="attr">uri:</span> <span class="string">https://gitee.com/codexiaobo/config-server.git</span></span><br><span class="line">      <span class="attr">label:</span> <span class="string">master</span> <span class="comment"># 分支配置</span></span><br><span class="line"></span><br><span class="line"><span class="attr">eureka:</span></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">    <span class="attr">service-url:</span></span><br><span class="line">      <span class="attr">defaultZone:</span> <span class="string">http://localhost:8761/eureka</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 暴露bus的刷新端点</span></span><br><span class="line"><span class="attr">management:</span></span><br><span class="line">  <span class="attr">endpoints:</span></span><br><span class="line">    <span class="attr">web:</span></span><br><span class="line">      <span class="attr">exposure:</span></span><br><span class="line">        <span class="attr">include:</span> <span class="string">&#x27;bus-refresh&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>curl -X POST http://localhost:9527/actuator/bus-refresh</code> 模拟发送请求修改</p>
+<h2 id="SpringCloud-Stream消息驱动"><a href="#SpringCloud-Stream消息驱动" class="headerlink" title="SpringCloud Stream消息驱动"></a>SpringCloud Stream消息驱动</h2><p>Spring Cloud Stream 是一个构建消息驱动微服务应用的框架</p>
+<p>Stream对消息中间件的进一步封装，可以做到代码层面对中间件的无感知，甚至于动态的切换中间件，就类似JDBC，使得微服务开发的高度解耦</p>
+<p>Spring Cloud Stream目前支持两种消息中间件RabbitMQ和Kafka</p>
+<h3 id="stream-组件"><a href="#stream-组件" class="headerlink" title="stream 组件"></a>stream 组件</h3><p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/stream%E7%BB%84%E4%BB%B6.17e8v7h5dz9c.webp" alt="stream组件"></p>
+<p><code>binding</code> :通过配置把应用和spring cloud stream 的 binder 绑定在一起</p>
+<p><code>output</code> :发送消息 Channel，内置 Source接口</p>
+<p><code>input</code> :接收消息 Channel，内置 Sink接口</p>
+<h3 id="模拟-1"><a href="#模拟-1" class="headerlink" title="模拟"></a>模拟</h3><h4 id="stream-provider模块"><a href="#stream-provider模块" class="headerlink" title="stream-provider模块"></a>stream-provider模块</h4><ul>
+<li>pom</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--spring boot web--&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- stream --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-stream-rabbit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>application.yml</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8000</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">stream:</span></span><br><span class="line">      <span class="attr">binders:</span></span><br><span class="line">        <span class="attr">xbclass_binder:</span> <span class="comment"># 自定义的绑定器名称</span></span><br><span class="line">          <span class="attr">type:</span> <span class="string">rabbit</span> <span class="comment"># 绑定器类型</span></span><br><span class="line">          <span class="attr">environment:</span> <span class="comment"># 指定mq的环境</span></span><br><span class="line">            <span class="attr">spring:</span></span><br><span class="line">              <span class="attr">rabbitmq:</span></span><br><span class="line">                <span class="attr">host:</span> <span class="string">localhost</span></span><br><span class="line">                <span class="attr">port:</span> <span class="number">5672</span></span><br><span class="line">                <span class="attr">username:</span> <span class="string">xiaobo</span></span><br><span class="line">                <span class="attr">password:</span> <span class="string">xiaobo</span></span><br><span class="line">                <span class="attr">virtual-host:</span> <span class="string">/</span></span><br><span class="line">      <span class="attr">bindings:</span></span><br><span class="line">        <span class="attr">output:</span> <span class="comment"># channel名称</span></span><br><span class="line">          <span class="attr">binder:</span> <span class="string">xbclass_binder</span> <span class="comment">#指定使用哪一个binder</span></span><br><span class="line">          <span class="attr">destination:</span> <span class="string">xblclass_exchange</span> <span class="comment"># 消息目的地</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>MessageProvider</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="comment">// 声明这个类是stream的发送者</span></span><br><span class="line"><span class="meta">@EnableBinding(Source.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MessageProvider</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> MessageChannel output;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 发送消息至rabbitmq</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> msg</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">send</span><span class="params">(String msg)</span></span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">//        发送消息</span></span><br><span class="line">        <span class="keyword">boolean</span> send = output.send(MessageBuilder.withPayload(msg).build());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (send) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;发送消息成功&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;发送消息失败&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>ProviderController</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping(value = &quot;/stream&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProviderController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> MessageProvider messageProvider;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(value = &quot;/send&quot;)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">send</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        messageProvider.send(<span class="string">&quot;我发送一条消息&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;success&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>StreamProviderApp</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamProviderApp</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(StreamProviderApp.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="stream-consumer模块"><a href="#stream-consumer模块" class="headerlink" title="stream-consumer模块"></a>stream-consumer模块</h4><ul>
+<li>application.yml</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">9000</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">stream:</span></span><br><span class="line">      <span class="attr">binders:</span></span><br><span class="line">        <span class="attr">xbclass_binder:</span> <span class="comment"># 自定义的绑定器名称</span></span><br><span class="line">          <span class="attr">type:</span> <span class="string">rabbit</span> <span class="comment"># 绑定器类型</span></span><br><span class="line">          <span class="attr">environment:</span> <span class="comment"># 指定mq的环境</span></span><br><span class="line">            <span class="attr">spring:</span></span><br><span class="line">              <span class="attr">rabbitmq:</span></span><br><span class="line">                <span class="attr">host:</span> <span class="string">localhost</span></span><br><span class="line">                <span class="attr">port:</span> <span class="number">5672</span></span><br><span class="line">                <span class="attr">username:</span> <span class="string">xiaobo</span></span><br><span class="line">                <span class="attr">password:</span> <span class="string">xiaobo</span></span><br><span class="line">                <span class="attr">virtual-host:</span> <span class="string">/</span></span><br><span class="line">      <span class="attr">bindings:</span></span><br><span class="line">        <span class="attr">input:</span> <span class="comment"># channel名称</span></span><br><span class="line">          <span class="attr">binder:</span> <span class="string">xbclass_binder</span> <span class="comment">#指定使用哪一个binder</span></span><br><span class="line">          <span class="attr">destination:</span> <span class="string">xblclass_exchange</span> <span class="comment"># 消息目的地</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>StreamConsumer</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> xiaobo</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2022/10/26 - 11:20</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@EnableBinding(Sink.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamConsumer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@StreamListener(Sink.INPUT)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">listenerConsumer</span><span class="params">(Message message)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(message);</span><br><span class="line">        System.out.println(message.getPayload());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>App</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StreamConsumerApp</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(StreamConsumerApp.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="SpringCloud-Sleuth分布式请求链路追踪"><a href="#SpringCloud-Sleuth分布式请求链路追踪" class="headerlink" title="SpringCloud Sleuth分布式请求链路追踪"></a>SpringCloud Sleuth分布式请求链路追踪</h2><p>一个工具,在整个分布式系统中能跟踪一个用户请求的过程，捕获这些跟踪数据，构建微服务的整个调用链的视图</p>
+<h3 id="下载zipkin-jar"><a href="#下载zipkin-jar" class="headerlink" title="下载zipkin.jar"></a>下载zipkin.jar</h3><p><a href="https://repo1.maven.org/maven2/io/zipkin/zipkin-server/">点击下载</a></p>
+<p><a href="https://repo1.maven.org/maven2/io/zipkin/zipkin-server/">https://repo1.maven.org/maven2/io/zipkin/zipkin-server/</a></p>
+<ul>
+<li>运行</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">java -jar ***.jar</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>服务提供方和消费方分别引入 sleuth 和 zipkin 依赖</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- sleuth-zipkin --&gt;</span></span><br><span class="line"><span class="comment">&lt;!--&lt;dependency&gt;</span></span><br><span class="line"><span class="comment">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span></span><br><span class="line"><span class="comment">    &lt;artifactId&gt;spring-cloud-starter-sleuth&lt;/artifactId&gt;</span></span><br><span class="line"><span class="comment">&lt;/dependency&gt;--&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.cloud<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-cloud-starter-zipkin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>配置服务提供方和服务消费方</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">spring:</span><br><span class="line">  zipkin:</span><br><span class="line">    base-url: http:<span class="comment">//localhost:9411/  # 设置zipkin的服务端路径</span></span><br><span class="line">  sleuth:</span><br><span class="line">    sampler:</span><br><span class="line">      probability: <span class="number">1</span> # 采集率 默认 <span class="number">0.1</span> 百分之十。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>访问</li>
+</ul>
+<p><a href="http://localhost:9411/">http://localhost:9411/</a></p>
+<p><strong>正确的开始，微小的长进，然后持续，嘿，我是小博，带你一起看我目之所及的世界……</strong></p>
+]]></content>
+      <tags>
+        <tag>java</tag>
+        <tag>spring cloud</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>RabbitMQ 二</title>
     <url>/posts/142858353/</url>
     <content><![CDATA[<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E9%95%BF%E5%A4%9C%E6%97%A0%E8%8D%92.2enjwoeetkis.webp" alt="长夜无荒"></p>
@@ -6000,7 +6156,8 @@
 <p><strong>你知道的越多 你不知道的越多 嘿 我是小博 带你一起看我目之所及的世界……</strong></p>
 ]]></content>
       <tags>
-        <tag>-java -设计模式</tag>
+        <tag>java</tag>
+        <tag>设计模式</tag>
       </tags>
   </entry>
   <entry>
@@ -6341,7 +6498,8 @@
 <p><strong>你知道的越多 你不知道的越多 嘿 我是小博 带你一起看我目之所及的世界……</strong></p>
 ]]></content>
       <tags>
-        <tag>-java -日志框架</tag>
+        <tag>java</tag>
+        <tag>日志框架</tag>
       </tags>
   </entry>
   <entry>
@@ -10714,7 +10872,7 @@
 ]]></content>
       <tags>
         <tag>框架</tag>
-        <tag>springcloud</tag>
+        <tag>spring cloud</tag>
       </tags>
   </entry>
   <entry>
@@ -10827,7 +10985,7 @@
 ]]></content>
       <tags>
         <tag>框架</tag>
-        <tag>springcloud</tag>
+        <tag>spring cloud</tag>
       </tags>
   </entry>
   <entry>
