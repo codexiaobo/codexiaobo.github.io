@@ -1,6 +1,274 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Docker</title>
+    <url>/posts/4126800539/</url>
+    <content><![CDATA[<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/docker.4p2gxlnxopi0.webp" alt="docker"></p>
+<!--sleep-->
+<span id="more"></span>
+
+<h1 id="Docker介绍"><a href="#Docker介绍" class="headerlink" title="Docker介绍"></a>Docker介绍</h1><p>Docker 是一个开源的应用容器引擎，基于 Go 语言开发。Docker 可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。容器是完全使用沙箱机制，相互之间不会有任何接口,更重要的是容器性能开销极低</p>
+<h2 id="Docker应用场景"><a href="#Docker应用场景" class="headerlink" title="Docker应用场景"></a>Docker应用场景</h2><ul>
+<li><p>Web 应用的自动化打包和发布</p>
+</li>
+<li><p>自动化测试和持续集成、发布</p>
+</li>
+<li><p>在服务型环境中部署和调整数据库或其他的后台应用</p>
+</li>
+</ul>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/Docker%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF.301jhsonlv40.webp" alt="Docker应用场景"></p>
+<h2 id="Docker结构"><a href="#Docker结构" class="headerlink" title="Docker结构"></a>Docker结构</h2><p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/Docker%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84.2xqc7w9w5960.webp" alt="Docker组成结构"></p>
+<p><code>Docker 镜像(Images)</code>：Docker 镜像是用于创建 Docker 容器的模板，镜像是基于联合文件系统的一种层式结构，由一系列指令一步一步构建出来</p>
+<p><code>Docker 容器(Container)</code>：容器是独立运行的一个或一组应用。镜像相当于类，容器相当于类的实例</p>
+<p><code>Docker 客户端(Client)</code>：Docker 客户端通过命令行或者其他工具使用 Docker API 与 Docker 的守护进程通信</p>
+<p><code>Docker 主机(Host)</code>:    一个物理或者虚拟的机器用于执行 Docker 守护进程和容器</p>
+<p><code>Docker守护进程</code>: Docker服务器端进程，负责支撑Docker 容器的运行以及镜像的管理</p>
+<p><code>Docker仓库</code>：DockerHub (Registry)    Docker 仓库用来保存镜像，可以理解为代码控制中的代码仓库<br>Docker Hub提供了庞大的镜像集合供使用。用户也可以将自己本地的镜像推送到Docker仓库供其他人下载</p>
+<h2 id="Docker安装与操作"><a href="#Docker安装与操作" class="headerlink" title="Docker安装与操作"></a>Docker安装与操作</h2><h3 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1、yum 包更新到最新 </span></span><br><span class="line">sudo yum update </span><br><span class="line"><span class="comment"># 2、作用：安装需要的软件包， yum-util 提供yum-config-manager功能，另外两个是devicemapper驱动依赖的</span></span><br><span class="line">sudo yum install -y yum-utils device-mapper-persistent-data lvm2 </span><br><span class="line"><span class="comment"># 3、 设置yum源 </span></span><br><span class="line"><span class="comment"># 使用ustc的（推荐） </span></span><br><span class="line">sudo yum-config-manager --add-repo http://mirrors.ustc.edu.cn/docker-ce/linux/centos/docker-ce.repo </span><br><span class="line"><span class="comment"># 4、 安装docker；出现输入的界面都按 y </span></span><br><span class="line">sudo yum install -y docker-ce</span><br><span class="line"><span class="comment"># 5、 查看docker版本 </span></span><br><span class="line">docker -v</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置镜像"><a href="#配置镜像" class="headerlink" title="配置镜像"></a>配置镜像</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 执行如下命令： </span></span><br><span class="line">mkdir /etc/docker </span><br><span class="line">vi /etc/docker/daemon.json</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>daemon.json</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="attr">&quot;registry-mirrors&quot;</span>: [<span class="string">&quot;https://docker.mirrors.ustc.edu.cn&quot;</span>] </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Docker启动与停止指令"><a href="#Docker启动与停止指令" class="headerlink" title="Docker启动与停止指令"></a>Docker启动与停止指令</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启动docker服务： </span></span><br><span class="line">systemctl start docker </span><br><span class="line"><span class="comment"># 停止docker服务： </span></span><br><span class="line">systemctl stop docker </span><br><span class="line"><span class="comment"># 重启docker服务： </span></span><br><span class="line">systemctl restart docker </span><br><span class="line"><span class="comment"># 查看docker服务状态： </span></span><br><span class="line">systemctl status docker </span><br><span class="line"><span class="comment"># 设置开机启动docker服务： </span></span><br><span class="line">systemctl <span class="built_in">enable</span> docker</span><br></pre></td></tr></table></figure>
+
+<h3 id="Docker操作镜像指令"><a href="#Docker操作镜像指令" class="headerlink" title="Docker操作镜像指令"></a>Docker操作镜像指令</h3><ul>
+<li>查看本地镜像</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看镜像 </span></span><br><span class="line">docker images</span><br></pre></td></tr></table></figure>
+
+<p><code>REPOSITORY</code>：镜像名称</p>
+<p><code>TAG</code>：镜像标签</p>
+<p><code>IMAGE ID</code>：镜像ID</p>
+<p><code>CREATED</code>：镜像的创建日期</p>
+<p><code>SIZE</code>：镜像大小</p>
+<ul>
+<li>搜索镜像</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 从网络中查找需要的镜像 </span></span><br><span class="line">docker search 镜像名称</span><br></pre></td></tr></table></figure>
+
+<p><code>NAME</code>：镜像名称</p>
+<p><code>DESCRIPTION</code>：镜像描述</p>
+<p><code>STARS</code>：用户评价，反应一个镜像的受欢迎程度</p>
+<p><code>OFFICIAL</code>：是否官方</p>
+<p><code>AUTOMATED</code>：自动构建，表示该镜像由Docker Hub自动构建流程创建的</p>
+<ul>
+<li>拉取镜像</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 拉取镜像就是从Docker仓库下载镜像到本地，镜像名称格式为 名称:版本号，如果版本号不指定则是最新的版本</span></span><br><span class="line">docker pull 镜像名称 </span><br><span class="line"><span class="comment"># 如拉取centos 7； </span></span><br><span class="line">docker pull centos:7</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>删除镜像</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 可以按照镜像id删除镜像： </span></span><br><span class="line">docker rmi 镜像id</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除所有镜像</span></span><br><span class="line">docker rmi docker images -q</span><br></pre></td></tr></table></figure>
+
+<h3 id="Docker操作容器指令"><a href="#Docker操作容器指令" class="headerlink" title="Docker操作容器指令"></a>Docker操作容器指令</h3><ul>
+<li>查看容器</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">查看正在运行的容器使用命令：</span><br><span class="line">docker ps</span><br><span class="line">查看所有容器使用命令：</span><br><span class="line">docker ps -a</span><br></pre></td></tr></table></figure>
+
+<h4 id="创建容器"><a href="#创建容器" class="headerlink" title="创建容器"></a>创建容器</h4><ul>
+<li>交互式容器</li>
+</ul>
+<p>启动完成后，直接进入当前容器。使用exit命令退出容器。需要注意的是以此种方式启动容器，如果退出容器，则容器会进入停止状态</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 拉取一个镜像</span></span><br><span class="line">docker pull centos:7 </span><br><span class="line"><span class="comment"># 创建并启动名称为 mycentos7 的交互式容器 </span></span><br><span class="line">docker run -it --name=xiaobocentos1 centos:7 /bin/bash</span><br></pre></td></tr></table></figure>
+
+
+<ul>
+<li>守护式容器</li>
+</ul>
+<p>启动完成后长期运行，不直接进入容器</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#创建并启动守护式容器 </span></span><br><span class="line">docker run -di --name=ydlcentos2 centos:7 </span><br><span class="line"><span class="comment">#登录进入容器命令为：docker exec -it container_name (或者 container_id) /bin/bash（exit退出 时，容器不会停止） </span></span><br><span class="line">docker <span class="built_in">exec</span> -it xiaobocentos2 /bin/bash</span><br></pre></td></tr></table></figure>
+
+<h4 id="停止并启动容器"><a href="#停止并启动容器" class="headerlink" title="停止并启动容器"></a>停止并启动容器</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 停止正在运行的容器：docker stop 容器名称或者ID </span></span><br><span class="line">docker stop xiaobocentos2 </span><br><span class="line"><span class="comment"># 启动已运行过的容器：docker start 容器名称或者ID </span></span><br><span class="line">docker start xiaobocentos2</span><br></pre></td></tr></table></figure>
+
+<h3 id="文件拷贝"><a href="#文件拷贝" class="headerlink" title="文件拷贝"></a>文件拷贝</h3><h4 id="宿主机拷贝到容器"><a href="#宿主机拷贝到容器" class="headerlink" title="宿主机拷贝到容器"></a>宿主机拷贝到容器</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># docker cp 需要拷贝的文件或目录 容器名称:容器目录</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个文件</span></span><br><span class="line">touch xiaobo.txt </span><br><span class="line"></span><br><span class="line"><span class="comment"># 复制文件到xiaobocentos2的容器的 / 目录下 </span></span><br><span class="line">docker cp xiaobo.txt xiaobocentos2:/root</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入xiaobocentos2容器 </span></span><br><span class="line">docker <span class="built_in">exec</span> -it xiaobocentos2 /bin/bash </span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看容器 / 目录下文件 </span></span><br><span class="line">ll</span><br></pre></td></tr></table></figure>
+
+<h4 id="容器拷贝到宿主机"><a href="#容器拷贝到宿主机" class="headerlink" title="容器拷贝到宿主机"></a>容器拷贝到宿主机</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># docker cp 容器名称:容器目录 需要拷贝的文件或目录</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#进入容器后创建文件</span></span><br><span class="line">touch xiaobo.log </span><br><span class="line"></span><br><span class="line"><span class="comment"># 退出容器 </span></span><br><span class="line"><span class="built_in">exit</span> </span><br><span class="line"></span><br><span class="line"><span class="comment"># 在Linux宿主机器执行复制；将容器xiaobocentos2的文件复制到宿主机器的/root目录下 </span></span><br><span class="line">docker cp xiaobocentos2:/root/xiaobo.log /root</span><br></pre></td></tr></table></figure>
+
+<h3 id="目录挂载"><a href="#目录挂载" class="headerlink" title="目录挂载"></a>目录挂载</h3><p>可以在创建容器的时候，将宿主机的目录与容器内的目录进行映射，这样我们就可以通过修改宿主机某个目录的文件从而同步容器</p>
+<p>创建容器时添加-v参数</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建linux宿主机器要挂载的目录 </span></span><br><span class="line">mkdir /root/binlog </span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建并启动容器xiaobocentos3 ,并挂载linux中的/root/binding 目录到容器的/root/binding 也就是在 linux中的/root/binding 中操作相当于对容器相应目录操作 </span></span><br><span class="line">docker run -di -v /root/binding:/root/binding --name=xiaobocentos3 centos:7</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在linux下创建文件 </span></span><br><span class="line">touch /root/binding/xiaobo.log </span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入容器 docker exec -it xiaobocentos3 /bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在容器中查看目录中是否有对应文件def.txt </span></span><br><span class="line">ll /root/binding</span><br></pre></td></tr></table></figure>
+
+<p>如果是多级的目录，可能现权限不足，需要添加参数<code>--privileged=true</code>解决挂载的目录没有权限的问题</p>
+<h4 id="查看容器ip"><a href="#查看容器ip" class="headerlink" title="查看容器ip"></a>查看容器ip</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在linux宿主机下查看 xiaobocentos3 的ip </span></span><br><span class="line">docker inspect xiaobocentos3</span><br></pre></td></tr></table></figure>
+
+<p>容器中有一个局域网，宿主机有一个ip，所以外部访问需要通过宿主机端口代理</p>
+<h4 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 删除容器 </span></span><br><span class="line">docker rm xiaobocentos3</span><br></pre></td></tr></table></figure>
+
+<h2 id="部署软件"><a href="#部署软件" class="headerlink" title="部署软件"></a>部署软件</h2><h3 id="Mysql容器部署"><a href="#Mysql容器部署" class="headerlink" title="Mysql容器部署"></a>Mysql容器部署</h3><ul>
+<li>搜索mysql</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker search mysql</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>拉取mysql镜像</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull mysql:8.0</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>修改配置</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在/root目录下创建mysql目录用于存储mysql数据信息</span></span><br><span class="line">mkdir /root/mysql</span><br><span class="line"><span class="built_in">cd</span> /root/mysql</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -id \</span><br><span class="line">-p 3307:3306 \</span><br><span class="line">--name=xiaobo_mysql \</span><br><span class="line">-v /root/mysql/conf:/etc/mysql/conf.d \</span><br><span class="line">-v /root/mysql/logs:/logs \</span><br><span class="line">-v /root/mysql/data:/var/lib/mysql \</span><br><span class="line">-e MYSQL_ROOT_PASSWORD=xiaobo \</span><br><span class="line">mysql:8.0</span><br></pre></td></tr></table></figure>
+
+<p><code>-p 3307:3306 </code> 将容器的 3306 端口映射到宿主机的 3307 端口</p>
+<p><code>-v /root/mysql/conf:/etc/mysql/conf.d \</code> 将主机当前目录下的my.cnf 挂载到容器</p>
+<p><code>-v /root/mysql/logs:/logs \</code> 将主机当前目录下的 logs 目录挂载到容器的 /logs 日志目录</p>
+<p><code>-v /root/mysql/data:/var/lib/mysql \</code> 将主机当前目录下的data目录挂载到容器的 /var/lib/mysql 数据目录</p>
+<p><code>-e MYSQL_ROOT_PASSWORD=xiaobo \</code> 初始化 root 用户的密码</p>
+<ul>
+<li>进入mysql容器</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it xiaobo_mysql /bin/bash</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>测试连接即可</li>
+</ul>
+<h3 id="Tomcat部署"><a href="#Tomcat部署" class="headerlink" title="Tomcat部署"></a>Tomcat部署</h3><ul>
+<li>搜索tomcat</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker search tomcat</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>拉取Tomcat镜像</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull tomcat</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>配置</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在/root目录下创建tomcat目录用于存储tomcat数据信息</span></span><br><span class="line">mkdir /root/tomcat</span><br><span class="line"><span class="built_in">cd</span> /root/tomcat</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -id --name=xiaobo_tomcat \</span><br><span class="line">-p 8081:8080 \</span><br><span class="line">-v /root/tomcat:/usr/<span class="built_in">local</span>/tomcat/webapps \</span><br><span class="line">tomcat </span><br></pre></td></tr></table></figure>
+
+<h3 id="Nginx部署"><a href="#Nginx部署" class="headerlink" title="Nginx部署"></a>Nginx部署</h3><ul>
+<li>搜索</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker search nginx</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>拉取Nginx镜像</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull nginx</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>修改配置</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在/root目录下创建nginx目录用于存储nginx数据信息</span></span><br><span class="line">mkdir /root/nginx</span><br><span class="line"><span class="built_in">cd</span> /root/nginx</span><br><span class="line">mkdir conf</span><br><span class="line"><span class="built_in">cd</span> conf</span><br><span class="line"><span class="comment"># 在~/nginx/conf/下创建nginx.conf文件,粘贴下面内容</span></span><br><span class="line">vim nginx.conf</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">user  nginx;</span><br><span class="line">worker_processes  1;</span><br><span class="line"></span><br><span class="line">error_log  /var/log/nginx/error.log warn;</span><br><span class="line">pid        /var/run/nginx.pid;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    include       /etc/nginx/mime.types;</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line"></span><br><span class="line">    log_format  main  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span><br><span class="line">                      &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span><br><span class="line">                      &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;;</span><br><span class="line"></span><br><span class="line">    access_log  /var/log/nginx/access.log  main;</span><br><span class="line"></span><br><span class="line">    sendfile        on;</span><br><span class="line">    #tcp_nopush     on;</span><br><span class="line"></span><br><span class="line">    keepalive_timeout  65;</span><br><span class="line"></span><br><span class="line">    #gzip  on;</span><br><span class="line"></span><br><span class="line">    include /etc/nginx/conf.d/*.conf;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -id --name=xiaobo_nginx \</span><br><span class="line">-p 80:80 \</span><br><span class="line">-v /root/nginx/conf/nginx.conf:/etc/nginx/nginx.conf \</span><br><span class="line">-v /root/nginx/logs:/var/<span class="built_in">log</span>/nginx \</span><br><span class="line">-v /root/nginx/html:/usr/share/nginx/html \</span><br><span class="line">nginx</span><br></pre></td></tr></table></figure>
+
+<h3 id="redis部署"><a href="#redis部署" class="headerlink" title="redis部署"></a>redis部署</h3><ul>
+<li>搜索</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker search redis</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>拉取Redis镜像</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker pull redis:5.0</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>端口映射</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -id --name=xiaobo_redis -p 6380:6379 redis:5.0</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>客户端连接</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">redis-cli.exe -h 192.168.117.200 -p 6380</span><br></pre></td></tr></table></figure>
+
+<h3 id="docker-compose"><a href="#docker-compose" class="headerlink" title="docker-compose"></a>docker-compose</h3><p>ompose项目是Docker官方的开源项目，负责实现对Docker容器集群的快速编排。它是一个定义和运行多容器的docker应用工具。使用compose，通过YMAL文件配置你自己的服务，然后通过一个命令，你能使用配置文件创建和运行所有服务</p>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -L <span class="string">&quot;https://github.com/docker/compose/releases/download/1.24.0/docker-compose-<span class="subst">$(uname -s)</span>-<span class="subst">$(uname -m)</span>&quot;</span> -o /usr/<span class="built_in">local</span>/bin/docker-compose </span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置文件可执行权限 </span></span><br><span class="line">chmod +x /usr/<span class="built_in">local</span>/bin/docker-compose </span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看版本信息 </span></span><br><span class="line">docker-compose -version</span><br></pre></td></tr></table></figure>
+
+<h4 id="卸载"><a href="#卸载" class="headerlink" title="卸载"></a>卸载</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 二进制包方式安装的，删除二进制文件即可 </span></span><br><span class="line">rm /usr/<span class="built_in">local</span>/bin/docker-compose</span><br></pre></td></tr></table></figure>
+
+<p>常用命令官网查看即可</p>
+<h3 id="compose模板"><a href="#compose模板" class="headerlink" title="compose模板"></a>compose模板</h3><figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;2&quot;</span> </span><br><span class="line">	<span class="attr">services:</span> </span><br><span class="line">		<span class="attr">web:</span></span><br><span class="line">			<span class="attr">images:</span> <span class="string">nginx</span> </span><br><span class="line">			<span class="attr">ports:</span> <span class="string">-&quot;8080:80&quot;</span> </span><br><span class="line">			<span class="attr">volumes:</span> <span class="bullet">-</span> <span class="string">/usr/local/abc:/usr/local/cba</span> </span><br><span class="line"><span class="comment">#volumes: </span></span><br><span class="line"><span class="comment">#networks:</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>services</li>
+</ul>
+<p>服务，在它下面可以定义应用需要的一些服务，每个服务都有自己的名字、使用的镜像、挂载的数据卷、所属的网络、依赖哪些其他服务等等</p>
+<ul>
+<li>volumes</li>
+</ul>
+<p>数据卷，在它下面可以定义的数据卷（名字等等），然后挂载到不同的服务下去使用</p>
+<ul>
+<li>networks</li>
+</ul>
+<p>应用的网络，在它下面可以定义应用的名字、使用的网络类型等等</p>
+<h3 id="compose应用"><a href="#compose应用" class="headerlink" title="compose应用"></a>compose应用</h3><ul>
+<li>创建模板</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建文件夹</span></span><br><span class="line">mkdir -p /usr/<span class="built_in">local</span>/mycompose </span><br><span class="line"><span class="comment">#进入文件夹 </span></span><br><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/mycompose </span><br><span class="line"><span class="comment">#创建 docker-compose.yml文件；内容如下 </span></span><br><span class="line">vi docker-compose.yml</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>docker-compose.yml</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">redis1:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">redis</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;6379:6379&quot;</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">&quot;redis1&quot;</span></span><br><span class="line">    <span class="attr">networks:</span> </span><br><span class="line">      <span class="bullet">-</span> <span class="string">dev</span></span><br><span class="line">  <span class="attr">mysql1:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">centos/mysql-57-centos7</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="string">&quot;root&quot;</span></span><br><span class="line">    <span class="attr">ports:</span> </span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;3306:3306&quot;</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">&quot;mysql1&quot;</span></span><br><span class="line">    <span class="attr">networks:</span> </span><br><span class="line">      <span class="bullet">-</span> <span class="string">dev</span></span><br><span class="line">  <span class="attr">web1:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">tomcat</span></span><br><span class="line">    <span class="attr">ports:</span> </span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;9090:8080&quot;</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">&quot;web1&quot;</span></span><br><span class="line">    <span class="attr">networks:</span> </span><br><span class="line">      <span class="bullet">-</span> <span class="string">dev</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">pro</span></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">dev:</span></span><br><span class="line">    <span class="attr">driver:</span> <span class="string">bridge</span></span><br><span class="line">  <span class="attr">pro:</span></span><br><span class="line">    <span class="attr">driver:</span> <span class="string">bridge</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="仓库的迁移和备份"><a href="#仓库的迁移和备份" class="headerlink" title="仓库的迁移和备份"></a>仓库的迁移和备份</h2><h3 id="迁移备份"><a href="#迁移备份" class="headerlink" title="迁移备份"></a>迁移备份</h3><ul>
+<li>容器转镜像</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 保存nginx容器为镜像 </span></span><br><span class="line">docker commit 容器名称 镜像名称</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>镜像备份</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker save –o tar文件名 镜像名</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>镜像恢复和迁移</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 停止mynginx容器 </span></span><br><span class="line">docker stop xiaobocentos1 </span><br><span class="line"><span class="comment"># 删除mynginx容器 </span></span><br><span class="line">docker rm xiaobocentos1 </span><br><span class="line"><span class="comment"># 删除mynginx镜像 </span></span><br><span class="line">docker rmi xiaobocentos1 </span><br><span class="line"><span class="comment"># 加载恢复mynginx镜像 </span></span><br><span class="line">docker load -i xiaobocentos1.tar </span><br><span class="line"><span class="comment"># 在镜像恢复之后，基于该镜像再次创建启动容器 </span></span><br><span class="line">docker run -di --name=xiaobocentos1 xiaobocentos1</span><br></pre></td></tr></table></figure>
+
+<h3 id="Dockerfile"><a href="#Dockerfile" class="headerlink" title="Dockerfile"></a>Dockerfile</h3><p>简单明了，创建镜像的</p>
+<ul>
+<li>创建jdk1.8镜像</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1、创建目录 </span></span><br><span class="line">mkdir –p /usr/<span class="built_in">local</span>/dockerjdk8 </span><br><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/dockerjdk8 </span><br><span class="line"></span><br><span class="line"><span class="comment"># 2、下载jdk-8u231-linux-x64.tar.gz并上传到服务器（虚拟机）中的/usr/local/dockerjdk8目录 </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3、在/usr/local/dockerjdk8目录下创建Dockerfile文件，文件内容如下： </span></span><br><span class="line">vi Dockerfile </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Dockerfile</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">FROM centos:7 </span><br><span class="line">MAINTAINER ITLILS </span><br><span class="line">WORKDIR /usr </span><br><span class="line">RUN mkdir /usr/local/java </span><br><span class="line">ADD jdk-8u231-linux-x64.tar.gz /usr/local/java/ </span><br><span class="line">ENV JAVA_HOME /usr/local/java/jdk1.8.0_231 </span><br><span class="line">ENV JRE_HOME $JAVA_HOME/jre </span><br><span class="line">ENV CLASSPATH $JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib:$CLASSPATH </span><br><span class="line">ENV PATH $JAVA_HOME/bin:$PATH </span><br><span class="line"></span><br><span class="line"># 4、执行命令构建镜像；不要忘了后面的那个 . </span><br><span class="line">docker build -t=&#x27;jdk1.8&#x27; . </span><br><span class="line"></span><br><span class="line"># 5、查看镜像是否建立完成 </span><br><span class="line">docker images</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>创建刚刚的容器</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建并启动容器 </span></span><br><span class="line">docker run -it --name=testjdk jdk1.8 /bin/bash </span><br><span class="line"><span class="comment"># 在容器中测试jdk是否已经安装 </span></span><br><span class="line">java -version</span><br></pre></td></tr></table></figure>
+
+<h3 id="搭建私有仓库"><a href="#搭建私有仓库" class="headerlink" title="搭建私有仓库"></a>搭建私有仓库</h3><ul>
+<li>创建目录</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1、拉取私有仓库镜像 </span></span><br><span class="line">docker pull registry</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2、启动私有仓库容器 </span></span><br><span class="line">docker run -id --name=registry -p 5000:5000 registry</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3、打开浏览器 输入地址http://私有仓库服务器ip:5000/v2/_catalog，看到&#123;&quot;repositories&quot;:[]&#125; 表示私有仓库 搭建成功</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 4、修改daemon.json   </span></span><br><span class="line">vim /etc/docker/daemon.json   </span><br><span class="line"></span><br><span class="line"><span class="comment"># 在上述文件中添加一个key，保存退出。此步用于让 docker 信任私有仓库地址；注意将私有仓库服务器ip修改为自己私有仓库服务器真实ip </span></span><br><span class="line">&#123;<span class="string">&quot;insecure-registries&quot;</span>:[<span class="string">&quot;私有仓库服务器ip:5000&quot;</span>]&#125; </span><br><span class="line"></span><br><span class="line"><span class="comment"># 5、重启docker 服务 </span></span><br><span class="line">systemctl restart docker</span><br><span class="line">docker start registry</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>镜像上传到私有服务器</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1、标记镜像为私有仓库的镜像     </span></span><br><span class="line">docker tag redis:5.0 192.168.117.200:5000/redis:5.0</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 2、上传标记的镜像     </span></span><br><span class="line">docker push 192.168.117.200:5000/redis:5.0</span><br></pre></td></tr></table></figure>
+
+<h4 id="其它服务器拉取私有仓库镜像"><a href="#其它服务器拉取私有仓库镜像" class="headerlink" title="其它服务器拉取私有仓库镜像"></a>其它服务器拉取私有仓库镜像</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 打开配置文件 </span></span><br><span class="line">vi /usr/lib/systemd/system/docker.service </span><br><span class="line"></span><br><span class="line"><span class="comment"># 在打开的上述文件中按照下面的图，添加如下的内容；注意修改下面内容中的ip地址 </span></span><br><span class="line">--add-registry=ip地址:5000 --insecure-registry=ip地址:5000 \ </span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改完后需要重新加载docker配置文件并重启docker </span></span><br><span class="line">systemctl daemon-reload </span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+<p>重启之后直接拉取即可</p>
+<h3 id="容器和虚拟机对比"><a href="#容器和虚拟机对比" class="headerlink" title="容器和虚拟机对比"></a>容器和虚拟机对比</h3><h4 id="相同"><a href="#相同" class="headerlink" title="相同"></a>相同</h4><p>具有相似的资源隔离和分配优势</p>
+<h4 id="不同"><a href="#不同" class="headerlink" title="不同"></a>不同</h4><p>容器虚拟化的是操作系统，虚拟机虚化的是硬件</p>
+<p>虚拟机可以运行不同的操作系统，容器只能运行相同的操作系统</p>
+<p><strong>正确的开始 微小的长进 然后持续 嘿 我是小博 带你一起看我目之所及的世界……</strong></p>
+]]></content>
+      <tags>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>spring cloud alibaba 一</title>
     <url>/posts/668782996/</url>
     <content><![CDATA[<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221030191700.2tmq4f2y4f8.webp" alt="微信图片_20221030191700"></p>
