@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/./images/favicon32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/./images/favicon16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;codexiaobo.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Pisces&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;},&quot;path&quot;:&quot;&#x2F;search.xml&quot;,&quot;localsearch&quot;:{&quot;enable&quot;:true,&quot;trigger&quot;:&quot;auto&quot;,&quot;top_n_per_article&quot;:1,&quot;unescape&quot;:false,&quot;preload&quot;:false}}</script><script src="/js/config.js"></script>
+
+<link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="elk 一">
+<meta property="og:url" content="https://codexiaobo.github.io/posts/441140627/index.html">
+<meta property="og:site_name" content="Code小博">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/elasticsearch.3dyx4lvs5no0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/%E5%85%A8%E5%B1%80%E6%A3%80%E7%B4%A2AND%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95.5yzz5er88ac0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/es%E5%90%AF%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%9F%A5%E7%9C%8B.6txparfgf840.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/es%E9%9B%86%E7%BE%A4%E7%8A%B6%E6%80%81.povzwbrsbkw.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/kibana%E6%9F%A5%E7%9C%8B.5qp1ffbe1t00.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/es%E5%86%85%E9%83%A8%E4%B9%90%E8%A7%82%E9%94%81.6dw42bgdh440.webp">
+<meta property="article:published_time" content="2022-11-03T16:15:57.000Z">
+<meta property="article:modified_time" content="2022-11-03T16:16:30.332Z">
+<meta property="article:author" content="xiaobo">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="elk">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/elasticsearch.3dyx4lvs5no0.webp">
+
+
+<link rel="canonical" href="https://codexiaobo.github.io/posts/441140627/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;codexiaobo.github.io&#x2F;posts&#x2F;441140627&#x2F;&quot;,&quot;path&quot;:&quot;posts&#x2F;441140627&#x2F;&quot;,&quot;title&quot;:&quot;elk 一&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>elk 一 | Code小博</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Code小博" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+  
+  <a href="https://codexiaobo.github.io" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+  
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Code小博</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ELK"><span class="nav-number">1.</span> <span class="nav-text">ELK</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Elastic-Stack"><span class="nav-number">1.1.</span> <span class="nav-text">Elastic Stack</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6"><span class="nav-number">1.1.1.</span> <span class="nav-text">组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD"><span class="nav-number">1.1.2.</span> <span class="nav-text">功能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Elasticsearch"><span class="nav-number">1.2.</span> <span class="nav-text">Elasticsearch</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2"><span class="nav-number">1.2.1.</span> <span class="nav-text">搜索</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%92%E8%81%94%E7%BD%91%E6%90%9C%E7%B4%A2"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">互联网搜索</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AB%99%E5%86%85%E6%90%9C%E7%B4%A2-%E5%9E%82%E7%9B%B4%E6%90%9C%E7%B4%A2"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">站内搜索(垂直搜索)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%81%9A%E6%90%9C%E7%B4%A2%E7%9A%84%E5%BC%8A%E7%AB%AF"><span class="nav-number">1.2.2.</span> <span class="nav-text">数据库做搜索的弊端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2-%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95-Lucene"><span class="nav-number">1.2.3.</span> <span class="nav-text">全文检索 倒排索引 Lucene</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Elasticsearch%E5%8A%9F%E8%83%BD"><span class="nav-number">1.2.4.</span> <span class="nav-text">Elasticsearch功能</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E7%9A%84%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E5%92%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%BC%95%E6%93%8E"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">分布式的搜索引擎和数据分析引擎</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%EF%BC%8C%E7%BB%93%E6%9E%84%E5%8C%96%E6%A3%80%E7%B4%A2%EF%BC%8C%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">全文检索，结构化检索，数据分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%B7%E9%87%8F%E6%95%B0%E6%8D%AE%E8%BF%9B%E8%A1%8C%E8%BF%91%E5%AE%9E%E6%97%B6%E7%9A%84%E5%A4%84%E7%90%86"><span class="nav-number">1.2.4.3.</span> <span class="nav-text">海量数据进行近实时的处理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Elasticserch%E5%9C%BA%E6%99%AF"><span class="nav-number">1.2.5.</span> <span class="nav-text">Elasticserch场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Elasticserch%E7%89%B9%E7%82%B9"><span class="nav-number">1.2.6.</span> <span class="nav-text">Elasticserch特点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Elasticsearch%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">1.3.</span> <span class="nav-text">Elasticsearch核心概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#NRT-%E8%BF%91%E5%AE%9E%E6%97%B6"><span class="nav-number">1.3.1.</span> <span class="nav-text">NRT(近实时)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cluster-%E9%9B%86%E7%BE%A4"><span class="nav-number">1.3.2.</span> <span class="nav-text">Cluster(集群)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node-%E8%8A%82%E7%82%B9"><span class="nav-number">1.3.3.</span> <span class="nav-text">Node(节点)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Index-%E7%B4%A2%E5%BC%95"><span class="nav-number">1.3.4.</span> <span class="nav-text">Index(索引)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Document-%E6%96%87%E6%A1%A3"><span class="nav-number">1.3.5.</span> <span class="nav-text">Document(文档)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Field-%E5%AD%97%E6%AE%B5"><span class="nav-number">1.3.6.</span> <span class="nav-text">Field(字段)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Type-%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.3.7.</span> <span class="nav-text">Type(类型)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shard-%E5%88%86%E7%89%87"><span class="nav-number">1.3.8.</span> <span class="nav-text">Shard(分片)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#replica-%E5%89%AF%E6%9C%AC"><span class="nav-number">1.3.9.</span> <span class="nav-text">replica(副本)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Elasticsearch-%E5%AF%B9%E6%AF%94-%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">1.3.10.</span> <span class="nav-text">Elasticsearch 对比 关系型数据库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Elasticsearch%E5%AE%89%E8%A3%85"><span class="nav-number">1.4.</span> <span class="nav-text">Elasticsearch安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.4.1.</span> <span class="nav-text">目录介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE"><span class="nav-number">1.4.2.</span> <span class="nav-text">修改配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8"><span class="nav-number">1.4.3.</span> <span class="nav-text">启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E7%8A%B6%E6%80%81%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.4.4.</span> <span class="nav-text">集群状态介绍</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kibana%E5%AE%89%E8%A3%85"><span class="nav-number">1.5.</span> <span class="nav-text">Kibana安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#es%E8%AF%A6%E7%BB%86"><span class="nav-number">1.6.</span> <span class="nav-text">es详细</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%A1%A3%EF%BC%88document%EF%BC%89%E7%9A%84%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.6.1.</span> <span class="nav-text">文档（document）的数据格式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.6.1.1.</span> <span class="nav-text">对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#es"><span class="nav-number">1.6.1.2.</span> <span class="nav-text">es</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86"><span class="nav-number">1.6.2.</span> <span class="nav-text">集群管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E6%A3%80%E6%9F%A5%E9%9B%86%E7%BE%A4%E7%9A%84%E5%81%A5%E5%BA%B7%E7%8A%B6%E5%86%B5"><span class="nav-number">1.6.2.1.</span> <span class="nav-text">快速检查集群的健康状况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E6%9F%A5%E7%9C%8B%E9%9B%86%E7%BE%A4%E4%B8%AD%E6%9C%89%E5%93%AA%E4%BA%9B%E7%B4%A2%E5%BC%95"><span class="nav-number">1.6.2.2.</span> <span class="nav-text">快速查看集群中有哪些索引</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#document-CRUD%E6%93%8D%E4%BD%9C"><span class="nav-number">1.6.3.</span> <span class="nav-text">document CRUD操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B0%E5%BB%BA%E7%B4%A2%E5%BC%95"><span class="nav-number">1.6.3.1.</span> <span class="nav-text">新建索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B0%E5%BB%BA%E6%96%87%E6%A1%A3"><span class="nav-number">1.6.3.2.</span> <span class="nav-text">新建文档</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A3%80%E7%B4%A2%E6%96%87%E6%A1%A3"><span class="nav-number">1.6.3.3.</span> <span class="nav-text">检索文档</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E6%96%87%E6%A1%A3-%E6%9B%BF%E6%8D%A2"><span class="nav-number">1.6.3.4.</span> <span class="nav-text">修改文档 替换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E6%96%87%E6%A1%A3-%E6%9B%B4%E6%96%B0"><span class="nav-number">1.6.3.5.</span> <span class="nav-text">修改文档 更新</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E6%96%87%E6%A1%A3"><span class="nav-number">1.6.3.6.</span> <span class="nav-text">删除文档</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#document%E8%AF%A6%E7%BB%86"><span class="nav-number">1.7.</span> <span class="nav-text">document详细</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E6%AE%B5%E8%A7%A3%E6%9E%90"><span class="nav-number">1.7.1.</span> <span class="nav-text">字段解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%8B%E5%8A%A8%E7%94%9F%E6%88%90id"><span class="nav-number">1.7.2.</span> <span class="nav-text">手动生成id</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90id"><span class="nav-number">1.7.3.</span> <span class="nav-text">自动生成id</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#source-%E5%AD%97%E6%AE%B5"><span class="nav-number">1.7.4.</span> <span class="nav-text">_source 字段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E5%88%B6%E8%BF%94%E5%9B%9E%E5%AD%97%E6%AE%B5"><span class="nav-number">1.7.5.</span> <span class="nav-text">定制返回字段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%A1%A3%E7%9A%84%E6%9B%BF%E6%8D%A2%E4%B8%8E%E5%88%A0%E9%99%A4"><span class="nav-number">1.7.6.</span> <span class="nav-text">文档的替换与删除</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%A8%E9%87%8F%E6%9B%BF%E6%8D%A2"><span class="nav-number">1.7.6.1.</span> <span class="nav-text">全量替换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%BA%E5%88%B6%E5%88%9B%E5%BB%BA"><span class="nav-number">1.7.6.2.</span> <span class="nav-text">强制创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A0%E9%99%A4"><span class="nav-number">1.7.6.3.</span> <span class="nav-text">删除</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E6%9B%BF%E6%8D%A2"><span class="nav-number">1.7.7.</span> <span class="nav-text">全局替换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%80%E9%83%A8%E6%9B%BF%E6%8D%A2"><span class="nav-number">1.7.8.</span> <span class="nav-text">局部替换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%84%9A%E6%9C%AC%E6%9B%B4%E6%96%B0"><span class="nav-number">1.7.9.</span> <span class="nav-text">脚本更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#es%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98"><span class="nav-number">1.7.10.</span> <span class="nav-text">es并发问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%82%B2%E8%A7%82%E9%94%81%E4%B8%8E%E4%B9%90%E8%A7%82%E9%94%81%E6%9C%BA%E5%88%B6"><span class="nav-number">1.7.11.</span> <span class="nav-text">悲观锁与乐观锁机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%82%B2%E8%A7%82%E9%94%81"><span class="nav-number">1.7.11.1.</span> <span class="nav-text">悲观锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B9%90%E8%A7%82%E9%94%81"><span class="nav-number">1.7.11.2.</span> <span class="nav-text">乐观锁</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#es%E5%86%85%E9%83%A8%E5%9F%BA%E4%BA%8Eversion%E4%B9%90%E8%A7%82%E9%94%81%E6%8E%A7%E5%88%B6"><span class="nav-number">1.7.12.</span> <span class="nav-text">es内部基于version乐观锁控制</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="xiaobo"
+      src="/images/xiaobo.png">
+  <p class="site-author-name" itemprop="name">xiaobo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">80</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">38</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://codexiaobo.github.io/" title="GitHub → https:&#x2F;&#x2F;codexiaobo.github.io"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/6557440727/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;6557440727&#x2F;profile?rightmod&#x3D;1&amp;wvr&#x3D;6&amp;mod&#x3D;personinfo&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.baidu.com/" title="https:&#x2F;&#x2F;www.baidu.com" rel="noopener" target="_blank">百度</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/" title="https:&#x2F;&#x2F;www.zhihu.com" rel="noopener" target="_blank">知乎</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.csdn.net/" title="https:&#x2F;&#x2F;www.csdn.net" rel="noopener" target="_blank">CSDN</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bilibili.com/" title="https:&#x2F;&#x2F;www.bilibili.com" rel="noopener" target="_blank">哔哩哔哩</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+	<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=440208476&auto=1&height=66"></iframe>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/441140627/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/xiaobo.png">
+      <meta itemprop="name" content="xiaobo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code小博">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          elk 一
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-11-04 00:15:57 / 修改时间：00:16:30" itemprop="dateCreated datePublished" datetime="2022-11-04T00:15:57+08:00">2022-11-04</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/elasticsearch.3dyx4lvs5no0.webp" alt="elasticsearch"></p>
+<!--sleep-->
+
+<span id="more"></span>
+
+<h1 id="ELK"><a href="#ELK" class="headerlink" title="ELK"></a>ELK</h1><h2 id="Elastic-Stack"><a href="#Elastic-Stack" class="headerlink" title="Elastic Stack"></a>Elastic Stack</h2><p>ELK是一个免费开源的日志分析架构技术栈总称，官网<a target="_blank" rel="noopener" href="https://www.elastic.co/cn">https://www.elastic.co/cn</a></p>
+<h3 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h3><ul>
+<li><p>Elasticsearch</p>
+</li>
+<li><p>Logstash</p>
+</li>
+<li><p>Kibana</p>
+</li>
+<li><p>Beats</p>
+</li>
+<li><p>Elastic cloud</p>
+</li>
+</ul>
+<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><ul>
+<li><p>数据搜索</p>
+</li>
+<li><p>分析和收集</p>
+</li>
+<li><p>日志分析</p>
+</li>
+</ul>
+<h2 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</h2><h3 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h3><p>用户输入想要的关键词，返回含有该关键词的所有信息</p>
+<h4 id="互联网搜索"><a href="#互联网搜索" class="headerlink" title="互联网搜索"></a>互联网搜索</h4><p>谷歌、百度、各种新闻首页</p>
+<h4 id="站内搜索-垂直搜索"><a href="#站内搜索-垂直搜索" class="headerlink" title="站内搜索(垂直搜索)"></a>站内搜索(垂直搜索)</h4><p>企业OA查询订单、人员、部门，电商网站内部搜索商品</p>
+<h3 id="数据库做搜索的弊端"><a href="#数据库做搜索的弊端" class="headerlink" title="数据库做搜索的弊端"></a>数据库做搜索的弊端</h3><ul>
+<li><p>存储问题</p>
+</li>
+<li><p>性能问题</p>
+</li>
+<li><p>不能分词</p>
+</li>
+</ul>
+<p><strong>站内搜索（垂直搜索）数据量小，简单搜索，可以使用数据库</strong></p>
+<p><strong>互联网搜索，肯定不会使用数据库搜索。数据量太大。PB级</strong></p>
+<h3 id="全文检索-倒排索引-Lucene"><a href="#全文检索-倒排索引-Lucene" class="headerlink" title="全文检索 倒排索引 Lucene"></a>全文检索 倒排索引 Lucene</h3><p>数据存储时，经行分词建立term索引库  </p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/%E5%85%A8%E5%B1%80%E6%A3%80%E7%B4%A2AND%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95.5yzz5er88ac0.webp" alt="全局检索AND倒排索引"></p>
+<p>倒排索引源于实际应用中需要根据属性的值来查找记录。这种索引表中的每一项都包括一个属性值和具有该属性值的各记录的地址。由于不是由记录来确定属性值，而是由属性值来确定记录的位置，因而称为倒排索引(inverted index)。带有倒排索引的文件我们称为倒排索引文件，简称倒排文件(inverted file)</p>
+<ul>
+<li>Lucene</li>
+</ul>
+<p>一个jar包，封装了全文检索的引擎、搜索的算法代码。底层会在磁盘建立索引库</p>
+<h3 id="Elasticsearch功能"><a href="#Elasticsearch功能" class="headerlink" title="Elasticsearch功能"></a>Elasticsearch功能</h3><h4 id="分布式的搜索引擎和数据分析引擎"><a href="#分布式的搜索引擎和数据分析引擎" class="headerlink" title="分布式的搜索引擎和数据分析引擎"></a>分布式的搜索引擎和数据分析引擎</h4><ul>
+<li>搜索</li>
+</ul>
+<p>互联网搜索,站内搜索,OA系统查询</p>
+<ul>
+<li>数据分析</li>
+</ul>
+<p>销量前10,最近7天搜索最高的关键字,热点话题分析</p>
+<h4 id="全文检索，结构化检索，数据分析"><a href="#全文检索，结构化检索，数据分析" class="headerlink" title="全文检索，结构化检索，数据分析"></a>全文检索，结构化检索，数据分析</h4><ul>
+<li>全文检索</li>
+</ul>
+<p>搜索一个商品包含某个关键字</p>
+<ul>
+<li>结构化检索</li>
+</ul>
+<p>搜索一个分类的商品</p>
+<ul>
+<li>数据分析</li>
+</ul>
+<p>搜索一个分类下的商品数量</p>
+<h4 id="海量数据进行近实时的处理"><a href="#海量数据进行近实时的处理" class="headerlink" title="海量数据进行近实时的处理"></a>海量数据进行近实时的处理</h4><ul>
+<li>分布式</li>
+</ul>
+<p>ES自动将海量数据分散到多台服务器上去存储和检索,经行并行查询，提高搜索效率。相对的，Lucene是单机应用</p>
+<ul>
+<li>近实时</li>
+</ul>
+<p>数据库上亿条数据查询，搜索一次耗时几个小时，是批处理，而es只需秒级即可查询海量数据，所以叫近实时。秒级</p>
+<h3 id="Elasticserch场景"><a href="#Elasticserch场景" class="headerlink" title="Elasticserch场景"></a>Elasticserch场景</h3><ul>
+<li>百度搜索</li>
+</ul>
+<p>第一次查询，使用es</p>
+<ul>
+<li>OA、ERP系统站内搜索</li>
+</ul>
+<h3 id="Elasticserch特点"><a href="#Elasticserch特点" class="headerlink" title="Elasticserch特点"></a>Elasticserch特点</h3><ul>
+<li><p>可扩展</p>
+</li>
+<li><p>技术整合</p>
+</li>
+<li><p>部署简单</p>
+</li>
+<li><p>接口简单</p>
+</li>
+<li><p>功能强大</p>
+</li>
+</ul>
+<h2 id="Elasticsearch核心概念"><a href="#Elasticsearch核心概念" class="headerlink" title="Elasticsearch核心概念"></a>Elasticsearch核心概念</h2><p><code>Lucene</code> 最先进、功能最强大的搜索库，直接基于lucene开发，非常复杂，api复杂</p>
+<p><code>Elasticsearch</code> 基于lucene，封装了许多lucene底层功能，提供简单易用的restful api接口和许多语言的客户端</p>
+<h3 id="NRT-近实时"><a href="#NRT-近实时" class="headerlink" title="NRT(近实时)"></a>NRT(近实时)</h3><p>写入数据时，过1秒才会被搜索到，因为内部在分词、录入索引。</p>
+<p>es搜索时，搜索和分析数据需要秒级出结果</p>
+<h3 id="Cluster-集群"><a href="#Cluster-集群" class="headerlink" title="Cluster(集群)"></a>Cluster(集群)</h3><p>包含一个或多个启动着es实例的机器群。通常一台机器起一个es实例。同一网络下，集群名一样的多个es实例自动组成集群，自动均衡分片等行为。默认集群名为“elasticsearch”</p>
+<h3 id="Node-节点"><a href="#Node-节点" class="headerlink" title="Node(节点)"></a>Node(节点)</h3><p>每个es实例称为一个节点。节点名自动分配，也可以手动配置</p>
+<h3 id="Index-索引"><a href="#Index-索引" class="headerlink" title="Index(索引)"></a>Index(索引)</h3><p>包含一堆有相似结构的文档数据</p>
+<h3 id="Document-文档"><a href="#Document-文档" class="headerlink" title="Document(文档)"></a>Document(文档)</h3><p>es中的最小数据单元。一个document就像数据库中的一条记录。通常以json格式显示。多个document存储于一个索引（Index）中</p>
+<h3 id="Field-字段"><a href="#Field-字段" class="headerlink" title="Field(字段)"></a>Field(字段)</h3><p>就像数据库中的列，定义每个document应该有的字段</p>
+<h3 id="Type-类型"><a href="#Type-类型" class="headerlink" title="Type(类型)"></a>Type(类型)</h3><p>每个索引里都可以有一个或多个type，type是index中的一个逻辑数据分类，一个type下的document，都有相同的field</p>
+<h3 id="Shard-分片"><a href="#Shard-分片" class="headerlink" title="Shard(分片)"></a>Shard(分片)</h3><p>index数据过大时，将index里面的数据，分为多个shard，分布式的存储在各个服务器上面。可以支持海量数据和高并发，提升性能和吞吐量，充分利用多台机器的cpu</p>
+<h3 id="replica-副本"><a href="#replica-副本" class="headerlink" title="replica(副本)"></a>replica(副本)</h3><p>在分布式环境下，任何一台机器都会随时宕机，如果宕机，index的一个分片没有，导致此index不能搜索。所以，为了保证数据的安全，我们会将每个index的分片经行备份，存储在另外的机器上。保证少数机器宕机es集群仍可以搜索</p>
+<p>能正常提供查询和插入的分片我们叫做主分片，其余的我们就管他们叫做备份的分片</p>
+<p>es6默认新建索引时，5分片，2副本，也就是一主一备，共10个分片。所以，es集群最小规模为两台</p>
+<h3 id="Elasticsearch-对比-关系型数据库"><a href="#Elasticsearch-对比-关系型数据库" class="headerlink" title="Elasticsearch 对比 关系型数据库"></a>Elasticsearch 对比 关系型数据库</h3><table>
+<thead>
+<tr>
+<th>关系型数据库</th>
+<th>Elasticsearch</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据库Database</td>
+<td>索引Index</td>
+</tr>
+<tr>
+<td>表Table</td>
+<td>索引Index(type)</td>
+</tr>
+<tr>
+<td>数据行Row</td>
+<td>文档Document</td>
+</tr>
+<tr>
+<td>数据列Column</td>
+<td>字段Field</td>
+</tr>
+<tr>
+<td>约束 Schema</td>
+<td>映射Mapping</td>
+</tr>
+</tbody></table>
+<h2 id="Elasticsearch安装"><a href="#Elasticsearch安装" class="headerlink" title="Elasticsearch安装"></a>Elasticsearch安装</h2><p>这里用到jdk 版本高于1.8.0_73</p>
+<p><a target="_blank" rel="noopener" href="https://www.elastic.co/cn/">下载地址</a><br><a target="_blank" rel="noopener" href="https://www.elastic.co/cn/">https://www.elastic.co/cn/</a></p>
+<p>我在这里学习的版本是7.3.0</p>
+<h3 id="目录介绍"><a href="#目录介绍" class="headerlink" title="目录介绍"></a>目录介绍</h3><p><code>bin</code>：脚本目录</p>
+<p><code>config</code>：配置文件目录</p>
+<p><code>data</code>：索引目录，存放索引文件的地方</p>
+<p><code>logs</code>：日志目录</p>
+<p><code>modules</code>：模块目录，包括了es的功能模块</p>
+<p><code>plugins</code> :插件目录，es支持插件机制</p>
+<h3 id="修改配置"><a href="#修改配置" class="headerlink" title="修改配置"></a>修改配置</h3><ul>
+<li>elasticsearch.yml中添加</li>
+</ul>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">node.name:</span> <span class="string">node-1</span>  </span><br><span class="line"><span class="attr">cluster.initial_master_nodes:</span> [<span class="string">&quot;node-1&quot;</span>]  </span><br><span class="line"><span class="attr">xpack.ml.enabled:</span> <span class="literal">false</span> </span><br><span class="line"><span class="attr">http.cors.enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">http.cors.allow-origin:</span> <span class="string">/.*/</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><p>bin目录中执行脚本文件<code>elasticsearch.bat</code></p>
+<p>访问 <code>http://localhost:9200/</code> 即可查看</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/es%E5%90%AF%E5%8A%A8%E4%BF%A1%E6%81%AF%E6%9F%A5%E7%9C%8B.6txparfgf840.webp" alt="es启动信息查看"></p>
+<p>访问 <code>http://localhost:9200/_cluster/health</code> 查询集群状态</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/es%E9%9B%86%E7%BE%A4%E7%8A%B6%E6%80%81.povzwbrsbkw.webp" alt="es集群状态"></p>
+<h3 id="集群状态介绍"><a href="#集群状态介绍" class="headerlink" title="集群状态介绍"></a>集群状态介绍</h3><p><code>Status</code> 集群状态</p>
+<p><code>Green</code> 所有分片可用</p>
+<p><code>Yellow</code> 所有主分片可用。Red主分片不可用，集群不可用</p>
+<h2 id="Kibana安装"><a href="#Kibana安装" class="headerlink" title="Kibana安装"></a>Kibana安装</h2><p>、kibana是es数据的前端展现，数据分析时，可以方便地看到数据。作为开发人员，可以方便访问es</p>
+<p>下载地址同上，一个旗下的产品</p>
+<p>目录结构相似，也可以对其修改配置</p>
+<p><code>i18n.locale: &quot;zh-CN&quot;</code> 支持中文，配置里这个改下国际化就行</p>
+<p>访问地址 <code>http://localhost:5601</code></p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/kibana%E6%9F%A5%E7%9C%8B.5qp1ffbe1t00.webp" alt="kibana查看"></p>
+<h2 id="es详细"><a href="#es详细" class="headerlink" title="es详细"></a>es详细</h2><h3 id="文档（document）的数据格式"><a href="#文档（document）的数据格式" class="headerlink" title="文档（document）的数据格式"></a>文档（document）的数据格式</h3><ul>
+<li><p>应用系统的数据结构都是面向对象的，具有复杂的数据结构</p>
+</li>
+<li><p>对象存储到数据库，需要将关联的复杂对象属性插到另一张表，查询时再拼接起来。</p>
+</li>
+<li><p>es面向文档，文档中存储的数据结构，与对象一致。所以一个对象可以直接存成一个文档。</p>
+</li>
+<li><p>es的document用json数据格式来表达</p>
+</li>
+</ul>
+<h4 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> String id;</span><br><span class="line">  <span class="keyword">private</span> String name;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">private</span> String classInfoId;  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassInfo</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> String id;</span><br><span class="line">  <span class="keyword">private</span> String className;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="es"><a href="#es" class="headerlink" title="es"></a>es</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;id&quot;</span>:<span class="string">&quot;1&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;name&quot;</span>: <span class="string">&quot;张三&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;last_name&quot;</span>: <span class="string">&quot;zhang&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;classInfo&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;id&quot;</span>: <span class="string">&quot;1&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;className&quot;</span>: <span class="string">&quot;三年二班&quot;</span>,     </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="集群管理"><a href="#集群管理" class="headerlink" title="集群管理"></a>集群管理</h3><h4 id="快速检查集群的健康状况"><a href="#快速检查集群的健康状况" class="headerlink" title="快速检查集群的健康状况"></a>快速检查集群的健康状况</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /_cat/health?v</span><br></pre></td></tr></table></figure>
+
+<p><code>green</code>：每个索引的primary shard和replica shard都是active状态的</p>
+<p><code>yellow</code>：每个索引的primary shard都是active状态的，但是部分replica shard不是active状态，处于不可用的状态</p>
+<p><code>red</code>：不是所有索引的primary shard都是active状态的，部分索引有数据丢失了</p>
+<h4 id="快速查看集群中有哪些索引"><a href="#快速查看集群中有哪些索引" class="headerlink" title="快速查看集群中有哪些索引"></a>快速查看集群中有哪些索引</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /_cat/indices?v</span><br></pre></td></tr></table></figure>
+
+<h3 id="document-CRUD操作"><a href="#document-CRUD操作" class="headerlink" title="document CRUD操作"></a>document CRUD操作</h3><h4 id="新建索引"><a href="#新建索引" class="headerlink" title="新建索引"></a>新建索引</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PUT /index</span><br></pre></td></tr></table></figure>
+
+<h4 id="新建文档"><a href="#新建文档" class="headerlink" title="新建文档"></a>新建文档</h4><p>语法：<code>PUT /index/type/id</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">PUT /book/_doc/1</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">&quot;name&quot;: &quot;Bootstrap开发&quot;,</span><br><span class="line">&quot;description&quot;: &quot;Bootstrap是由Twitter推出的一个前台页面开发css框架，是一个非常流行的开发框架，此框架集成了多种页面效果。此开发框架包含了大量的CSS、JS程序代码，可以帮助开发者（尤其是不擅长css页面开发的程序人员）轻松的实现一个css，不受浏览器限制的精美界面css效果。&quot;,</span><br><span class="line">&quot;studymodel&quot;: &quot;201002&quot;,</span><br><span class="line">&quot;price&quot;:38.6,</span><br><span class="line">&quot;timestamp&quot;:&quot;2019-08-25 19:11:35&quot;,</span><br><span class="line">&quot;pic&quot;:&quot;group1/M00/00/00/wKhlQFs6RCeAY0pHAAJx5ZjNDEM428.jpg&quot;,</span><br><span class="line">&quot;tags&quot;: [ &quot;bootstrap&quot;, &quot;dev&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="检索文档"><a href="#检索文档" class="headerlink" title="检索文档"></a>检索文档</h4><p>语法：<code>GET /index/type/id</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /book/_doc/1 </span><br></pre></td></tr></table></figure>
+
+<h4 id="修改文档-替换"><a href="#修改文档-替换" class="headerlink" title="修改文档 替换"></a>修改文档 替换</h4><p>语法：<code>PUT /book/type/id</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">PUT /book/_doc/1</span><br><span class="line">&#123;</span><br><span class="line">    &quot;name&quot;: &quot;Bootstrap开发教程1&quot;,</span><br><span class="line">    &quot;description&quot;: &quot;Bootstrap是由Twitter推出的一个前台页面开发css框架，是一个非常流行的开发框架，此框架集成了多种页面效果。此开发框架包含了大量的CSS、JS程序代码，可以帮助开发者（尤其是不擅长css页面开发的程序人员）轻松的实现一个css，不受浏览器限制的精美界面css效果。&quot;,</span><br><span class="line">    &quot;studymodel&quot;: &quot;201002&quot;,</span><br><span class="line">    &quot;price&quot;:38.6,</span><br><span class="line">    &quot;timestamp&quot;:&quot;2019-08-25 19:11:35&quot;,</span><br><span class="line">    &quot;pic&quot;:&quot;group1/M00/00/00/wKhlQFs6RCeAY0pHAAJx5ZjNDEM428.jpg&quot;,</span><br><span class="line">    &quot;tags&quot;: [ &quot;bootstrap&quot;, &quot;开发&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="修改文档-更新"><a href="#修改文档-更新" class="headerlink" title="修改文档 更新"></a>修改文档 更新</h4><p>语法：<code>POST /&#123;index&#125;/type /&#123;id&#125;/_update</code></p>
+<p>或者<code>POST /&#123;index&#125;/_update/&#123;id&#125;</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">POST /book/_update/1/ </span><br><span class="line">&#123;</span><br><span class="line">  &quot;doc&quot;: &#123;</span><br><span class="line">   &quot;name&quot;: &quot; Bootstrap开发教程高级&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="删除文档"><a href="#删除文档" class="headerlink" title="删除文档"></a>删除文档</h4><p>语法：<code>DELETE /index/type/id</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DELETE /book/_doc/1</span><br></pre></td></tr></table></figure>
+
+<h2 id="document详细"><a href="#document详细" class="headerlink" title="document详细"></a>document详细</h2><h3 id="字段解析"><a href="#字段解析" class="headerlink" title="字段解析"></a>字段解析</h3><ul>
+<li>_index</li>
+</ul>
+<p>此文档属于哪个索引</p>
+<p>类似数据放在一个索引中。数据库中表的定义规则。各个索引存储和搜索时互不影响</p>
+<ul>
+<li>_type</li>
+</ul>
+<p>类别</p>
+<p>以后es9将彻底删除此字段，所以当前版本在不断弱化type。见到_type都为doc。</p>
+<ul>
+<li>_id</li>
+</ul>
+<p>文档的唯一标识。就像表的id主键。结合索引可以标识和定义一个文档。</p>
+<h3 id="手动生成id"><a href="#手动生成id" class="headerlink" title="手动生成id"></a>手动生成id</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">put /index/_doc/id</span><br></pre></td></tr></table></figure>
+
+<h3 id="自动生成id"><a href="#自动生成id" class="headerlink" title="自动生成id"></a>自动生成id</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POST /index/_doc</span><br></pre></td></tr></table></figure>
+
+<p>长度为20个字符，URL安全，base64编码，GUID，分布式生成不冲突</p>
+<h3 id="source-字段"><a href="#source-字段" class="headerlink" title="_source 字段"></a>_source 字段</h3><p>插入数据时的所有字段和值。在get获取数据时，在_source字段中原样返回</p>
+<h3 id="定制返回字段"><a href="#定制返回字段" class="headerlink" title="定制返回字段"></a>定制返回字段</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /book/_doc/1?__source_includes=name,price</span><br></pre></td></tr></table></figure>
+
+<h3 id="文档的替换与删除"><a href="#文档的替换与删除" class="headerlink" title="文档的替换与删除"></a>文档的替换与删除</h3><h4 id="全量替换"><a href="#全量替换" class="headerlink" title="全量替换"></a>全量替换</h4><p>执行两次，返回结果中版本号version在不断上升。此过程为全量替换</p>
+<p>本质：旧文档的内容不会立即删除，只是标记为deleted。适当的时机，集群会将这些文档删除</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PUT /test_index/_doc/1</span><br><span class="line">&#123;</span><br><span class="line">  &quot;test_field&quot;: &quot;test&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="强制创建"><a href="#强制创建" class="headerlink" title="强制创建"></a>强制创建</h4><p>为防止覆盖原有数据，我们在新增时，设置为强制创建，不会覆盖原有文档<br><code>PUT /index/ _doc/id/_create</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PUT /test_index/_doc/1/_create</span><br><span class="line">&#123;</span><br><span class="line">  &quot;test_field&quot;: &quot;test&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h4><p><code>DELETE /index/_doc/id</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DELETE  /test_index/_doc/1/</span><br></pre></td></tr></table></figure>
+
+<p>实质：旧文档的内容不会立即删除，只是标记为deleted。适当的时机，集群会将这些文档删除</p>
+<h3 id="全局替换"><a href="#全局替换" class="headerlink" title="全局替换"></a>全局替换</h3><p>全量替换，需要将文档所有数据提交</p>
+<blockquote>
+<p>重新发一份给es<br>每次修改都将新的数据发给es</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">post /index/type/id/</span><br><span class="line">&#123;</span><br><span class="line">   &quot;doc&quot;: &#123;</span><br><span class="line">      &quot;field&quot;：&quot;value&quot;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="局部替换"><a href="#局部替换" class="headerlink" title="局部替换"></a>局部替换</h3><p>局部替换则只修改变动字段</p>
+<blockquote>
+<p>es内部获取旧文档<br>将传来的文档field更新到旧数据<br>将旧文档标记为delete<br>创建的新文档<br>都是在es内部完成的</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">post /index/type/id/_update </span><br><span class="line">&#123;</span><br><span class="line">   &quot;doc&quot;: &#123;</span><br><span class="line">      &quot;field&quot;：&quot;value&quot;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>优点</li>
+</ul>
+<p>减少网络请求次数</p>
+<p>减少网络开销</p>
+<p>减少并发冲突</p>
+<h3 id="脚本更新"><a href="#脚本更新" class="headerlink" title="脚本更新"></a>脚本更新</h3><p>es可以内置脚本执行复杂操作。例如painless脚本</p>
+<p>这里不太使用，举个例子</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PUT /test_index/_doc/6</span><br><span class="line">&#123;</span><br><span class="line">  &quot;num&quot;: 0,</span><br><span class="line">  &quot;tags&quot;: []</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">POST /test_index/_doc/6/_update</span><br><span class="line">&#123;</span><br><span class="line">   &quot;script&quot; : &quot;ctx._source.num+=1&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="es并发问题"><a href="#es并发问题" class="headerlink" title="es并发问题"></a>es并发问题</h3><p>就是假如现在有两个下单的线程，下单不得减库存吗，现在有100件库存，线程1要减库存了，100-1=99，但是线程2也要减库存了100-1=99，正常顺序不是线程1，减完然后线程2在减吗，但是这是线程2先到了，就会出现问题</p>
+<p>插入数据没有问题，例如日志，但是修改数据会有问题，出现数据不准确的问题，发生并发冲突</p>
+<h3 id="悲观锁与乐观锁机制"><a href="#悲观锁与乐观锁机制" class="headerlink" title="悲观锁与乐观锁机制"></a>悲观锁与乐观锁机制</h3><h4 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h4><p>就是在特殊情况下对数据上锁，只能有一个线程来操作数据，不同场景有不同的锁机制，行级锁、表级锁、读锁、写锁</p>
+<p>现在还是以刚才的下单说明，两个线程，使用悲观锁了，这时我们把线程1锁住了，这个时候线程2就卡住了，因为得等待线程1对数据做完操作以后，线程2才能读取到数据</p>
+<ul>
+<li>优点</li>
+</ul>
+<p>方便，对程序将不需要额外操作</p>
+<ul>
+<li>缺点</li>
+</ul>
+<p>并发能力弱，相当于单线程了</p>
+<h4 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h4><p>乐观锁不用锁机制，一般使用版本来进行控制</p>
+<p>这样一开始version=1，当一个线程修改数据时，都带着version=1去修改，这个时候就有一个线程修改了，version就会变成version=2了，所以另一个还带着version=1呢，所以他就会重新获取数据，然后进行修改数据，并且重新带着version=2去修改了</p>
+<ul>
+<li>优点</li>
+</ul>
+<p>并发能力高，不加锁，所以相当于多线程了</p>
+<ul>
+<li>缺点</li>
+</ul>
+<p>麻烦，每次要对比version，高并发下重复次数较多</p>
+<h3 id="es内部基于version乐观锁控制"><a href="#es内部基于version乐观锁控制" class="headerlink" title="es内部基于version乐观锁控制"></a>es内部基于version乐观锁控制</h3><p>es内部的主从同步是异步多线程的，所以会出现混乱</p>
+<p>举个例子，就好比P0要同步到R0，先修改的线程1带着version1，然后线程2带着version2过来了，我们当然希望按着顺序来了，可是没有控制的话就不一定了</p>
+<p>所以es内部使用了version乐观锁控制，es对于文档的增删改都是基于版本号</p>
+<p>如果后修改的线程先到了，副本分片先把数据修改咯，然后version+1，然后本应该先修改的线程到了在判断version，这个时候就会判断到你现在这个version过时了，就会自动丢掉这个请求</p>
+<p>模拟一下就是你先创建，然后删咯，然后在创建 你看下version，肯定会一直在增</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/es%E5%86%85%E9%83%A8%E4%B9%90%E8%A7%82%E9%94%81.6dw42bgdh440.webp" alt="es内部乐观锁"></p>
+<p><strong>正确的开始 微小的长进 然后持续 嘿 我是小博 带你一起看我目之所及的世界……</strong></p>
+
+    </div>
+	<div>
+	
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束 <i class="fa fa-paw"></i> 感谢您的阅读-------------</div>
+    
+</div>
+
+     
+	</div>
+	
+	<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/posts/441140627/">elk 一</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a>小博</p>
+  <p><span>发布时间:</span>2022年11月04日 - 00:15</p>
+  <p><span>最后更新:</span>2022年11月04日 - 00:16</p>
+  <p><span>原始链接:</span><a href="/posts/441140627/" title="elk 一">https://codexiaobo.github.io/posts/441140627/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://codexiaobo.github.io/posts/441140627/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+      $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+        });
+    });  
+</script>
+
+
+      
+	</div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>学习技术分享、感谢您的支持</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="xiaobo 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="xiaobo 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"># java</a>
+              <a href="/tags/elk/" rel="tag"># elk</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/4126800539/" rel="prev" title="Docker">
+                  <i class="fa fa-chevron-left"></i> Docker
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaobo</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">807k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">12:14</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+<span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+<script>
+    var now = new Date(); 
+    function createtime() { 
+        var grt= new Date("06/07/2021 10:15:49");//在此处修改你的建站时间，格式：月/日/年 时:分:秒
+        now.setTime(now.getTime()+250); 
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 "; 
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+    } 
+setInterval("createtime()",250);
+</script>
+
+
+
+
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+ 
+  
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+
+ 
+</body>
+</html>
