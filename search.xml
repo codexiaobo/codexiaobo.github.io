@@ -1,6 +1,246 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>JVM 一</title>
+    <url>/posts/3370054281/</url>
+    <content><![CDATA[<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221110153740.4cjwd89ht760.webp" alt="微信图片_20221110153740"></p>
+<!--sleep-->
+
+<span id="more"></span>
+
+<h1 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h1><p>java virtua Machine</p>
+<h2 id="JDK"><a href="#JDK" class="headerlink" title="JDK"></a>JDK</h2><p>jdk中包含了<code>jvm</code>和 <code>屏蔽操作系统差异的组件</code></p>
+<ul>
+<li>jvm</li>
+</ul>
+<p>jvm在各个操作系统上是一致的</p>
+<ul>
+<li>屏蔽操作系统差异组件</li>
+</ul>
+<p>在各个操作系统上各不相同，就像Windows、Mac、Linux上安装Jdk需要下载不同的jdk</p>
+<h2 id="类的生命周期"><a href="#类的生命周期" class="headerlink" title="类的生命周期"></a>类的生命周期</h2><p>类的加载–&gt;连接–&gt;初始化–&gt;使用–&gt;卸载</p>
+<h3 id="类的加载"><a href="#类的加载" class="headerlink" title="类的加载"></a>类的加载</h3><p>查找并加载二进制数据，并且从硬盘上加载到jvm内存中</p>
+<h3 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h3><h4 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h4><p>校验二进制数据(.class)是否正确</p>
+<h4 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h4><p>在准备阶段，JVM中只有类，没有对象</p>
+<p>首先static静态变量分配内存，并赋初始化默认值，之后（初始化阶段）再进行修改为赋值</p>
+<ul>
+<li>初始化顺序 </li>
+</ul>
+<p>static –&gt;非static –&gt;构造方法</p>
+<h4 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h4><p>把类中符号引用，转为直接引用</p>
+<p>前期阶段，不知道类的具体内存地址，只能使用“com.xiaobo.dream.Student ”来替代Student类，“com.xiaobo.dream.Student ”就称为符号引用</p>
+<p>解析阶段，JVM就可以将 “com.xiaobo.dream.Student ”映射成实际的内存地址，以会后就用内存地址来代替Student，这种称为直接引用</p>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>给static变量 赋予正确的值</p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><ul>
+<li><p>对象的初始化</p>
+</li>
+<li><p>对象的垃圾回收</p>
+</li>
+<li><p>对象的销毁</p>
+</li>
+</ul>
+<h3 id="卸载"><a href="#卸载" class="headerlink" title="卸载"></a>卸载</h3><h4 id="JVM结束生命周期时机"><a href="#JVM结束生命周期时机" class="headerlink" title="JVM结束生命周期时机"></a>JVM结束生命周期时机</h4><ul>
+<li><p>正常结束</p>
+</li>
+<li><p>异常结束/错误 Throwable –&gt; Exception AND error</p>
+</li>
+<li><p>System.exit()</p>
+</li>
+<li><p>操作系统异常</p>
+</li>
+</ul>
+<h2 id="JVM内存模型"><a href="#JVM内存模型" class="headerlink" title="JVM内存模型"></a>JVM内存模型</h2><p>JMM(Java Memoery Model) 定义变量(所有线程的共享变量， 不能是局部变量)的访问规则</p>
+<h3 id="JMM内存划分"><a href="#JMM内存划分" class="headerlink" title="JMM内存划分"></a>JMM内存划分</h3><h4 id="主内存区"><a href="#主内存区" class="headerlink" title="主内存区"></a>主内存区</h4><p>存放真实变量</p>
+<h4 id="工作内存区"><a href="#工作内存区" class="headerlink" title="工作内存区"></a>工作内存区</h4><p>主内存中变量的副本，供各个线程所使用</p>
+<h3 id="线程访问问题"><a href="#线程访问问题" class="headerlink" title="线程访问问题"></a>线程访问问题</h3><ul>
+<li><p>各个线程只能访问自己私有的工作内存，不能访问其他线程的工作内存，也不能访问主内存</p>
+</li>
+<li><p>不同线程之间，可以通过主内存 间接的访问其他线程的工作内存</p>
+</li>
+</ul>
+<h3 id="不同线程之间交互数据"><a href="#不同线程之间交互数据" class="headerlink" title="不同线程之间交互数据"></a>不同线程之间交互数据</h3><p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/%E4%B8%8D%E5%90%8C%E7%BA%BF%E7%A8%8B%E4%B9%8B%E9%97%B4%E4%BA%A4%E4%BA%92%E6%95%B0%E6%8D%AE.6hhzj21bpb40.webp" alt="不同线程之间交互数据"></p>
+<p><code>Lock</code>:将主内存中的变量，表示为一条线程的独占状态</p>
+<p><code>Read</code>：将主内存中的变量，读取到工作内存中</p>
+<p><code>Load</code>：将读取的变量拷贝到变量副本中</p>
+<p><code>Use</code>：把工作内存中的变量副本，传递给线程去使用</p>
+<p><code>Assign</code>:把线程正在使用的变量，传递给工作内存中的变量副本中</p>
+<p><code>Store</code>:将工作内存中变量副本的值，传递到主内存中</p>
+<p><code>Write</code>：将变量副本作为一个主内存中的变量进行存储</p>
+<p><code>Unlock</code>:解决线程的独占状态</p>
+<p><strong>以上动作必须是原子性的</strong></p>
+<h4 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h4><p>一个操作是不可中断的。即使是在多个线程一起执行的时候，一个操作一旦开始，就不会被其他线程干扰</p>
+<h3 id="读写半个long-double数据问题"><a href="#读写半个long-double数据问题" class="headerlink" title="读写半个long/double数据问题"></a>读写半个long/double数据问题</h3><p>商用JVM解决了此问题</p>
+<p>自己解决可以通过volatile避免读写半个数据的问题</p>
+<h2 id="Volatile"><a href="#Volatile" class="headerlink" title="Volatile"></a>Volatile</h2><p>JVM的一个轻量级的同步机制</p>
+<h3 id="Volatile作用"><a href="#Volatile作用" class="headerlink" title="Volatile作用"></a>Volatile作用</h3><ul>
+<li><p>防止JVM对非原子性协议进行的误操作（读取半个数据）</p>
+</li>
+<li><p>可以使变量对所有的线程立即可见（某一个线程如果修改了 工作内存中的变量副本，那么加上volatile 之后，该变量就会立刻同步到其他线程的工作内存中）</p>
+</li>
+<li><p>禁止指令的“重排序”优化</p>
+</li>
+</ul>
+<h3 id="原子性-1"><a href="#原子性-1" class="headerlink" title="原子性"></a>原子性</h3><p><code>number = 1</code></p>
+<h3 id="非原子性"><a href="#非原子性" class="headerlink" title="非原子性"></a>非原子性</h3><p><code>i++</code></p>
+<p>首先从主内存中拿到i，然后进行 i + 1，然后 i= i + 1；</p>
+<h3 id="重排序"><a href="#重排序" class="headerlink" title="重排序"></a>重排序</h3><p>排序的对象就是原子性操作，目的是为了提高执行效率，优化</p>
+<p>不会影响<code>单线程</code>的执行结果</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> a  =<span class="number">10</span> ; <span class="comment">//1    int a ; a = 10 ;</span></span><br><span class="line"><span class="keyword">int</span> b ;<span class="comment">//2</span></span><br><span class="line">b = <span class="number">20</span> ;<span class="comment">//3</span></span><br><span class="line"><span class="keyword">int</span> c = a * b ;<span class="comment">//4</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//2 3 1 4</span></span><br><span class="line"><span class="keyword">int</span> b ;</span><br><span class="line">b = <span class="number">20</span> ;</span><br><span class="line"><span class="keyword">int</span> a  =<span class="number">10</span> ;</span><br><span class="line"><span class="keyword">int</span> c = a * b ;</span><br></pre></td></tr></table></figure>
+
+<h3 id="volatile防止重排序问题"><a href="#volatile防止重排序问题" class="headerlink" title="volatile防止重排序问题"></a>volatile防止重排序问题</h3><ul>
+<li><p>在volatile写操作前，插入StoreStore屏障</p>
+</li>
+<li><p>在volatile写操作后，插入StoreLoad屏障</p>
+</li>
+<li><p>在volatile读操作后，插入LoadLoad屏障</p>
+</li>
+<li><p>在volatile读操作后，插入LoadStore屏障</p>
+</li>
+</ul>
+<h3 id="volatile原子性和线程安全性问题"><a href="#volatile原子性和线程安全性问题" class="headerlink" title="volatile原子性和线程安全性问题"></a>volatile原子性和线程安全性问题</h3><p>volatile不保证线程的原子性也不保证线程的安全性</p>
+<p>想保证原子性/线程安全，可以使用原子包java.util.cocurrent.aotmic中的类，该类能够保证原子性的核心，是因为提供了compareAndSet()方法，该方法提供了 cas算法（无锁算法）</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestVolatile</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">//    static volatile int number = 0;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> AtomicInteger number = <span class="keyword">new</span> AtomicInteger(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(() -&gt;&#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i1 = <span class="number">0</span>; i1 &lt; <span class="number">10000</span>; i1++) &#123;</span><br><span class="line"><span class="comment">//                  number++;</span></span><br><span class="line">                    number.incrementAndGet();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;).start();</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        System.out.println(number);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="JVM运行时内存"><a href="#JVM运行时内存" class="headerlink" title="JVM运行时内存"></a>JVM运行时内存</h2><h3 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h3><p>行号指示器，指向当前线程所执行的字节码指令的地址，大白话：class文件中的行号</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E5%86%85%E5%AD%98.6wr4ceccz2k0.webp" alt="JVM运行时内存"></p>
+<ul>
+<li><p>一般情况下，程序计数器是行号；但如果正在执行的方法是native方法，则程序计数器的值undefined</p>
+</li>
+<li><p>程序计数器 是唯一一个不会产生 <code>内存溢出</code> 的区域</p>
+</li>
+<li><p>goto的本质就是改变的 程序计数器的值</p>
+</li>
+</ul>
+<h3 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h3><p>描述方法执行的内存模型</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88.1zoydjx95728.webp" alt="虚拟机栈"></p>
+<p>方法在执行的同时，会在虚拟机栈中创建一个栈帧，栈帧中包含方法的局部变量表，操作数栈、动态链接、方法出口信息等</p>
+<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><p>当方法太多时，就可能发生 栈溢出异常StackOverflowError，或者内存溢出异常OutOfMemoryError</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        main(<span class="keyword">new</span> String[]&#123;<span class="string">&quot;小博&quot;</span>&#125;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h3><p>原理和结构与虚拟机栈一致，不同的是虚拟机栈中存放的是jdk或我们自己编写的方法，而本地方法栈调用的是操作系统底层的方法</p>
+<h4 id="局部变量表AND操作数栈"><a href="#局部变量表AND操作数栈" class="headerlink" title="局部变量表AND操作数栈"></a>局部变量表AND操作数栈</h4><p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E8%A1%A8AND%E6%93%8D%E4%BD%9C%E6%95%B0%E6%A0%88.5tfsrlyq2ss0.webp" alt="局部变量表AND操作数栈"></p>
+<h4 id="动态链接"><a href="#动态链接" class="headerlink" title="动态链接"></a>动态链接</h4><p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5.6rb2u6mu81k0.webp" alt="动态链接"></p>
+<p>符号引用会在实际执行时转换为不同的地址，所以转换的行为会在每一次运行时都发生一次</p>
+<h3 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h3><p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/%E5%A0%86.17uzgtabmc2k.webp" alt="堆"></p>
+<ul>
+<li><p>存放对象实例（数组、对象）</p>
+</li>
+<li><p>堆是jvm区域中最大的一块，在jvm启动时就已经创建完毕</p>
+</li>
+<li><p>GC主要管理的区域</p>
+</li>
+<li><p>堆本身是线程共享，但在堆内部可以划分出多个线程私有的缓冲区</p>
+</li>
+<li><p>堆允许物理空间不连续，只要逻辑连续即可</p>
+</li>
+<li><p>堆可以分 新生代、老生代 。大小比例，新生代：老生代= 1:2  </p>
+</li>
+</ul>
+<h4 id="新生代"><a href="#新生代" class="headerlink" title="新生代"></a>新生代</h4><ul>
+<li><p>新生代中 包含eden、s0、s1 = 8:1:1  </p>
+</li>
+<li><p>新生代的使用率一般在90%。 在使用时，只能使用 一个eden和一块s区间(s0或s1)，底层采用的是复制算法，为了避免碎片产生</p>
+</li>
+<li><p>新生代存放生命周期比较短的对象，小的对象</p>
+</li>
+<li><p>大部分对象都存在于新生代</p>
+</li>
+<li><p>新生代的回收频率高、效率高</p>
+</li>
+</ul>
+<h4 id="老生代"><a href="#老生代" class="headerlink" title="老生代"></a>老生代</h4><ul>
+<li><p>存放在老生代中的对象周期较长，对象较大，对象的大小，可以通过参数设置 <code>-XX：PretenureSizeThredshold</code>。一般而言，大对象一般是 集合、数组、字符串。生命周期： <code>-XX:MaxTenuringThredshold</code>，使用的回收器 MajorGC\FullGC</p>
+</li>
+<li><p>空间大</p>
+</li>
+<li><p>增长速度慢</p>
+</li>
+<li><p>频率低</p>
+</li>
+</ul>
+<h4 id="新生代老生代年龄问题"><a href="#新生代老生代年龄问题" class="headerlink" title="新生代老生代年龄问题"></a>新生代老生代年龄问题</h4><ul>
+<li>新生代、老生代中年龄：MinorGC回收新生代中的对象。如果Eden区中的对象在一次回收后仍然存活，就会被转移到 s区中；之后，如果MinorGC再次回收，已经在s区中的对象仍然存活，则年龄+1。如果年龄增长一定的数字(默认16)，则对象会被转移到 老生代中</li>
+</ul>
+<blockquote>
+<p>在新生代中的对象，每经过一次MinorGC，有三种可能<br>从eden –&gt;s区<br>已经在s区中，年龄+1<br>转移到老生代中</p>
+</blockquote>
+<h4 id="具体问题具体考虑"><a href="#具体问题具体考虑" class="headerlink" title="具体问题具体考虑"></a>具体问题具体考虑</h4><p>根据项目中 对象大小的数量，设置新生代或老生代的空间容量，从提高GC的性能</p>
+<p>对象太多，会导致内存异常</p>
+<h4 id="虚拟机参数"><a href="#虚拟机参数" class="headerlink" title="虚拟机参数"></a>虚拟机参数</h4><p><code>-Xms128m</code> ：JVM启动时的大小</p>
+<p><code>-Xmn32m</code>：新生代大小</p>
+<p><code>-Xmx128</code>：总大小</p>
+<p>jvm总大小= 新生代 + 老生代</p>
+<p>一般-Xms128m 和 -Xmx128相同</p>
+<h3 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h3><p>存放类的元数据（描述类的信息）、常量池、方法信息（方法数据、方法代码）</p>
+<p>GC：类的元数据（描述类的信息）、常量池（存放编译期间产生的 字面量(“abc”)、符号引用）</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/%E6%96%B9%E6%B3%95%E5%8C%BA.5aa97c3hd5c0.webp" alt="方法区"></p>
+<h4 id="内存异常OutOfMemoryError"><a href="#内存异常OutOfMemoryError" class="headerlink" title="内存异常OutOfMemoryError"></a>内存异常OutOfMemoryError</h4><p>内存溢出的异常OutOfMemoryError，除了虚拟机中的4个区域以外，还可能是直接内存。在NIO技术中会使用到直接内存</p>
+<h2 id="类的使用方式"><a href="#类的使用方式" class="headerlink" title="类的使用方式"></a>类的使用方式</h2><ul>
+<li>类的初始化</li>
+</ul>
+<p>JVM只会在<code>首次主动使用</code>一个类/接口时，才会初始化它们</p>
+<h3 id="主动使用"><a href="#主动使用" class="headerlink" title="主动使用"></a>主动使用</h3><ul>
+<li>new 构造类的使用 </li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;初始化了&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Test();</span><br><span class="line">        <span class="keyword">new</span> Test();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">运行结果:</span><br><span class="line">初始化了</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>访问类/接口的 静态成员（属性、方法）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;初始化了&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;method 初始化了&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        A.method();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">运行结果:</span><br><span class="line">初始化了</span><br><span class="line">method 初始化了</span><br></pre></td></tr></table></figure>
+
+<p>main()本身也是一个静态方法，main()的所在类 也会在执行被初始化</p>
+<p>如果成员变量既是static，又是final ，即常量，则不会被初始化</p>
+<p>上边的这一种情况中，如果常量的值 是一个随机值，则会被初始化 (为了安全)</p>
+<ul>
+<li>使用Class.forName(“”)执行反射时使用的类</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ClassNotFoundException </span>&#123;</span><br><span class="line">        A.method();</span><br><span class="line">        Class.forName(<span class="string">&quot;com.dream.xiaobo.initiative.Test&quot;</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>初始化一个子类时，该子类的父类也会被初始化</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Father</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;我是爸爸&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Son</span> <span class="keyword">extends</span> <span class="title">Father</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Son();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>动态语言在执行所涉及的类 也会被初始化（动态代理）</li>
+</ul>
+<h3 id="被动使用"><a href="#被动使用" class="headerlink" title="被动使用"></a>被动使用</h3><p>除了主动以外，其他都是被动使用</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        B[] bs = <span class="keyword">new</span> B[<span class="number">10</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;BBB&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>不属于主动使用类，因此不会被初始化</p>
+<h2 id="助记符"><a href="#助记符" class="headerlink" title="助记符"></a>助记符</h2><h3 id="反编译"><a href="#反编译" class="headerlink" title="反编译"></a>反编译</h3><p>编译的是class文件</p>
+<p><code>javap -c class文件名</code></p>
+<h3 id="编译过程"><a href="#编译过程" class="headerlink" title="编译过程"></a>编译过程</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">C</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(Test.i);</span><br><span class="line">        System.out.println(Test.s);</span><br><span class="line">        System.out.println(Test.l);</span><br><span class="line">        System.out.println(Test.d);</span><br><span class="line">        System.out.println(Test.f);</span><br><span class="line">        System.out.println(Test.b);</span><br><span class="line">        System.out.println(Test.bl);</span><br><span class="line">        System.out.println(Test.c);</span><br><span class="line">        System.out.println(Test.string);</span><br><span class="line">        System.out.println(Test.test);</span><br><span class="line">        System.out.println(Test.array);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> i = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">short</span> s = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">long</span> l = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> d = <span class="number">10.0</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">float</span> f = <span class="number">11.1f</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span> b = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> bl = <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">char</span> c = <span class="string">&#x27;c&#x27;</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String string = <span class="string">&quot;xiaobo&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> C test = <span class="keyword">new</span> C();</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> C[] array = <span class="keyword">new</span> C[<span class="number">3</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>反编译结果</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">PS D:\Users\<span class="number">86158</span>\jvm\<span class="keyword">volatile</span>\out\production\<span class="keyword">volatile</span>\com\dream\xiaobo\compile&gt; javap -c C</span><br><span class="line">警告: 文件 .\C.class 不包含类 C</span><br><span class="line">Compiled from <span class="string">&quot;C.java&quot;</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">com</span>.<span class="title">dream</span>.<span class="title">xiaobo</span>.<span class="title">compile</span>.<span class="title">C</span> </span>&#123;</span><br><span class="line">  <span class="keyword">public</span> com.dream.xiaobo.compile.C();</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: aload_0</span><br><span class="line">       <span class="number">1</span>: invokespecial #<span class="number">1</span>                  <span class="comment">// Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span></span><br><span class="line">       <span class="number">4</span>: <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(java.lang.String[])</span></span>;</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: getstatic     #<span class="number">2</span>                  <span class="comment">// Field java/lang/System.out:Ljava/io/PrintStream;</span></span><br><span class="line">       <span class="number">3</span>: getstatic     #<span class="number">3</span>                  <span class="comment">// Field com/dream/xiaobo/compile/Test.i:I</span></span><br><span class="line">       <span class="number">6</span>: invokevirtual #<span class="number">4</span>                  <span class="comment">// Method java/io/PrintStream.println:(I)V</span></span><br><span class="line">       <span class="number">9</span>: getstatic     #<span class="number">2</span>                  <span class="comment">// Field java/lang/System.out:Ljava/io/PrintStream;</span></span><br><span class="line">      <span class="number">12</span>: getstatic     #<span class="number">5</span>                  <span class="comment">// Field com/dream/xiaobo/compile/Test.s:S</span></span><br><span class="line">      <span class="number">15</span>: invokevirtual #<span class="number">4</span>                  <span class="comment">// Method java/io/PrintStream.println:(I)V</span></span><br><span class="line">      <span class="number">18</span>: getstatic     #<span class="number">2</span>                  <span class="comment">// Field java/lang/System.out:Ljava/io/PrintStream;</span></span><br><span class="line">      <span class="number">21</span>: getstatic     #<span class="number">6</span>                  <span class="comment">// Field com/dream/xiaobo/compile/Test.l:J</span></span><br><span class="line">      <span class="number">24</span>: invokevirtual #<span class="number">7</span>                  <span class="comment">// Method java/io/PrintStream.println:(J)V</span></span><br><span class="line">      <span class="number">27</span>: getstatic     #<span class="number">2</span>                  <span class="comment">// Field java/lang/System.out:Ljava/io/PrintStream;</span></span><br><span class="line">      <span class="number">30</span>: getstatic     #<span class="number">8</span>                  <span class="comment">// Field com/dream/xiaobo/compile/Test.d:D</span></span><br><span class="line">      <span class="number">33</span>: invokevirtual #<span class="number">9</span>                  <span class="comment">// Method java/io/PrintStream.println:(D)V</span></span><br><span class="line">      <span class="number">36</span>: getstatic     #<span class="number">2</span>                  <span class="comment">// Field java/lang/System.out:Ljava/io/PrintStream;</span></span><br><span class="line">      <span class="number">39</span>: getstatic     #<span class="number">10</span>                 <span class="comment">// Field com/dream/xiaobo/compile/Test.f:F</span></span><br><span class="line">      <span class="number">42</span>: invokevirtual #<span class="number">11</span>                 <span class="comment">// Method java/io/PrintStream.println:(F)V</span></span><br><span class="line">      <span class="number">45</span>: getstatic     #<span class="number">2</span>                  <span class="comment">// Field java/lang/System.out:Ljava/io/PrintStream;</span></span><br><span class="line">      <span class="number">48</span>: getstatic     #<span class="number">12</span>                 <span class="comment">// Field com/dream/xiaobo/compile/Test.b:B</span></span><br><span class="line">      <span class="number">51</span>: invokevirtual #<span class="number">4</span>                  <span class="comment">// Method java/io/PrintStream.println:(I)V</span></span><br><span class="line">      <span class="number">54</span>: getstatic     #<span class="number">2</span>                  <span class="comment">// Field java/lang/System.out:Ljava/io/PrintStream;</span></span><br><span class="line">      <span class="number">57</span>: getstatic     #<span class="number">13</span>                 <span class="comment">// Field com/dream/xiaobo/compile/Test.bl:Z</span></span><br><span class="line">      <span class="number">60</span>: invokevirtual #<span class="number">14</span>                 <span class="comment">// Method java/io/PrintStream.println:(Z)V</span></span><br><span class="line">      <span class="number">63</span>: getstatic     #<span class="number">2</span>                  <span class="comment">// Field java/lang/System.out:Ljava/io/PrintStream;</span></span><br><span class="line">      <span class="number">66</span>: getstatic     #<span class="number">15</span>                 <span class="comment">// Field com/dream/xiaobo/compile/Test.c:C</span></span><br><span class="line">      <span class="number">69</span>: invokevirtual #<span class="number">16</span>                 <span class="comment">// Method java/io/PrintStream.println:(C)V</span></span><br><span class="line">      <span class="number">72</span>: getstatic     #<span class="number">2</span>                  <span class="comment">// Field java/lang/System.out:Ljava/io/PrintStream;</span></span><br><span class="line">      <span class="number">75</span>: getstatic     #<span class="number">17</span>                 <span class="comment">// Field com/dream/xiaobo/compile/Test.string:Ljava/lang/String;</span></span><br><span class="line">      <span class="number">78</span>: invokevirtual #<span class="number">18</span>                 <span class="comment">// Method java/io/PrintStream.println:(Ljava/lang/String;)V</span></span><br><span class="line">      <span class="number">81</span>: getstatic     #<span class="number">2</span>                  <span class="comment">// Field java/lang/System.out:Ljava/io/PrintStream;</span></span><br><span class="line">      <span class="number">84</span>: getstatic     #<span class="number">19</span>                 <span class="comment">// Field com/dream/xiaobo/compile/Test.test:Lcom/dream/xiaobo/compile/C;</span></span><br><span class="line">      <span class="number">87</span>: invokevirtual #<span class="number">20</span>                 <span class="comment">// Method java/io/PrintStream.println:(Ljava/lang/Object;)V</span></span><br><span class="line">      <span class="number">90</span>: getstatic     #<span class="number">2</span>                  <span class="comment">// Field java/lang/System.out:Ljava/io/PrintStream;</span></span><br><span class="line">      <span class="number">93</span>: getstatic     #<span class="number">21</span>                 <span class="comment">// Field com/dream/xiaobo/compile/Test.array:[Lcom/dream/xiaobo/compile/C;</span></span><br><span class="line">      <span class="number">96</span>: invokevirtual #<span class="number">20</span>                 <span class="comment">// Method java/io/PrintStream.println:(Ljava/lang/Object;)V</span></span><br><span class="line">      <span class="number">99</span>: <span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><code>aload_0</code>: 装载了一个引用类型</p>
+<p><code>Invokespecial</code>:  init,private,super.method():&lt;init&gt;存放的是初始化代码的位置</p>
+<p><code>getstatic</code>：获取静态成员</p>
+<p><code>bipush</code> ：整数范围 -128 &lt;–&gt; 127之内  (8位带符号的整数),放到栈顶</p>
+<p><code>sipush</code>: &gt;127   (16个带符号的整数),放到栈顶</p>
+<p>无论是定义int或short等，只要在 -128 –127以内 都是bipush，否则是sipush</p>
+<p><code>特殊</code>：-1  –&gt;  5不是bipush iconst_m1（-1）  iconst_0   iconst_1 ….  iconst_5</p>
+<p><code>ldc</code>: int  float String 常量 ,放到栈顶</p>
+<p><code>ldc2_w</code> :long  double常量,放到栈顶</p>
+<p><strong>正确的开始 微小的长进 然后持续 嘿 我是小博 带你一起看我目之所及的世界……</strong></p>
+]]></content>
+      <tags>
+        <tag>java</tag>
+        <tag>JVM</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>elk 一</title>
     <url>/posts/441140627/</url>
     <content><![CDATA[<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/elasticsearch.3dyx4lvs5no0.webp" alt="elasticsearch"></p>
