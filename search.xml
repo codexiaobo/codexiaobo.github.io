@@ -15,7 +15,7 @@
 </ul>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span></span>&#123;</span><br><span class="line">  </span><br><span class="line">  Object object = <span class="keyword">new</span> Object() ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>//当方法执行完毕后，强引用指向的 引用而对象new Object()就会等待被GC回收</p>
+<p>/当方法执行完毕后，强引用指向的 引用而对象new Object()就会等待被GC回收</p>
 <ul>
 <li>引用被置为null</li>
 </ul>
@@ -115,7 +115,7 @@
 </ul>
 <p>可以将项目部署在网络上，可以在A节点上 远程操作B节点。在操作上，可以对硬件无感。也可以在A节点上 对B节点上的项目进行运维、部署，并且立项情况下  在维护的期间，不需要暂时、重启。</p>
 <h3 id="类的卸载"><a href="#类的卸载" class="headerlink" title="类的卸载"></a>类的卸载</h3><ul>
-<li>系统自带（</li>
+<li>系统自带</li>
 </ul>
 <p>系统加载器、扩展加载器、根加载器，这些加载器加载的类是不会被卸载</p>
 <ul>
