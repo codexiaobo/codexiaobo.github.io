@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/./images/favicon32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/./images/favicon16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;codexiaobo.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Pisces&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;},&quot;path&quot;:&quot;&#x2F;search.xml&quot;,&quot;localsearch&quot;:{&quot;enable&quot;:true,&quot;trigger&quot;:&quot;auto&quot;,&quot;top_n_per_article&quot;:1,&quot;unescape&quot;:false,&quot;preload&quot;:false}}</script><script src="/js/config.js"></script>
+
+<link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="jvm(二)">
+<meta property="og:url" content="https://codexiaobo.github.io/posts/2855935176/index.html">
+<meta property="og:site_name" content="Code小博">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221110153753.2ld32fgfn680.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/JVM%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE.1p3lqjlcrk0w.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E4%BC%98%E5%8A%BF.6i5wbm0kv3s.webp">
+<meta property="article:published_time" content="2022-11-13T11:58:44.000Z">
+<meta property="article:modified_time" content="2022-11-13T11:59:33.011Z">
+<meta property="article:author" content="xiaobo">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="jvm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221110153753.2ld32fgfn680.webp">
+
+
+<link rel="canonical" href="https://codexiaobo.github.io/posts/2855935176/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;codexiaobo.github.io&#x2F;posts&#x2F;2855935176&#x2F;&quot;,&quot;path&quot;:&quot;posts&#x2F;2855935176&#x2F;&quot;,&quot;title&quot;:&quot;jvm(二)&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>jvm(二) | Code小博</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Code小博" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+  
+  <a href="https://codexiaobo.github.io" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+  
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Code小博</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JVM"><span class="nav-number">1.</span> <span class="nav-text">JVM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM%E5%9B%9B%E7%A7%8D%E5%BC%95%E7%94%A8"><span class="nav-number">1.1.</span> <span class="nav-text">JVM四种引用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%BA%E5%BC%95%E7%94%A8"><span class="nav-number">1.1.1.</span> <span class="nav-text">强引用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%BA%E5%BC%95%E7%94%A8%E5%AF%B9%E8%B1%A1%E5%A4%B1%E6%95%88"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">强引用对象失效</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AF%E5%BC%95%E7%94%A8"><span class="nav-number">1.1.2.</span> <span class="nav-text">软引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%B1%E5%BC%95%E7%94%A8"><span class="nav-number">1.1.3.</span> <span class="nav-text">弱引用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E5%BC%95%E7%94%A8"><span class="nav-number">1.1.4.</span> <span class="nav-text">虚引用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">流程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AF%E5%BC%95%E7%94%A8%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98%E7%9A%84%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5"><span class="nav-number">1.2.</span> <span class="nav-text">软引用实现缓存的淘汰策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE"><span class="nav-number">1.3.</span> <span class="nav-text">双亲委派</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM%E8%87%AA%E5%B8%A6%E7%9A%84%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="nav-number">1.3.1.</span> <span class="nav-text">JVM自带的加载器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="nav-number">1.3.2.</span> <span class="nav-text">用户自定义的加载器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E8%AF%A6%E8%A7%A3"><span class="nav-number">1.3.3.</span> <span class="nav-text">自定义类加载器详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%BC%94%E7%A4%BA"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">演示</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6%E4%BC%98%E5%8A%BF"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">双亲委派机制优势</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB"><span class="nav-number">1.3.3.3.</span> <span class="nav-text">继承关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%9E%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB"><span class="nav-number">1.3.3.4.</span> <span class="nav-text">非继承关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OSGI"><span class="nav-number">1.3.3.5.</span> <span class="nav-text">OSGI</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E5%8D%B8%E8%BD%BD"><span class="nav-number">1.3.4.</span> <span class="nav-text">类的卸载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM%E7%9B%91%E6%B5%8B%E5%B7%A5%E5%85%B7"><span class="nav-number">1.3.5.</span> <span class="nav-text">JVM监测工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC%E8%B0%83%E4%BC%98"><span class="nav-number">1.3.6.</span> <span class="nav-text">GC调优</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GC%E7%9A%84%E5%8F%91%E5%B1%95"><span class="nav-number">1.3.6.1.</span> <span class="nav-text">GC的发展</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%80%E5%8D%95%E7%9A%84%E4%B8%80%E4%B8%AA%E5%B0%8F%E9%97%AE%E9%A2%98"><span class="nav-number">1.3.6.2.</span> <span class="nav-text">简单的一个小问题</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="xiaobo"
+      src="/images/xiaobo.png">
+  <p class="site-author-name" itemprop="name">xiaobo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">82</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://codexiaobo.github.io/" title="GitHub → https:&#x2F;&#x2F;codexiaobo.github.io"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/6557440727/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;6557440727&#x2F;profile?rightmod&#x3D;1&amp;wvr&#x3D;6&amp;mod&#x3D;personinfo&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.baidu.com/" title="https:&#x2F;&#x2F;www.baidu.com" rel="noopener" target="_blank">百度</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/" title="https:&#x2F;&#x2F;www.zhihu.com" rel="noopener" target="_blank">知乎</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.csdn.net/" title="https:&#x2F;&#x2F;www.csdn.net" rel="noopener" target="_blank">CSDN</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bilibili.com/" title="https:&#x2F;&#x2F;www.bilibili.com" rel="noopener" target="_blank">哔哩哔哩</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+	<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=440208476&auto=1&height=66"></iframe>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/2855935176/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/xiaobo.png">
+      <meta itemprop="name" content="xiaobo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code小博">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          jvm(二)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-11-13 19:58:44 / 修改时间：19:59:33" itemprop="dateCreated datePublished" datetime="2022-11-13T19:58:44+08:00">2022-11-13</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>12k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>11 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221110153753.2ld32fgfn680.webp" alt="微信图片_20221110153753"></p>
+<!--sleep-->
+<span id="more"></span>
+
+<h1 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h1><h2 id="JVM四种引用"><a href="#JVM四种引用" class="headerlink" title="JVM四种引用"></a>JVM四种引用</h2><h3 id="强引用"><a href="#强引用" class="headerlink" title="强引用"></a>强引用</h3><p>对象引用直接new</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Object obj = <span class="keyword">new</span> Object();</span><br></pre></td></tr></table></figure>
+
+<h4 id="强引用对象失效"><a href="#强引用对象失效" class="headerlink" title="强引用对象失效"></a>强引用对象失效</h4><ul>
+<li>生命周期结束(作用域失效)</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span></span>&#123;</span><br><span class="line">  </span><br><span class="line">  Object object = <span class="keyword">new</span> Object() ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>//当方法执行完毕后，强引用指向的 引用而对象new Object()就会等待被GC回收</p>
+<ul>
+<li>引用被置为null</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">object = <span class="keyword">null</span></span><br></pre></td></tr></table></figure>
+
+<p>没有任何引用指向new Object() 因此，new Object() 就会等待被GC回收</p>
+<p><strong>除了以上两个情况以外，其他任何时候GC都不会回收强引用对象</strong></p>
+<h3 id="软引用"><a href="#软引用" class="headerlink" title="软引用"></a>软引用</h3><p>如果内存充足，GC不会随便的回收软引用对象；如果JVM内存不足，则GC就会主动的回收软引用对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">//        实例化软引用类</span></span><br><span class="line">        SoftReference&lt;Object&gt; softReference = <span class="keyword">new</span> SoftReference&lt;&gt;(<span class="keyword">new</span> Object());</span><br><span class="line"></span><br><span class="line"><span class="comment">//        声明一个List集合，模仿内存溢出</span></span><br><span class="line">        List&lt;<span class="keyword">byte</span>[]&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread( () -&gt;&#123;</span><br><span class="line">            <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line"><span class="comment">//                    这块让他睡一会是为了给这个线程一点时间，让他能刷新数据到主内存中进行线程之间的数据同步</span></span><br><span class="line">                    Thread.sleep(<span class="number">10</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);</span><br><span class="line">                &#125;</span><br><span class="line"><span class="comment">//                如果软引用为空，则回收</span></span><br><span class="line">                <span class="keyword">if</span> (softReference.get() == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    System.out.println(<span class="string">&quot;softReference 软引用对象已经被回收了&quot;</span>);</span><br><span class="line">                    System.exit(<span class="number">0</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,<span class="string">&quot;线程1&quot;</span>).start();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//        模仿内存溢出</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">//            如果内存没有溢出，则</span></span><br><span class="line">            <span class="keyword">if</span> (softReference.get() != <span class="keyword">null</span>)&#123;</span><br><span class="line"></span><br><span class="line">                list.add(<span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span> * <span class="number">1024</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>来自<code>java.lang.ref.SoftReference</code></p>
+<p><code>get()</code> 返回 所引用的对象</p>
+<h3 id="弱引用"><a href="#弱引用" class="headerlink" title="弱引用"></a>弱引用</h3><p>只要GC执行，就会将弱引用对象进行回收</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WeakReferenceTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 测试弱引用</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> args</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">//        实例化weakReference 弱引用对象</span></span><br><span class="line">        WeakReference&lt;Object&gt; weakReference = <span class="keyword">new</span> WeakReference&lt;&gt;(<span class="keyword">new</span> Object());</span><br><span class="line"></span><br><span class="line"><span class="comment">//        判断是否被回收</span></span><br><span class="line">        System.out.println(weakReference.get() == <span class="keyword">null</span> ? <span class="string">&quot;已被回收&quot;</span> : <span class="string">&quot;没被回收&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//        让虚拟机进行一次回收 这个方法概率实践 有可能生效 有可能失效</span></span><br><span class="line">        System.gc();</span><br><span class="line"></span><br><span class="line">        System.out.println(weakReference.get() == <span class="keyword">null</span> ? <span class="string">&quot;已被回收&quot;</span> : <span class="string">&quot;没被回收&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>来自<code>java.lang.ref.WeakReference</code></p>
+<h3 id="虚引用"><a href="#虚引用" class="headerlink" title="虚引用"></a>虚引用</h3><p>是否使用虚引用，和引用对象本身没有任何关系，无法通过虚引用来获取对象本身</p>
+<p>来自 <code>java.lang.ref.PhantomReference</code></p>
+<p>虚引用不会单独使用，一般会和 引用队列（<code>java.lang.ref.ReferenceQueue</code>）一起使用</p>
+<h4 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h4><p>当gc回收一个对象，如果gc发现 此对象还有一个虚引用，就会将虚引用放入到 引用队列中，之后（当虚引用出队之后）再去回收该对象。因此，我们可以使用 虚引用+引用对象 实现：在对象被gc之前，进行一些额外的其他操作</p>
+<p>GC –&gt;如果有虚引用–&gt;虚引用入队–&gt;虚引用出队–&gt; 回收对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PhantomReferenceTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line"><span class="comment">//        实例化要引用类</span></span><br><span class="line">        W w = <span class="keyword">new</span> W();</span><br><span class="line"><span class="comment">//        实例化引用队列</span></span><br><span class="line">        ReferenceQueue referenceQueue = <span class="keyword">new</span> ReferenceQueue();</span><br><span class="line"><span class="comment">//        实例化虚引用，需要一个引用队列</span></span><br><span class="line">        PhantomReference&lt;W&gt; phantomReference = <span class="keyword">new</span> PhantomReference&lt;&gt;(w,referenceQueue);</span><br><span class="line"></span><br><span class="line"><span class="comment">//        将虚引用对象设置为空</span></span><br><span class="line">        w = <span class="keyword">null</span>;</span><br><span class="line"><span class="comment">//        执行垃圾回收</span></span><br><span class="line">        System.gc();</span><br><span class="line"><span class="comment">//        睡一会，缓存</span></span><br><span class="line">        Thread.sleep(<span class="number">10</span>);</span><br><span class="line"><span class="comment">//        GC-&gt; 虚引用-&gt;入队-&gt;出队-&gt;</span></span><br><span class="line">        System.out.println(referenceQueue.poll());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">W</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>特殊情况</li>
+</ul>
+<p>虚引用对象重写了finalize()，那么JVM会延迟 虚引用的入队时间</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PhantomAndFinalize</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line"><span class="comment">//        实例化要引用类</span></span><br><span class="line">        E e = <span class="keyword">new</span> E();</span><br><span class="line"><span class="comment">//        实例化引用队列</span></span><br><span class="line">        ReferenceQueue referenceQueue = <span class="keyword">new</span> ReferenceQueue();</span><br><span class="line"><span class="comment">//        实例化虚引用，需要一个引用队列</span></span><br><span class="line">        PhantomReference&lt;W&gt; phantomReference = <span class="keyword">new</span> PhantomReference&lt;&gt;(e,referenceQueue);</span><br><span class="line"></span><br><span class="line"><span class="comment">//        将虚引用对象设置为空</span></span><br><span class="line">        e = <span class="keyword">null</span>;</span><br><span class="line"><span class="comment">//        执行垃圾回收</span></span><br><span class="line">        System.gc();</span><br><span class="line"><span class="comment">//        睡一会，缓存</span></span><br><span class="line">        Thread.sleep(<span class="number">10</span>);</span><br><span class="line"><span class="comment">//        GC-&gt; 虚引用-&gt;入队-&gt;出队-&gt;</span></span><br><span class="line">        System.out.println(referenceQueue.poll());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">E</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.finalize();</span><br><span class="line">        System.out.println(<span class="string">&quot;被回收之前的操作&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="软引用实现缓存的淘汰策略"><a href="#软引用实现缓存的淘汰策略" class="headerlink" title="软引用实现缓存的淘汰策略"></a>软引用实现缓存的淘汰策略</h2><p>java中可以用引用实现 淘汰策略</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SoftCache</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    Map&lt;String, SoftReference&lt;ObjectTest&gt;&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">//    逻辑</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setCaches</span><span class="params">(String id,ObjectTest obj)</span></span>&#123;</span><br><span class="line">        map.put( id,<span class="keyword">new</span> SoftReference&lt;ObjectTest&gt;(obj));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">ObjectTest <span class="title">getCache</span><span class="params">(String id)</span></span>&#123;</span><br><span class="line">        SoftReference&lt;ObjectTest&gt; softRef = map.get(id) ;</span><br><span class="line">        <span class="keyword">return</span>  softRef == <span class="keyword">null</span> ?  <span class="keyword">null</span> : softRef.get()  ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ObjectTest</span></span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="双亲委派"><a href="#双亲委派" class="headerlink" title="双亲委派"></a>双亲委派</h2><p>当一个加载器要加载类的时候，自己先不加载，而是逐层向上交由双亲去加载；当双亲中的某一个加载器 加载成功后，再向下返回成功。如果所有的双亲和自己都无法加载，则报异常</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/JVM%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE.1p3lqjlcrk0w.webp" alt="JVM双亲委派"></p>
+<h3 id="JVM自带的加载器"><a href="#JVM自带的加载器" class="headerlink" title="JVM自带的加载器"></a>JVM自带的加载器</h3><p>在JVM的内部所包含，C++</p>
+<ul>
+<li>根加载器,Bootstrap</li>
+</ul>
+<p>加载 <code>jre\lib\rt.jar</code> 包含平时编写代码时 大部分jdk api,指定加载某一个jar <code>-Xbootclasspath=a.jar</code></p>
+<ul>
+<li>扩展类加载器，Extension</li>
+</ul>
+<p><code>..\jre\lib\ext\\\*.jar</code>指定加载某一个jar <code>-Djava.ext.dirs= ....</code></p>
+<ul>
+<li>AppClassLoader/SystemClassLoader 系统加载器/应用加载器</li>
+</ul>
+<p>加载classpath，指定加载 <code>-Djava.class.path= 类/jar</code></p>
+<h3 id="用户自定义的加载器"><a href="#用户自定义的加载器" class="headerlink" title="用户自定义的加载器"></a>用户自定义的加载器</h3><p>独立于JVM之外的加载器,Java</p>
+<p>都是抽象类java.lang.ClassLoader的子类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyLoader</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        Class&lt;?&gt; clazz = Class.forName(<span class="string">&quot;java.lang.Object&quot;</span>);</span><br><span class="line"></span><br><span class="line">        ClassLoader classLoader = clazz.getClassLoader();</span><br><span class="line"></span><br><span class="line">        System.out.println(classLoader);</span><br><span class="line"></span><br><span class="line">        Class&lt;?&gt; clazz2 = Class.forName(<span class="string">&quot;com.dream.xiaobo.loader.Loader1&quot;</span>);</span><br><span class="line"></span><br><span class="line">        ClassLoader classLoader2 = clazz2.getClassLoader();</span><br><span class="line"></span><br><span class="line">        System.out.println(classLoader2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Loader1</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyLoader2</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        Class&lt;?&gt; clazz = Class.forName(<span class="string">&quot;java.lang.String&quot;</span>);</span><br><span class="line"></span><br><span class="line">        ClassLoader classLoader = clazz.getClass().getClassLoader();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;classLoader:&quot;</span> + classLoader);</span><br><span class="line">        System.out.println(<span class="string">&quot;====&quot;</span>);</span><br><span class="line">        ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;systemClassLoader:&quot;</span> + systemClassLoader);</span><br><span class="line">        System.out.println(<span class="string">&quot;====&quot;</span>);</span><br><span class="line">        ClassLoader parent = systemClassLoader.getParent();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;parent:&quot;</span> + parent);</span><br><span class="line">        System.out.println(<span class="string">&quot;====&quot;</span>);</span><br><span class="line">        ClassLoader parent2 = parent.getParent();</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">&quot;parent2:&quot;</span> + parent2);</span><br><span class="line">        System.out.println(<span class="string">&quot;====&quot;</span>);</span><br><span class="line"><span class="comment">//        ClassLoader parent3 = parent2.getParent();</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//        System.out.println(&quot;parent3:&quot; + parent3);</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        Enumeration&lt;URL&gt; resources = systemClassLoader.getResources(<span class="string">&quot;./com/dream/xiaobo/loader/MyLoader2.class&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (resources.hasMoreElements()) &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;url:&quot;</span> + resources.nextElement());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果类是rt.jar中的，则该类是被bootstrap（根加载器）加载；如果是classpath中的类（自己编写的类），则该类是被AppClassLoader加载</p>
+<p><code>定义类加载</code>：最终实际加载类的加载器  </p>
+<p><code>初始化类加载类</code>：直接面对加载任务的类</p>
+<h3 id="自定义类加载器详解"><a href="#自定义类加载器详解" class="headerlink" title="自定义类加载器详解"></a>自定义类加载器详解</h3><p>二进制名<code>binary names</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;java.lang.String&quot;</span></span><br><span class="line"><span class="string">&quot;javax.swing.JSpinner$DefaultEditor&quot;</span></span><br><span class="line"><span class="string">&quot;java.security.KeyStore$Builder$FileBuilder$1&quot;</span></span><br><span class="line"><span class="string">&quot;java.net.URLClassLoader$3$1&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>$</code>代表内部类：</p>
+<p><code>$数字</code>：第几个匿名内部类</p>
+<p>数组的加载器类型和数组元素的加载器类型是相同</p>
+<p>原声类型的数组是没有类加载器的  </p>
+<p>如果加载的结果是null 可能是此类没有加载器(int[]) ， 也可能是 加载类型是“根加载器”</p>
+<p>xxx.class文件可能是在本地存在，也可能是来自于网络 或者在运行时动态产生(jsp)</p>
+<h4 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyClassLoaderImpl</span>  <span class="keyword">extends</span> <span class="title">ClassLoader</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String path ; <span class="comment">//null</span></span><br><span class="line">    <span class="comment">//优先使用的类加载器是：getSystemClassLoader()</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyClassLoaderImpl</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyClassLoaderImpl</span><span class="params">(ClassLoader parent)</span></span>&#123;<span class="comment">//扩展类加载器</span></span><br><span class="line">        <span class="keyword">super</span>(parent);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="comment">//com.yq.xx.class</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Class <span class="title">findClass</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;加载findClass&quot;</span>);</span><br><span class="line">        <span class="keyword">byte</span>[] b = loadClassData(name);</span><br><span class="line">        <span class="keyword">return</span> defineClass(name, b, <span class="number">0</span>, b.length);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//“com/yq/xxx.class” -&gt;  byte[]</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">byte</span>[] loadClassData(String name)  &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;加载loadClassData&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span>(path != <span class="keyword">null</span>)&#123;<span class="comment">//name: com.yanqun.parents.MyDefineCL</span></span><br><span class="line">            name = path+ name.substring(  name.lastIndexOf(<span class="string">&quot;.&quot;</span>)+<span class="number">1</span>  )+<span class="string">&quot;.class&quot;</span> ;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="comment">//classpath -&gt;APPClassLoader</span></span><br><span class="line">            name =  dotToSplit(<span class="string">&quot;out.production.volatile.&quot;</span>+name)+<span class="string">&quot;.class&quot;</span> ;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">byte</span>[] result = <span class="keyword">null</span> ;</span><br><span class="line">        FileInputStream inputStream = <span class="keyword">null</span> ;</span><br><span class="line">        ByteArrayOutputStream output = <span class="keyword">null</span> ;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            inputStream = <span class="keyword">new</span> FileInputStream( <span class="keyword">new</span> File(  name)  );</span><br><span class="line">            <span class="comment">//inputStream -&gt; byte[]</span></span><br><span class="line">            output = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">2</span>];</span><br><span class="line">            <span class="keyword">int</span> len = -<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">while</span> ((len = inputStream.read(buf)) != -<span class="number">1</span>) &#123;</span><br><span class="line">                output.write(buf, <span class="number">0</span>, len);</span><br><span class="line">            &#125;</span><br><span class="line">            result = output.toByteArray();</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace(); ;</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span>(inputStream != <span class="keyword">null</span> )&#123;</span><br><span class="line">                    inputStream.close();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(output != <span class="keyword">null</span> )&#123;</span><br><span class="line">                    output.close();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result ;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">//自定义加载器的对象</span></span><br><span class="line">        MyClassLoaderImpl myClassLoader = <span class="keyword">new</span> MyClassLoaderImpl();<span class="comment">//默认在双亲委派时，会根据正规流程：系统——》扩展-&gt;根</span></span><br><span class="line"></span><br><span class="line">        myClassLoader.path = <span class="string">&quot;d:/&quot;</span> ;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//MyClassLoaderImpl myClassLoader = new MyClassLoaderImpl();//直接指定某个 具体的的委派</span></span><br><span class="line">        Class&lt;?&gt; aClass = myClassLoader.loadClass(<span class="string">&quot;com.dream.xiaobo.loader.MyDefineCL&quot;</span>);</span><br><span class="line">        System.out.println(aClass.getClassLoader());</span><br><span class="line"><span class="comment">//        MyDefineCL myDefineCL = (MyDefineCL)( aClass.newInstance()) ;</span></span><br><span class="line"><span class="comment">//        myDefineCL.say();</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">dotToSplit</span><span class="params">(String clssName)</span></span>&#123;  <span class="keyword">return</span> clssName.replace(<span class="string">&quot;.&quot;</span>,<span class="string">&quot;/&quot;</span>) ;  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyDefineCL</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">say</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>总结</li>
+</ul>
+<p>继承ClassLoader，重写的 findClass()</p>
+<p><code>findClass(String name)&#123;...&#125;</code> ：是全类名的形式  a.b.c.class，并且开头 是： 包名.类名.class</p>
+<p><code>loadClassData(String name)&#123;...&#125;</code> ：name所代表的文件内容-&gt;byte[] ,是文件形式的字符串a/b/c.class，并且开头out.production..</p>
+<p> .class文件从classpath中删除，之后才可能用到 自定义类加载器；否在classpath中的.class会被 APPClassLoader加载</p>
+<p><code>loadClass() -&gt;findClass()-&gt;loadClassData()</code>: 代码执行流程</p>
+<p>类加载器只会把同一个类加载一次，同一个class文件加载后的位置</p>
+<p>先委托APPClassLoader加载，APPClassLoader会在classpath中寻找是否存在，如果存在则直接加载；如果不存在，才有可能交给自定义加载器加载</p>
+<p>在双亲委派体系中，下层的加载器是通过parent引用上层的加载器。即在双亲委派体系中，各个加载器之间不是继承关系</p>
+<h4 id="双亲委派机制优势"><a href="#双亲委派机制优势" class="headerlink" title="双亲委派机制优势"></a>双亲委派机制优势</h4><p>可以防止用户自定义的类和rt.jar中的类重名而造成的混乱</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/java/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E4%BC%98%E5%8A%BF.6i5wbm0kv3s.webp" alt="双亲委派优势"></p>
+<h4 id="继承关系"><a href="#继承关系" class="headerlink" title="继承关系"></a>继承关系</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">B</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">B</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;B被加载了，加载器是： &quot;</span>+ <span class="keyword">this</span>.getClass().getClassLoader());<span class="comment">//对象使用之前，必然先把此对象对应的类加载</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> <span class="keyword">extends</span>  <span class="title">B</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">A</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>();</span><br><span class="line">        System.out.println(<span class="string">&quot;A被加载了，加载器是： &quot;</span>+ <span class="keyword">this</span>.getClass().getClassLoader());<span class="comment">//对象使用之前，必然先把此对象对应的类加载</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//AppClassLoader.class : TestMyClassLoader2</span></span><br><span class="line"><span class="comment">//自定义加载器: A.class/B.class</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestMyClassLoader2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        MyClassLoaderImpl myClassLoader = <span class="keyword">new</span> MyClassLoaderImpl() ;</span><br><span class="line">        <span class="comment">//自定义加载路径</span></span><br><span class="line">        myClassLoader.path = <span class="string">&quot;d:/&quot;</span> ;</span><br><span class="line">        Class&lt;?&gt; aClass = myClassLoader.loadClass(<span class="string">&quot;com.dream.xiaobo.extendss.A&quot;</span>);</span><br><span class="line">        Object aObject = aClass.newInstance();<span class="comment">//newInstance()会调用 该类的构造方法(new 构造方法())</span></span><br><span class="line">        System.out.println(aObject);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">存在继承关系</span><br><span class="line"></span><br><span class="line">A.class:  classpath</span><br><span class="line">B.class:   classpath</span><br><span class="line">原因</span><br><span class="line">同一个AppClassLoader 会同时加载A.class和B.class</span><br><span class="line"></span><br><span class="line">--</span><br><span class="line">A.class:   d:\</span><br><span class="line">B.class:   classpath</span><br><span class="line">原因</span><br><span class="line">A.class：自定义加载器加载</span><br><span class="line">B.class：被AppClassLoader加载</span><br><span class="line">因此，加载A.class和B.class的不是同一个加载器</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">A.class:    classpath</span><br><span class="line">B.class:    d:\	</span><br><span class="line">NoClassDefFoundError</span><br><span class="line">原因:A.class: 被AppClassLoader加载  B.class: 自定义加载器加载</span><br><span class="line">因此，加载A.class和B.class的不是同一个加载器</span><br><span class="line"></span><br><span class="line">--</span><br><span class="line">A.class	d:\</span><br><span class="line">B.class d:\</span><br><span class="line">TestMyClassLoader2 can not access a member of class A with modifiers &quot;public&quot;</span><br><span class="line">A.class/B.class: 自定义加载器加载</span><br><span class="line">原因是 main()方法所在类在 工程中（APPClassLoader），而A和B不在工程中（自定义加载器）。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">造成这些异常的核心原因： 命名空间（不是由同一个类加载器所加载）</span><br></pre></td></tr></table></figure>
+
+<h4 id="非继承关系"><a href="#非继承关系" class="headerlink" title="非继承关系"></a>非继承关系</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Y</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Y</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Y被加载了，加载器是： &quot;</span>+ <span class="keyword">this</span>.getClass().getClassLoader());<span class="comment">//对象使用之前，必然先把此对象对应的类加载</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">X</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">X</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Y() ;<span class="comment">//加载Y（系统加载器）</span></span><br><span class="line">        System.out.println(<span class="string">&quot;X被加载了，加载器是： &quot;</span>+ <span class="keyword">this</span>.getClass().getClassLoader());<span class="comment">//对象使用之前，必然先把此对象对应的类加载</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//AppClassLoader.class : TestMyClassLoader2</span></span><br><span class="line"><span class="comment">//自定义加载器: A.class/B.class</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestMyClassLoader3</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        MyClassLoaderImpl myClassLoader = <span class="keyword">new</span> MyClassLoaderImpl() ;</span><br><span class="line">        <span class="comment">//自定义加载路径</span></span><br><span class="line">        myClassLoader.path = <span class="string">&quot;d:/&quot;</span> ;</span><br><span class="line">        <span class="comment">//程序第一次加载时（X），使用的是  自定义加载器</span></span><br><span class="line">        Class&lt;?&gt; aClass = myClassLoader.loadClass(<span class="string">&quot;com.dream.xiaobo.extendss.X&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        Object aObject = aClass.newInstance();<span class="comment">//newInstance()会调用 该类的构造方法(new 构造方法())</span></span><br><span class="line">        System.out.println(aObject);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">没有继承关系</span><br><span class="line"></span><br><span class="line">X.class:  D:		自定义加载器</span><br><span class="line">Y.class:  classpath	系统加载器</span><br><span class="line"></span><br><span class="line">Y被加载了，加载器是： AppClassLoader</span><br><span class="line">X被加载了，加载器是： MyClassLoaderImpl</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">因为下层可以调用上层</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">X.class:  classpath  系统加载器</span><br><span class="line">Y.class:  D:	    自定义加载器</span><br><span class="line"></span><br><span class="line">java.lang.NoClassDefFoundError</span><br></pre></td></tr></table></figure>
+
+
+<p>如果存在继承关系： 继承的双方（父类、子类）都必须是同一个加载器，否则出错</p>
+<p>如果不存在继承关系： 子类加载器可以访问父类加载器加载的类（自定义加载器，可以访问到 系统加载器加载的Y类）；反之不行（父类加载器 不能访问子类加载器）</p>
+<h4 id="OSGI"><a href="#OSGI" class="headerlink" title="OSGI"></a>OSGI</h4><ul>
+<li><p>网状结构的加载结构</p>
+</li>
+<li><p>屏蔽掉硬件的异构性</p>
+</li>
+</ul>
+<p>可以将项目部署在网络上，可以在A节点上 远程操作B节点。在操作上，可以对硬件无感。也可以在A节点上 对B节点上的项目进行运维、部署，并且立项情况下  在维护的期间，不需要暂时、重启。</p>
+<h3 id="类的卸载"><a href="#类的卸载" class="headerlink" title="类的卸载"></a>类的卸载</h3><ul>
+<li>系统自带（</li>
+</ul>
+<p>系统加载器、扩展加载器、根加载器，这些加载器加载的类是不会被卸载</p>
+<ul>
+<li>用户自定义的加载器</li>
+</ul>
+<p>会被GC卸载GC</p>
+<h3 id="JVM监测工具"><a href="#JVM监测工具" class="headerlink" title="JVM监测工具"></a>JVM监测工具</h3><p><code>jps</code>: 查看Java进程 （java命令）</p>
+<p><code>jstat</code>:只能查看当前时刻的内存情况；可以查看到 新生代、老年代中的内存使用情况</p>
+<p><code>jmap</code>：查看堆内存的占用情况；也可以执行dump操作</p>
+<p><code>jconsole</code>:图形的监控界面</p>
+<p>如果通过jconsole中的”执行gc”按钮发现 GC回收的内存太少，就说明当前进程是存在问题的（至少是可以被优化的）</p>
+<p><code>jvisualvm</code>:  监视 - 堆Dump -查找最大对象，从中可以发现 当前进程中是哪个对象 占据了最大的内存，从而对这个对象进行分析。</p>
+<p>通过VM参数实现： 当内存溢出时，自动将溢出时刻的内存dump下来。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-Xmx100m</span><br><span class="line">-Xms100m</span><br><span class="line">-XX:+HeapDumpOnOutOfMemoryError</span><br></pre></td></tr></table></figure>
+
+<h3 id="GC调优"><a href="#GC调优" class="headerlink" title="GC调优"></a>GC调优</h3><p>调优实际是是一种取舍，以xx换xx的策略。因此在调优之前，必须明确方向：低延迟？高吞吐量？</p>
+<p>在已知条件相同的前提下，牺牲低延迟 来换取 高吞吐量，或者反之。</p>
+<h4 id="GC的发展"><a href="#GC的发展" class="headerlink" title="GC的发展"></a>GC的发展</h4><p><strong>JVM默认的GC</strong></p>
+<p>CMS GC（在jdk9以后被逐步废弃） –&gt; G1 GC(jdk9) –&gt; Z GC(jdk11)</p>
+<ul>
+<li>Serial GC:</li>
+</ul>
+<p>串行GC，是一种在单核环境下的串行回收器。当GC回收的时刻，其他线程必须等待。一般不会使用。</p>
+<ul>
+<li>Parallel GC：</li>
+</ul>
+<p>在Serial 的基础上，使用了多线程技术，提高吞吐量。</p>
+<ul>
+<li>CMS GC</li>
+</ul>
+<p>CMS使用了多线程技术，使用<code>标记清除算法</code>，可以极大提升效率，在低延迟上有很大的提升，CMS GC繁琐，参数太多</p>
+<ul>
+<li>G1 GC</li>
+</ul>
+<p>jdk9开始使用的默认GC。将堆内存划分为很多大小相等region，并会对这些区域的使用状态进行标记。以便GC在回收时，能够快速的定位出哪些region是空闲的，哪些是有垃圾对象，从而提升GC的效率。G1使用的算法是<code>标记整理算法</code></p>
+<ul>
+<li>Z GC</li>
+</ul>
+<p>jdk11开始提供全新的GC。回收TB级别的垃圾 在毫秒范围。</p>
+<p><strong>根据生命周期划分</strong></p>
+<ul>
+<li>Minor GC</li>
+</ul>
+<p>回收新生代中的对象</p>
+<ul>
+<li>Full GC</li>
+</ul>
+<p>回收整个堆空间（新生代、老年代）</p>
+<h4 id="简单的一个小问题"><a href="#简单的一个小问题" class="headerlink" title="简单的一个小问题"></a>简单的一个小问题</h4><ul>
+<li>如果通过监测工具发现Minor GC和Full GC都在频繁的回收，如何优化？</li>
+</ul>
+<p><code>思路</code>：Minor GC –&gt; 短生命周期的对象太多了 –&gt; 造成逃逸到老年代中的对象越多 –&gt;  新生代多+老年代多 –&gt; Full GC </p>
+<p><code>解决办法</code>：Minor GC 可以尝试调大 新生代的最大空间，再调大 新生代晋升到老年代的阈值，从而降低  短生命周期的对象 从新生代转移到老年代的概率</p>
+<p><strong>正确的开始 微小的长进 然后持续 嘿 我是小博 带你一起看我目之所及的世界……</strong></p>
+
+    </div>
+	<div>
+	
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束 <i class="fa fa-paw"></i> 感谢您的阅读-------------</div>
+    
+</div>
+
+     
+	</div>
+	
+	<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/posts/2855935176/">jvm(二)</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a>小博</p>
+  <p><span>发布时间:</span>2022年11月13日 - 19:58</p>
+  <p><span>最后更新:</span>2022年11月13日 - 19:59</p>
+  <p><span>原始链接:</span><a href="/posts/2855935176/" title="jvm(二)">https://codexiaobo.github.io/posts/2855935176/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://codexiaobo.github.io/posts/2855935176/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+      $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+        });
+    });  
+</script>
+
+
+      
+	</div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>学习技术分享、感谢您的支持</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="xiaobo 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="xiaobo 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"># java</a>
+              <a href="/tags/jvm/" rel="tag"># jvm</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/3370054281/" rel="prev" title="JVM 一">
+                  <i class="fa fa-chevron-left"></i> JVM 一
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaobo</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">828k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">12:33</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+<span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+<script>
+    var now = new Date(); 
+    function createtime() { 
+        var grt= new Date("06/07/2021 10:15:49");//在此处修改你的建站时间，格式：月/日/年 时:分:秒
+        now.setTime(now.getTime()+250); 
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 "; 
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+    } 
+setInterval("createtime()",250);
+</script>
+
+
+
+
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+ 
+  
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+
+ 
+</body>
+</html>
