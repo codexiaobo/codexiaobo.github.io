@@ -1,6 +1,217 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>MySQL进阶 一</title>
+    <url>/posts/2619773061/</url>
+    <content><![CDATA[<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221201204413.3qgwfd5qr3y0.webp" alt="微信图片_20221201204413"></p>
+<!--sleep-->
+
+<span id="more"></span>
+
+<h1 id="Mysql高级进阶"><a href="#Mysql高级进阶" class="headerlink" title="Mysql高级进阶"></a>Mysql高级进阶</h1><h2 id="Mysql架构"><a href="#Mysql架构" class="headerlink" title="Mysql架构"></a>Mysql架构</h2><p><code>数据库</code>：按照数据结构来组织、存储和管理数据的仓库，通常由数据库管理系统进行管理</p>
+<p><code>数据库管理软件（RDBMS）</code>：就是我们说的数据库管理系统软件，他强调软件</p>
+<p><code>数据库实例</code>：启动数据库软件，在内存中运行一个独立进程，用来操作数据，这个正在运行的进程就是一个数据库实例，理论上可以在一台电脑上启动多个数据库实例，当然要监听在不同的端口</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/mysql%E6%9E%B6%E6%9E%84%E5%9B%BE.3qr8mchi2ua0.webp" alt="mysql架构图"></p>
+<p>图片来源于网络</p>
+<blockquote>
+<p>MySQL向外提供的交互接口（Connectors）</p>
+</blockquote>
+<p>Connectors组件，是MySQL向外提供的交互组件，如java,.net,php等语言可以通过该组件来操作SQL语句，实现与SQL的交互。通过客户端/服务器通信协议与MySQL建立连接。MySQL 客户端与服务端的通信方式是 “ 半双工 ”。对于每一个 MySQL 的连接，时刻都有一个线程状态来标识这个连接正在做什么</p>
+<blockquote>
+<p>管理服务组件和工具组件(Management Service &amp; Utilities)</p>
+</blockquote>
+<p>提供MySQL的各项服务组件和管理工具，如备份(Backup)，恢复(Recovery)，安全管理(Security)等功能</p>
+<blockquote>
+<p>连接池组件(Connection Pool)</p>
+</blockquote>
+<p>负责监听客户端向MySQL Server端的各种请求，接收请求，转发请求到目标模块。每个成功连接MySQL Server的客户请求都会被创建或分配一个线程，该线程负责客户端与MySQL Server端的通信，接收客户端发送的命令，传递服务端的结果信息等。</p>
+<blockquote>
+<p>SQL接口组件(SQL Interface)</p>
+</blockquote>
+<p>接收用户SQL命令，如DML,DDL和存储过程等，并将最终结果返回给用户</p>
+<blockquote>
+<p>查询分析器组件(Parser)</p>
+</blockquote>
+<p>首先分析SQL命令语法的合法性，并进行抽象语法树解析，如果sql有语法错误，会抛出异常信息。</p>
+<blockquote>
+<p>优化器组件（Optimizer）</p>
+</blockquote>
+<p>对SQL命令按照标准流程进行优化分析，mysql会按照它认为的最优方式进行优化，选用成本最小的执行计划。</p>
+<blockquote>
+<p>缓存主件（Caches &amp; Buffers）</p>
+</blockquote>
+<p>缓存和缓冲组件，这里边的内容我们后边会详细的讲解。</p>
+<blockquote>
+<p>MySQL存储引擎</p>
+</blockquote>
+<p>MySQL属于关系型数据库，而关系型数据库的存储是以表的形式进行的，对于表的创建，数据的存储，检索，更新等都是由MySQL存储引擎完成的。</p>
+<p>MySQL存储引擎在MySQL中扮演着重要角色。MySQL的存储引擎种类比较多，如MyIsam存储引擎，InnoDB存储引擎和Memory存储引擎</p>
+<p>因为mysql本身就是开源的，他允许第三方基于MySQL骨架，开发适合自己业务需求的存储引擎。从MySQL存储引擎种类上来说，可以分为官方存储引擎和第三方存储引擎，比较常用的存储引擎包括InnoDB存储引擎，MyIsam存储引擎和Momery存储引擎。</p>
+<h3 id="Mysql查询流程"><a href="#Mysql查询流程" class="headerlink" title="Mysql查询流程"></a>Mysql查询流程</h3><p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/mysql%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B.28veejxrv04k.webp" alt="mysql执行流程"></p>
+<h3 id="MySQL8-0取消了查询缓存"><a href="#MySQL8-0取消了查询缓存" class="headerlink" title="MySQL8.0取消了查询缓存"></a>MySQL8.0取消了查询缓存</h3><p>MySQL会对每条接收到的SELECT类型的查询进行hash计算，然后查找这个查询的缓存结果是否存在。hash计算和查找所带来的开销需要重视</p>
+<p>查询语句的字符大小写、空格或者注释的不同，Query Cache都会认为是不同的查询，因为他们的hash值会不同</p>
+<p>当向某个表写入数据的时候，必须将和这个表相关的所有缓存设置为失效，如果缓存内容很多，则消耗也会很大。</p>
+<h3 id="MySQLbin目录结构"><a href="#MySQLbin目录结构" class="headerlink" title="MySQLbin目录结构"></a>MySQLbin目录结构</h3><blockquote>
+<p>MySQL服务器端工具</p>
+</blockquote>
+<p><code>mysqld</code>：SQL后台保护程序(MySQL服务器进程)。该程序必须运行之后。客户端才能通过连接服务器端程序访问和操作数据库</p>
+<p><code>mysqld_safe</code>：MySQL服务脚本。mysql_safe增加了一些安全特性，如当出现错误时重启服务器，向错误日志文件写入运行时间信息</p>
+<p><code>mysql.server</code>：MySQL服务启动服本。调用mysqld_safe来启动MySQL服务</p>
+<p><code>mysql_multi</code>：服务器启动脚本，可以启动或停止系统上安装的多个服务</p>
+<p><code>myiasmchk</code>：用来描述、检查、优化和维护MyISAM表的实用工具</p>
+<p><code>mysqlbu</code>：MySQL缺陷报告脚本。它可以用来向MySQL邮件系统发送缺陷报告</p>
+<p><code>mysql_install_db</code>：用于默认权限创建MySQ授权表。通常只是在系统上首次安装MySQL时执行一次</p>
+<blockquote>
+<p>MySQL客户端工具</p>
+</blockquote>
+<p><code>mysql</code>：交互式输入SQL语句或从文件以批处理模式执行SQL语句来操作数据库管理系统，就是我们的客户端</p>
+<p><code>mysqldump</code>：将MySQL数据库转储到一个文件，可以用来备份数据库</p>
+<p><code>mysqladmin</code>：用来检索版本、进程、以及服务器的状态信息</p>
+<p><code>mysqlbinlog</code>：用于从二进制日志读取语句。在二进制日志文件中包含执行的语句，可用来帮助系统从崩溃中恢复</p>
+<p><code>mysqlcheck</code>：检查、修复、分析以及优化表的表维护</p>
+<p><code>mysqlhotcopy</code>：当服务器在运行时，快速备份MyISAM或ISAM表的工具</p>
+<p><code>mysql import</code>：使用load data infile将文本文件导入相关表的客户程序</p>
+<p><code>perror</code>：显示系统或MySQL错误代码含义的工具</p>
+<p><code>myisampack</code>：压缩MyISAP表，产生更小的只读表</p>
+<p><code>mysaqlaccess</code>：检查访问主机名、用户名和数据库组合的权限</p>
+<p><code>mysql.sock</code> 不是bin目录中的，是linux系统中的mysql文件，socket 即 Unix 域套接字文件，在类 unix 平台，客户端连接 MySQL 服务端的方式有两种，分别是 TCP/IP 方式与 socket 套接字文件方式。Unix 套接字文件连接的速度比 TCP/IP 快，但是只能连接到同一台计算机上的服务器使用。通过设置 socket 变量可配置套接字文件路径及名称，默认值为 /tmp/mysql.sock，如果mysql.sock文件误删的话，就需要重启mysql服务</p>
+<h3 id="mysql数据备份"><a href="#mysql数据备份" class="headerlink" title="mysql数据备份"></a>mysql数据备份</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">-- 备份一个表</span><br><span class="line">mysqldump -u root -p 数据库 表  &gt; ~/dump.txt</span><br><span class="line">-- 备份一个数据库</span><br><span class="line">mysqldump -u root -p 数据库  &gt; ~/dump.txt</span><br><span class="line">-- 备份所有数据库</span><br><span class="line">mysqldump -u root -p --all-databases &gt; dump.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="mysql数据恢复"><a href="#mysql数据恢复" class="headerlink" title="mysql数据恢复"></a>mysql数据恢复</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mysql -u root -p 要还原到的数据库 &lt; ~/dump.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="字符集和排序规则"><a href="#字符集和排序规则" class="headerlink" title="字符集和排序规则"></a>字符集和排序规则</h3><p>查看字符编码</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">show collation like <span class="string">&#x27;%utf8%&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>后缀</th>
+<th>英文</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>_ai</td>
+<td>accent insensitive</td>
+<td>不区分重音（è，é，ê和ë）</td>
+</tr>
+<tr>
+<td>_as</td>
+<td>accent sensitive</td>
+<td>区分重音</td>
+</tr>
+<tr>
+<td>_ci</td>
+<td>case insensitive</td>
+<td>不区分大小写</td>
+</tr>
+<tr>
+<td>_cs</td>
+<td>case sensitive</td>
+<td>区分大小写</td>
+</tr>
+<tr>
+<td>_bin</td>
+<td>binary</td>
+<td>以二进制的形式进行比较</td>
+</tr>
+</tbody></table>
+<h4 id="utf8和utf8mb4的区别"><a href="#utf8和utf8mb4的区别" class="headerlink" title="utf8和utf8mb4的区别"></a>utf8和utf8mb4的区别</h4><p><code>utf8mb3(utf-8)</code>：使用1~3个字节表示字符，utf8默认就是utf8mb3</p>
+<p><code>utf8mb4</code>：使用1~4个字节表示字符，他是utf8的超集，甚至可以存储很多,emoji表情，mysql8.0已经默认字符集设置为utf8mb4。</p>
+<p><code>character_set_server</code>和<code>collate_server</code>对全局的字符集和排序规则进行设置。这两个设置可以在配置文件中修改</p>
+<h3 id="mysql修改配置"><a href="#mysql修改配置" class="headerlink" title="mysql修改配置"></a>mysql修改配置</h3><h4 id="查看全局配置变量"><a href="#查看全局配置变量" class="headerlink" title="查看全局配置变量"></a>查看全局配置变量</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">show global variables like <span class="string">&#x27;%wait_timeout%&#x27;</span>;</span><br><span class="line">select @@global.wait_timeout;</span><br></pre></td></tr></table></figure>
+
+<h4 id="修改配置变量"><a href="#修改配置变量" class="headerlink" title="修改配置变量"></a>修改配置变量</h4><ul>
+<li>修改配置文件，然后重新启动</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># vi /etc/my.cnf</span><br><span class="line">[mysqld]</span><br><span class="line">wait_timeout=10000</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>set方式</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">set</span> global wait_timeout=10000;</span><br><span class="line"><span class="built_in">set</span> @@global.wait_timeout=10000;</span><br></pre></td></tr></table></figure>
+
+<h4 id="设置当前会话"><a href="#设置当前会话" class="headerlink" title="设置当前会话"></a>设置当前会话</h4><ul>
+<li>修改</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mysql&gt; <span class="built_in">set</span> wait_timeout=10000;</span><br><span class="line">mysql&gt; <span class="built_in">set</span> session wait_timeout=10000;</span><br><span class="line">mysql&gt; <span class="built_in">set</span> <span class="built_in">local</span> wait_timeout=10000;</span><br><span class="line">mysql&gt; <span class="built_in">set</span> @@wait_timeout=10000;</span><br><span class="line">mysql&gt; <span class="built_in">set</span> @@session.wait_timeout=10000;</span><br><span class="line">mysql&gt; <span class="built_in">set</span> @@local.wait_timeout=10000;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mysql&gt; select @@wait_timeout;</span><br><span class="line">mysql&gt; select @@session.wait_timeout;</span><br><span class="line">mysql&gt; select @@local.wait_timeout;</span><br><span class="line">mysql&gt; show variables like <span class="string">&#x27;wait_timeout&#x27;</span>;</span><br><span class="line">mysql&gt; show <span class="built_in">local</span> variables like <span class="string">&#x27;wait_timeout&#x27;</span>;</span><br><span class="line">mysql&gt; show session variables like <span class="string">&#x27;wait_timeout&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="内置数据库"><a href="#内置数据库" class="headerlink" title="内置数据库"></a>内置数据库</h3><p><code>mysql</code>：这个库很重要，他是mysql的核心数据库，负责存储数据库的用户、权限设置、关键字等mysql自己需要使用，控制和管理的信息</p>
+<p><code>information_schema</code>：这个数据库维护了数据库其他表的一些描述性信息，也称为元数据。比如，当前有哪些表，哪些视图，哪些触发器，哪些列等</p>
+<p><code>performation_schema</code>：这个数据库用来存储mysql服务器运行过程中的一些状态信息，是做性能监控的。比如最近执行了什么sql语句，内存使用情况等</p>
+<p><code>sys</code>：结合information_schema和performation_schema的数据，能更方便的了解mysql服务器的性能信息。</p>
+<h2 id="数据存储"><a href="#数据存储" class="headerlink" title="数据存储"></a>数据存储</h2><h3 id="innodb数据存储"><a href="#innodb数据存储" class="headerlink" title="innodb数据存储"></a>innodb数据存储</h3><p>对于innodb而言，数据是存储在表空间内的，表空间是一个抽象的概念，他对应着硬盘上的一个或多个文件</p>
+<p>表空间存储数据的单位是<code>页</code>，每一页大概占用16k的空间</p>
+<h3 id="系统表空间"><a href="#系统表空间" class="headerlink" title="系统表空间"></a>系统表空间</h3><ul>
+<li><p>系统表空间包含了很多【公共数据】，比如InnoDB的数据字典，回滚信息、系统事物信息、二次写缓冲等，老版本的mysql表中的数据也会存储在系统表空间</p>
+</li>
+<li><p>系统表空间是一个共享的表空间因为它是被多个表共享的</p>
+</li>
+<li><p>该空间的数据文件通过参数【innodb_data_file_path】控制，默认值是ibdata1:12M:autoextend（文件名为ibdata1、12MB、自动扩展）</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">-- 如果1代表开启，0代表关闭</span><br><span class="line">show variables like<span class="string">&#x27;innodb_file_per_table&#x27;</span></span><br><span class="line">-- 设置对应的变量</span><br><span class="line"><span class="built_in">set</span> global innodb_file_per_table=0;</span><br><span class="line">-- 查看系统表空间的配置</span><br><span class="line">show variables like <span class="string">&quot;innodb_data_file_path&quot;</span>;</span><br><span class="line">-- 配置文件的配置</span><br><span class="line">innodb_data_file_path=data1:512M;data2:512M:autoextend</span><br></pre></td></tr></table></figure>
+
+<h3 id="独立表空间"><a href="#独立表空间" class="headerlink" title="独立表空间"></a>独立表空间</h3><p>独立表空间是默认开启的，在5.6.6以后，Innodb不在默认将各个表的数据存储在<code>系统表空间</code>当中，而是会为每一个表建立一个独立表空间，innodb存储引擎的独立表空间为<code>.ibd</code>文件</p>
+<p>如果启用了<code>innodb_file_per_table</code>参数，需要注意的是每张表的表空间内存放的只是<code>数据</code>、<code>索引</code>和<code>插入缓冲Bitmap页</code>，其他数据如：回滚信息、系统事物信息、二次写缓冲（Double write buffer）等还是放在原来的系统表空间内,同时即使启用了<code>innodb_file_per_table</code>参数，系统表空间还是会不断的增加其大小的</p>
+<h3 id="其他类型表空间"><a href="#其他类型表空间" class="headerlink" title="其他类型表空间"></a>其他类型表空间</h3><p>MyIsam没有表空间的概念，他会在目录中产生2个文件<code>.MYD（数据文件）</code>、<code>.MYI（索引文件）</code>三个文件,在5.7以前<code>数据文件</code>和<code>表信息文件</code>是分开的，相互独立的。会多一个<code>.frm</code>文件，8.0之后进行了合并</p>
+<h3 id="组织结构"><a href="#组织结构" class="headerlink" title="组织结构"></a>组织结构</h3><p><code>区（extent）</code>：每一个表空间保存了大量的页，为了更好的管理这些页面，Innodb提出了<code>区</code>的概念，对于16k的页，连续64个页就是一个区，大概1M的空间，每一个表空间都是由若干个连续的区组成的，每256个区被划分为一组</p>
+<p><code>段（Segment）</code>：分为索引段，数据段，回滚段等后边会将，段是为了区分不同的数据类型，相同的段存的数据类型是一致的。一个段包含256个区(256M大小)。</p>
+<blockquote>
+<p>Row Format</p>
+</blockquote>
+<ul>
+<li><p>第一个部分是一个非NULL【变长字段长度列表】。变长列的真实长度就保存在这个部分，他是按照列的顺序【逆序放置】的。当列的长度小于255字节，如（varchar(50)），用1字节表示；若大于255个字节（varchar(600)），用2个字节表示，这其实也就说明了为什么varchar的最大长度是65536</p>
+</li>
+<li><p>第二个部分是NULL标志位，他指示了当前行数据中哪些为null值，用一个bitmap表示。NULL值标志位也是逆序排列，占用空间按照字节数高位补零，如有九个字段可以为空（00000001 01010101）</p>
+</li>
+<li><p>第三部分为记录头信息，固定占用5个字节（40位）</p>
+</li>
+<li><p>第四部分就是实际存储的每个列的数据了，需要特别注意的是，NULL不占该部分任何数据，即NULL除了占有NULL标志位，实际存储不占有任何空间。Innodb存储变长列（VARCHAR, VARBINARY, BLOB, TEXT）的前768字节，剩下的部分存储在溢出页中。固定长度列，超过768字节的视为变长列。内部存储前768字节，20字节指针存储列的溢出页的地址，所以长度为768+20字节</p>
+</li>
+</ul>
+<p><strong>举例</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">create table <span class="built_in">test</span> (</span><br><span class="line">　　t1 varchar(10),</span><br><span class="line">　　t2 varchar(10),</span><br><span class="line">　　t3 char(10),</span><br><span class="line">　　t4 varchar(10)</span><br><span class="line">) engine=innodb row_format=compact;</span><br><span class="line"></span><br><span class="line">insert into row_test values(<span class="string">&#x27;a&#x27;</span>,<span class="string">&#x27;bb&#x27;</span>,<span class="string">&#x27;bb&#x27;</span>,<span class="string">&#x27;ccc&#x27;</span>); </span><br><span class="line">insert into row_test values(<span class="string">&#x27;d&#x27;</span>,<span class="string">&#x27;ee&#x27;</span>,<span class="string">&#x27;ee&#x27;</span>,<span class="string">&#x27;fff&#x27;</span>); </span><br><span class="line">insert into row_test values(<span class="string">&#x27;d&#x27;</span>,NULL,NULL,<span class="string">&#x27;fff&#x27;</span>); </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>表空间二进制结构</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">                         03 02 01 00 00 00 10 00 </span><br><span class="line">2c 00 00 00 00 2b 68 00  00 00 00 06 05 80 00 00 </span><br><span class="line">00 32 01 10 61 62 62 62  62 20 20 20 20 20 20 20 </span><br><span class="line">20 63 63 63 03 02 01 00  00 00 18 00 2b 00 00 00  </span><br><span class="line">00 02 01 00 00 00 00 0f  62 c9 00 00 01 b2 01 10  </span><br><span class="line">64 65 65 65 65 20 20 20  20 20 20 20 20 66 66 66  </span><br><span class="line">03 01 06 00 00 20 ff 98  00 00 00 00 02 02 00 00 </span><br><span class="line">00 00 0f 67 cc 00 00 01  b6 01 10 64 66 66 66 </span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">03 02 01 // 变长字段长度列表，逆序，t4列长度为3，t2列长度为2，t1列长度为1</span><br><span class="line">00 // NULL标志位，第一行没有NULL值</span><br><span class="line">00 00 10 00 2c // 记录头信息，固定5字节长度</span><br><span class="line">00 00 00 00 2b 68 // RowID我们建的表没有主键，因此会有RowID，固定6字节长度</span><br><span class="line">00 00 00 00 06 05 // 事务ID，固定6个字节</span><br><span class="line">80 00 00 00 32 01 10 // 回滚指针，固定7个字节</span><br><span class="line">61 // t1数据<span class="string">&#x27;a&#x27;</span></span><br><span class="line">62 62 // t2<span class="string">&#x27;bb&#x27;</span></span><br><span class="line">62 62 20 20 20 20 20 20 20 20 // t3数据<span class="string">&#x27;bb&#x27;</span>  Ox20十进制是32对应ascii码是空字符</span><br><span class="line">63 63 63 // t4数据<span class="string">&#x27;ccc&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">03 02 01 // 变长字段长度列表，逆序，t4列长度为3，t2列长度为2，t1列长度为1</span><br><span class="line">00 // NULL标志位，第二行没有NULL值</span><br><span class="line">00 00 18 00 2b // 记录头信息，固定5字节长度</span><br><span class="line">00 00 00 00 02 01 // RowID我们建的表没有主键，因此会有RowID，固定6字节长度</span><br><span class="line">00 00 00 00 0f 62 // 事务ID，固定6个字节</span><br><span class="line">c9 00 00 01 b2 01 10 // 回滚指针，固定7个字节</span><br><span class="line">64 // t1数据<span class="string">&#x27;d&#x27;</span></span><br><span class="line">65 65 // t2数据<span class="string">&#x27;ee&#x27;</span></span><br><span class="line">65 65 20 20 20 20 20 20 20 20 // t3数据<span class="string">&#x27;ee&#x27;</span></span><br><span class="line">66 66 66 // t4数据<span class="string">&#x27;fff&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">03 01 // 变长字段长度列表，逆序，t4列长度为3，t1列长度为1</span><br><span class="line">06 // 00000110 NULL标志位，t2和t3列为空</span><br><span class="line">00 00 20 ff 98  // 记录头信息，固定5字节长度</span><br><span class="line">00 00 00 00 02 02 // RowID我们建的表没有主键，因此会有RowID，固定6字节长度</span><br><span class="line">00 00 00 00 0f 67 // 事务ID，固定6个字节</span><br><span class="line">cc 00 00 01 b6 01 10 // 回滚指针，固定7个字节</span><br><span class="line">64 // t1数据<span class="string">&#x27;d&#x27;</span></span><br><span class="line">66 66 66 // t4数据<span class="string">&#x27;fff&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>REDUNDANT</p>
+</blockquote>
+<ul>
+<li><p>第一个部分保存了<code>字段长度偏移列表</code>，这个部分保存了该行数据所有列，包括隐藏列的长度偏移量，这个偏移列表是按照列的顺序<code>逆序排列</code></p>
+</li>
+<li><p>第二个部分为记录头信息<code>record header</code>，Redundant行格式固定占用6个字节（48位）</p>
+</li>
+<li><p>第三个部分就是实际存储的每个列的数据了</p>
+</li>
+</ul>
+<blockquote>
+<p>DYNAMIC</p>
+</blockquote>
+<p>InnoDB Plugin引入了两种新的文件格式（file format，可以理解为新的页格式），对于以前支持的Compact和Redundant格式将其称为Antelope文件格式，新的文件格式称为Barracuda。Barracuda文件格式下拥有两种新的行记录格式Compressed和Dynamic两种</p>
+<p>新的两种格式对于存放BLOB的数据采用了完全的行溢出的方式，在数据页中只存放20个字节的指针，实际的数据都存放在BLOB Page中，而之前的Compact和Redundant两种格式会存放768个前缀字节。mysql8.0默认此格式</p>
+<p><strong>正确的开始 微小的长进 然后持续 嘿 我是小博 带你一起看我目之所及的世界……</strong></p>
+]]></content>
+      <tags>
+        <tag>mysql</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>jvm(二)</title>
     <url>/posts/2855935176/</url>
     <content><![CDATA[<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221110153753.2ld32fgfn680.webp" alt="微信图片_20221110153753"></p>
