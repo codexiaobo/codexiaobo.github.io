@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/./images/favicon32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/./images/favicon16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;codexiaobo.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Pisces&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;},&quot;path&quot;:&quot;&#x2F;search.xml&quot;,&quot;localsearch&quot;:{&quot;enable&quot;:true,&quot;trigger&quot;:&quot;auto&quot;,&quot;top_n_per_article&quot;:1,&quot;unescape&quot;:false,&quot;preload&quot;:false}}</script><script src="/js/config.js"></script>
+
+<link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL进阶 二">
+<meta property="og:url" content="https://codexiaobo.github.io/posts/2812722732/index.html">
+<meta property="og:site_name" content="Code小博">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20221202143149.35bobhhpdfe0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/Buffer-pool-%E7%B3%BB%E7%BB%9F%E7%94%B3%E8%AF%B7%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4.2p4v7qv12au0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/free%E9%93%BE.6u2mj9dz02g0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/flush%E9%93%BE.3igefz0049e0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/LRU%E9%93%BE.p126gszoab4.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/RU%E8%AF%BB%E6%9C%AA%E6%8F%90%E4%BA%A4.2tbpp9pmj0o0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/RC%E8%AF%BB%E5%B7%B2%E6%8F%90%E4%BA%A4.1hfeucbmxt8g.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/RR%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB.54drqdu3h2w0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/%E4%B8%B2%E8%A1%8C%E5%8C%961.o8lrd53onjk.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/%E4%B8%B2%E8%A1%8C%E5%8C%962.4rkkc6w8foy0.webp">
+<meta property="article:published_time" content="2022-12-02T08:32:22.000Z">
+<meta property="article:modified_time" content="2022-12-02T08:35:04.367Z">
+<meta property="article:author" content="xiaobo">
+<meta property="article:tag" content="mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20221202143149.35bobhhpdfe0.webp">
+
+
+<link rel="canonical" href="https://codexiaobo.github.io/posts/2812722732/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;codexiaobo.github.io&#x2F;posts&#x2F;2812722732&#x2F;&quot;,&quot;path&quot;:&quot;posts&#x2F;2812722732&#x2F;&quot;,&quot;title&quot;:&quot;MySQL进阶 二&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>MySQL进阶 二 | Code小博</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Code小博" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+  
+  <a href="https://codexiaobo.github.io" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+  
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Code小博</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6"><span class="nav-number">1.</span> <span class="nav-text">MySQL高级进阶</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%86%B2%E6%B1%A0-Buffer-Pool"><span class="nav-number">1.1.</span> <span class="nav-text">缓冲池 Buffer Pool</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.1.</span> <span class="nav-text">内部结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%93%E5%86%B2%E9%A1%B5"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">缓冲页</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E5%9D%97"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">控制块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#buffer-pool%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">buffer pool初始化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#free%E9%93%BE"><span class="nav-number">1.1.2.</span> <span class="nav-text">free链</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A4%E6%96%AD%E6%95%B0%E6%8D%AE%E9%A1%B5%E6%98%AF%E5%90%A6%E8%A2%AB%E7%BC%93%E5%AD%98"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">判断数据页是否被缓存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flush%E9%93%BE"><span class="nav-number">1.1.3.</span> <span class="nav-text">flush链</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%84%8F%E9%A1%B5"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">脏页</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%B7%E7%9B%98%E6%97%B6%E6%9C%BA"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">刷盘时机</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lru%E9%93%BE"><span class="nav-number">1.1.4.</span> <span class="nav-text">lru链</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E4%B8%B4%E6%97%B6%E8%A1%A8"><span class="nav-number">1.2.</span> <span class="nav-text">MySQL临时表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%A4%96%E9%83%A8%E4%B8%B4%E6%97%B6%E8%A1%A8"><span class="nav-number">1.2.1.</span> <span class="nav-text">创建外部临时表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92"><span class="nav-number">1.2.2.</span> <span class="nav-text">查看执行计划</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E9%83%A8%E4%B8%B4%E6%97%B6%E8%A1%A8"><span class="nav-number">1.2.3.</span> <span class="nav-text">内部临时表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%88%9B%E5%BB%BA%E5%86%85%E9%83%A8%E4%B8%B4%E6%97%B6%E8%A1%A8"><span class="nav-number">1.2.4.</span> <span class="nav-text">常见创建内部临时表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E4%B8%B4%E6%97%B6%E8%A1%A8"><span class="nav-number">1.2.5.</span> <span class="nav-text">内存临时表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A3%81%E7%9B%98%E4%B8%B4%E6%97%B6%E8%A1%A8"><span class="nav-number">1.2.6.</span> <span class="nav-text">磁盘临时表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%88%B1%E4%BD%A0%E7%A3%81%E7%9B%98%E4%B8%B4%E6%97%B6%E8%A1%A8%E6%97%B6%E6%9C%BA"><span class="nav-number">1.2.6.1.</span> <span class="nav-text">创建爱你磁盘临时表时机</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E4%BA%8B%E5%8A%A1"><span class="nav-number">1.3.</span> <span class="nav-text">MySQL事务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-number">1.3.1.</span> <span class="nav-text">事务的分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%BE%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">显式事务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%90%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">隐式事务</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AA%E8%AF%BB%E4%BA%8B%E5%8A%A1"><span class="nav-number">1.3.2.</span> <span class="nav-text">只读事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%9D%E5%AD%98%E7%82%B9"><span class="nav-number">1.3.3.</span> <span class="nav-text">保存点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E5%9B%9B%E5%A4%A7%E7%89%B9%E5%BE%81-ACID"><span class="nav-number">1.3.4.</span> <span class="nav-text">事务四大特征(ACID)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8E%9F%E5%AD%90%E6%80%A7-Atomicity"><span class="nav-number">1.3.4.1.</span> <span class="nav-text">原子性(Atomicity)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7-Consistency"><span class="nav-number">1.3.4.2.</span> <span class="nav-text">一致性(Consistency)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E6%80%A7-Isolation"><span class="nav-number">1.3.4.3.</span> <span class="nav-text">隔离性(Isolation)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%81%E4%B9%85%E6%80%A7-Durability"><span class="nav-number">1.3.4.4.</span> <span class="nav-text">持久性(Durability)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-number">1.3.5.</span> <span class="nav-text">事务隔离级别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%BB%E6%9C%AA%E6%8F%90%E4%BA%A4-Read-uncommitted"><span class="nav-number">1.3.5.1.</span> <span class="nav-text">读未提交(Read uncommitted)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%BB%E5%B7%B2%E6%8F%90%E4%BA%A4-Read-committed"><span class="nav-number">1.3.5.2.</span> <span class="nav-text">读已提交(Read committed)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB-Repeatable-read"><span class="nav-number">1.3.5.3.</span> <span class="nav-text">可重复读(Repeatable read)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%B2%E8%A1%8C%E5%8C%96-Serializable"><span class="nav-number">1.3.5.4.</span> <span class="nav-text">串行化(Serializable)</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="xiaobo"
+      src="/images/xiaobo.png">
+  <p class="site-author-name" itemprop="name">xiaobo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">84</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://codexiaobo.github.io/" title="GitHub → https:&#x2F;&#x2F;codexiaobo.github.io"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/6557440727/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;6557440727&#x2F;profile?rightmod&#x3D;1&amp;wvr&#x3D;6&amp;mod&#x3D;personinfo&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.baidu.com/" title="https:&#x2F;&#x2F;www.baidu.com" rel="noopener" target="_blank">百度</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/" title="https:&#x2F;&#x2F;www.zhihu.com" rel="noopener" target="_blank">知乎</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.csdn.net/" title="https:&#x2F;&#x2F;www.csdn.net" rel="noopener" target="_blank">CSDN</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bilibili.com/" title="https:&#x2F;&#x2F;www.bilibili.com" rel="noopener" target="_blank">哔哩哔哩</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+	<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=440208476&auto=1&height=66"></iframe>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/2812722732/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/xiaobo.png">
+      <meta itemprop="name" content="xiaobo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code小博">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MySQL进阶 二
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-12-02 16:32:22 / 修改时间：16:35:04" itemprop="dateCreated datePublished" datetime="2022-12-02T16:32:22+08:00">2022-12-02</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20221202143149.35bobhhpdfe0.webp" alt="微信截图_20221202143149"></p>
+<!--sleep-->
+<span id="more"></span>
+
+<h1 id="MySQL高级进阶"><a href="#MySQL高级进阶" class="headerlink" title="MySQL高级进阶"></a>MySQL高级进阶</h1><h2 id="缓冲池-Buffer-Pool"><a href="#缓冲池-Buffer-Pool" class="headerlink" title="缓冲池 Buffer Pool"></a>缓冲池 Buffer Pool</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> id <span class="keyword">between</span> <span class="number">1</span> <span class="keyword">and</span> <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这个全表查询需要从id为1一直到10 需要进行10次I/O，但是id从1到10却在一个页上，所以innodb设计了buffer pool<br>访问当前表空间的第一行数据，缓存当前页，一次I/O</p>
+<p>Innodb引擎会在mysql启动的时候，向操作系统申请一块连续的空间当做buffer pool，空间的大小由变量<code>innodb_buffer_pool_size</code>确定</p>
+<h3 id="内部结构"><a href="#内部结构" class="headerlink" title="内部结构"></a>内部结构</h3><h4 id="缓冲页"><a href="#缓冲页" class="headerlink" title="缓冲页"></a>缓冲页</h4><p>buffer pool中存放的<code>数据页</code>我们称之为<code>缓冲页</code>，和磁盘上的数据页是一一对应的，都是16KB，缓冲页的数据，是从磁盘上加载到buffer pool当中的一个完整页</p>
+<h4 id="控制块"><a href="#控制块" class="headerlink" title="控制块"></a>控制块</h4><p>是缓冲页<code>描述信息</code>，这一块区域保存的是数据页所属的表空间号，数据页编号，数据页地址，以及一些链表相关的节点信息等，每个控制块大小是缓存页的5%左右，大约是800个字节</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/Buffer-pool-%E7%B3%BB%E7%BB%9F%E7%94%B3%E8%AF%B7%E5%86%85%E5%AD%98%E7%A9%BA%E9%97%B4.2p4v7qv12au0.webp" alt="Buffer-pool-系统申请内存空间"></p>
+<p>buffer pool的前一部分存储<code>控制块</code>，后一部分存储<code>缓冲页</code>，如果中间有未被利用的空间，叫<code>内存碎片</code></p>
+<h4 id="buffer-pool初始化"><a href="#buffer-pool初始化" class="headerlink" title="buffer pool初始化"></a>buffer pool初始化</h4><p>数据库会在启动的时候，按照配置中的Buffer Pool大小，去向操作系统申请一块内存，作为Buffer Pool的内存区域，然后会按照默认的缓存页的的大小<code>16KB</code>以及对应的<code>800个字节左右</code>的<code>控制块</code>的大小，在Buffer Pool中划分出一个一个的缓存页和一个一个与其对应的描述数据<code>控制块</code>。此时的buffer pool中没有任何内容</p>
+<h3 id="free链"><a href="#free链" class="headerlink" title="free链"></a>free链</h3><p>程序在执行过程中会不断的有新的页被缓存起来，所以要判断哪些缓冲页是<code>闲置状态</code>，此时要<code>控制块来进行标记和管理</code>了。innodb设计初，将所有<code>空闲的缓冲页</code>所对应的<code>控制块</code>作为一个个的节点，形成一个链表，这个链表就是free链，就是空闲链表</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/free%E9%93%BE.6u2mj9dz02g0.webp" alt="free链"></p>
+<p>free链表是一个双向链表，链表上除了控制块以外，还有一个基础节点，存储了free链有多少个描述信息块，也就是有多少个空闲的缓存页，以及指向链表头尾的指针,当我们加载数据的时候，会从free链中找到空闲的缓存页，把数据页的<code>表空间号和数据页</code>号写入<code>控制块</code>,加载数据到缓存页后，会把缓存页对应的控制块从free链表中移除</p>
+<h4 id="判断数据页是否被缓存"><a href="#判断数据页是否被缓存" class="headerlink" title="判断数据页是否被缓存"></a>判断数据页是否被缓存</h4><p>使用<code>表空间号+页号</code>可以确定一个唯一的页，所以我们可以设计一个hash表，使用<code>表空间号+页</code>号当做key，使用<code>控制块地址</code>做value，每次查询的时候只需要通过key进行查找即可，hash的时间复杂度是O(1)，这样就能迅速定位缓存的页</p>
+<h3 id="flush链"><a href="#flush链" class="headerlink" title="flush链"></a>flush链</h3><h4 id="脏页"><a href="#脏页" class="headerlink" title="脏页"></a>脏页</h4><p>sql的执行过程中，无论是增删改查，都是优先在buffer pool中进行的，这样可以极大的保证执行效率。但是我们对缓存页的某些数据进行了修改，就会导致buffer pool中的缓冲页和磁盘的数据页<code>数据不一致</code>，那么此时的缓冲页就称之为<code>脏页</code>，所以脏页的数据是要刷到磁盘上的</p>
+<p>其实就是在高峰期我们找一个临时的地方先存放，然后等到过了高峰期在写入到磁盘上</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/flush%E9%93%BE.3igefz0049e0.webp" alt="flush链"></p>
+<p>flush链表是一个双向链表，链表结点是被<code>修改过的缓存页</code>的控制块</p>
+<h4 id="刷盘时机"><a href="#刷盘时机" class="headerlink" title="刷盘时机"></a>刷盘时机</h4><p>后台会有专门的线程每隔一段时间就把flush链表中的脏页刷入磁盘中，刷新的速率取决与当前系统是否繁忙。在如果系统奔溃，是会产生数据不一致的问题的，没有刷入磁盘的数据就会丢失，mysql通过日志系统解决这个问题</p>
+<h3 id="lru链"><a href="#lru链" class="headerlink" title="lru链"></a>lru链</h3><p>当需要更多的空间缓存<code>新的数据页</code>的时候，我们将最近使用最少的<code>缓冲页淘汰掉</code>，这是LRU算法，对于innodb而言，是通过<code>LRU链表</code>来完成的，结构和free链表、flush链表基本相同，只是负责的功能不同</p>
+<p>当客户端访问一条数据时，会加载对应的数据页到buffer pool，并会将缓冲页对应的控制块放置到<code>LRU链表的首位</code>,一旦buffer pool被占满，则从链表的末端开始淘汰数据</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/LRU%E9%93%BE.p126gszoab4.webp" alt="LRU链"></p>
+<p>对于预读的数据页，会在第一次访问时放入old区域，如果在sql执行的过程中访问相邻数据时，再次访问访问到该数据页，则把他加入如热数据区</p>
+<p>Innodb提供了一个参数<code>innodb_old_blocks_time</code>，默认是1s，所以执行流程为</p>
+<blockquote>
+<p>页被首次访问时会记录访问的时间戳<br>以后访问都和首次访问的时间进行对比，如果时间大于1s，就讲当前页放入yong区<br>一个sql的扫描一个页的时间，哪怕在慢也不会低于1s，所以解决了一个全表扫秒而导致全表成为热点数据的问题</p>
+</blockquote>
+<p><strong>热点数据要求首次访问时间和最后一次访问时间的时间差不能低于1s</strong></p>
+<p>查看innodb当前的状态</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> engine innodb status</span><br></pre></td></tr></table></figure>
+
+<h2 id="MySQL临时表"><a href="#MySQL临时表" class="headerlink" title="MySQL临时表"></a>MySQL临时表</h2><h3 id="创建外部临时表"><a href="#创建外部临时表" class="headerlink" title="创建外部临时表"></a>创建外部临时表</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> temporary <span class="keyword">table</span> 表名</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看执行计划"><a href="#查看执行计划" class="headerlink" title="查看执行计划"></a>查看执行计划</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> 表名</span><br></pre></td></tr></table></figure>
+
+<h3 id="内部临时表"><a href="#内部临时表" class="headerlink" title="内部临时表"></a>内部临时表</h3><p><code>内部临时表</code>用来存储某些操作的<code>中间结果</code>，这些操作可能包括在<code>优化阶段</code>或者<code>执行阶段</code>，这种内部表对用户来说是不可见的。MySQL内部将使用<code>自动生成的临时表</code>，辅助SQL的执行。我们可以使用执行计划查看，如果一条sql语句的执行计划中列<code>extra</code>结果为<code>Using temporary</code>，那么也就说明这个查询要使用到临时表</p>
+<h3 id="常见创建内部临时表"><a href="#常见创建内部临时表" class="headerlink" title="常见创建内部临时表"></a>常见创建内部临时表</h3><ul>
+<li><p>使用GROUP BY分组，且分组字段没有索引时。</p>
+</li>
+<li><p>使用DISTINCT查询。</p>
+</li>
+<li><p>使用UNION进行结果合并，辅助去重，union all不会使用临时表，因为他不需要去重</p>
+</li>
+<li><p>复杂的sql中很容易产生临时表</p>
+</li>
+</ul>
+<h3 id="内存临时表"><a href="#内存临时表" class="headerlink" title="内存临时表"></a>内存临时表</h3><p>内存临时表使用memery引擎（Memory引擎不支持BOLB和TEXT类型）</p>
+<h3 id="磁盘临时表"><a href="#磁盘临时表" class="headerlink" title="磁盘临时表"></a>磁盘临时表</h3><p>磁盘临时表默认使用innodb引擎</p>
+<h4 id="创建爱你磁盘临时表时机"><a href="#创建爱你磁盘临时表时机" class="headerlink" title="创建爱你磁盘临时表时机"></a>创建爱你磁盘临时表时机</h4><ul>
+<li><p>数据表中包含BLOB/TEXT列</p>
+</li>
+<li><p>在 GROUP BY 或者 DSTINCT 的列中有超过 512字符的字符类型列</p>
+</li>
+<li><p>在SELECT、UNION、UNION ALL查询中，存在最大长度超过512的列</p>
+</li>
+</ul>
+<h2 id="MySQL事务"><a href="#MySQL事务" class="headerlink" title="MySQL事务"></a>MySQL事务</h2><p>在 MySQL 中只有使用了Innodb 数据库引擎的数据库或表才支持事务</p>
+<p>事务处理可以用来维护数据库的完整性，保证成批的 SQL 语句要么全部执行，要么全部不执行</p>
+<h3 id="事务的分类"><a href="#事务的分类" class="headerlink" title="事务的分类"></a>事务的分类</h3><h4 id="显式事务"><a href="#显式事务" class="headerlink" title="显式事务"></a>显式事务</h4><ul>
+<li>开启事务</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">begin</span>    </span><br><span class="line">或者</span><br><span class="line"><span class="keyword">start</span> transaction</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>提交事务</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">commit</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>事务回滚</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">rollback</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="隐式事务"><a href="#隐式事务" class="headerlink" title="隐式事务"></a>隐式事务</h4><p>默认的事务是隐式事务，由变量<code>autocommit</code>控制。隐式事务的环境下，我们每执行一条sql都会<code>自动开启和关闭</code>事务</p>
+<h3 id="只读事务"><a href="#只读事务" class="headerlink" title="只读事务"></a>只读事务</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">read <span class="keyword">only</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="保存点"><a href="#保存点" class="headerlink" title="保存点"></a>保存点</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">start</span> transaction;</span><br><span class="line">UPDATE <span class="keyword">user</span> <span class="keyword">set</span> ...;</span><br><span class="line"><span class="keyword">savepoint</span> a;</span><br><span class="line">UPDATE <span class="keyword">user</span> <span class="keyword">set</span> ....;</span><br><span class="line"><span class="keyword">rollback</span> <span class="keyword">to</span> a;</span><br></pre></td></tr></table></figure>
+
+<p>上边update执行，下边updata回滚</p>
+<p><strong>Mysql不支持嵌套事务，开启一个事务的情况下，若再开启一个事务，会隐式的提交上一个事务</strong></p>
+<h3 id="事务四大特征-ACID"><a href="#事务四大特征-ACID" class="headerlink" title="事务四大特征(ACID)"></a>事务四大特征(ACID)</h3><h4 id="原子性-Atomicity"><a href="#原子性-Atomicity" class="headerlink" title="原子性(Atomicity)"></a>原子性(Atomicity)</h4><p>一个事务中的所有操作，要么全部完成，要么全部不完成，不会结束在中间某个环节。如果事务在执行过程中发生错误，会被回滚到事务开始前的状态，就像这个事务从来没有执行过一样</p>
+<h4 id="一致性-Consistency"><a href="#一致性-Consistency" class="headerlink" title="一致性(Consistency)"></a>一致性(Consistency)</h4><p>在事务开始之前和结束以后，数据库的完整性没有被破坏，数据库状态应该与业务规则保持一致，其他的三个特性都在为他服务</p>
+<h4 id="隔离性-Isolation"><a href="#隔离性-Isolation" class="headerlink" title="隔离性(Isolation)"></a>隔离性(Isolation)</h4><p>数据库允许多个并发事务同时对其数据进行读取和修改，隔离性可以防止多个事务在并发修改共享数据时产生数据不一致的现象</p>
+<h4 id="持久性-Durability"><a href="#持久性-Durability" class="headerlink" title="持久性(Durability)"></a>持久性(Durability)</h4><p>事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失</p>
+<h3 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h3><p>-隔离级别的设置与查看</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查看全局和当前事务的隔离级别</span></span><br><span class="line"><span class="keyword">SELECT</span> @<span class="variable">@global</span>.transaction_isolation, @<span class="variable">@transaction</span>_isolation_isolation;</span><br><span class="line"><span class="keyword">show</span> variables <span class="keyword">like</span> <span class="string">&#x27;transaction_isolation&#x27;</span>;</span><br><span class="line"><span class="comment">--5.7   tx_isolation</span></span><br><span class="line"><span class="comment">--8.0   transaction_isolation</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 设置下一个事务的隔离级别</span></span><br><span class="line"><span class="keyword">SET</span> transaction isolation level read uncommitted;</span><br><span class="line"><span class="keyword">SET</span> transaction isolation level read committed;</span><br><span class="line"><span class="keyword">set</span> transaction isolation level repeatable read;</span><br><span class="line"><span class="keyword">SET</span> transaction isolation level serializable;</span><br><span class="line"><span class="comment">-- 设置当前会话的隔离级别</span></span><br><span class="line"><span class="keyword">SET</span> session transaction isolation level read uncommitted;</span><br><span class="line"><span class="keyword">SET</span> session transaction isolation level read committed;</span><br><span class="line"><span class="keyword">set</span> session transaction isolation level repeatable read;</span><br><span class="line"><span class="keyword">SET</span> session transaction isolation level serializable;</span><br><span class="line"><span class="comment">-- 设置全局事务的隔离级别</span></span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">GLOBAL</span> transaction isolation level read uncommitted;</span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">GLOBAL</span> transaction isolation level read committed;</span><br><span class="line"><span class="keyword">set</span> <span class="keyword">GLOBAL</span> transaction isolation level repeatable read;</span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">GLOBAL</span> transaction isolation level serializable;</span><br><span class="line"></span><br><span class="line">其中，SESSION 和 <span class="keyword">GLOBAL</span> 关键字用来指定修改的事务隔离级别的范围：</span><br><span class="line">SESSION：表示修改的事务隔离级别将应用于当前 session（当前 cmd 窗口）内的所有事务；</span><br><span class="line"><span class="keyword">GLOBAL</span>：表示修改的事务隔离级别将应用于所有 session（全局）中的所有事务，且当前已经存在的 session 不受影响；</span><br><span class="line">如果省略 SESSION 和 <span class="keyword">GLOBAL</span>，表示修改的事务隔离级别将应用于当前 session 内的下一个还未开始的事务。</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="读未提交-Read-uncommitted"><a href="#读未提交-Read-uncommitted" class="headerlink" title="读未提交(Read uncommitted)"></a>读未提交(Read uncommitted)</h4><p>一个事务可以读取其他<code>未提交的事务</code>修改的数据，隔离级别最低</p>
+<p><strong>发生的问题？</strong></p>
+<p>脏读，不可重复度，幻读</p>
+<p><code>脏读</code>：一个事务读到了其他事务未提交的数据，未提交意味着这些数据可能会回滚，读到的数据不一定准确</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/RU%E8%AF%BB%E6%9C%AA%E6%8F%90%E4%BA%A4.2tbpp9pmj0o0.webp" alt="RU读未提交"></p>
+<h4 id="读已提交-Read-committed"><a href="#读已提交-Read-committed" class="headerlink" title="读已提交(Read committed)"></a>读已提交(Read committed)</h4><p>当前事务只能读到别的事物已经提交的数据，一个事务a修改了另一个未提交事务b读取过的数据。那么事务b再次读取，会发现两次读取的数据不一致。也就是说在一个原子性的操作中一个事务两次读取相同的数据，却不一致，一行数据不能重复被读取。主要是<code>update</code>语句，会导致不可重复读</p>
+<p><strong>发生的问题？</strong></p>
+<p>不可重复读和幻读</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/RC%E8%AF%BB%E5%B7%B2%E6%8F%90%E4%BA%A4.1hfeucbmxt8g.webp" alt="RC读已提交"></p>
+<h4 id="可重复读-Repeatable-read"><a href="#可重复读-Repeatable-read" class="headerlink" title="可重复读(Repeatable read)"></a>可重复读(Repeatable read)</h4><p>同一个事务中发出同一个SELECT语句两次或更多次，那么产生的结果数据集总是相同的，</p>
+<p><strong>发生的问题？</strong></p>
+<p><code>幻读</code>：一个事务按照某些条件进行查询，事务提交前，有另一个事务插入了满足条件的其他数据，再次使用相同条件查询，却发现多了一些数据，就像出现了幻觉一样。幻读主要针对针对delete和insert语句</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/RR%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB.54drqdu3h2w0.webp" alt="RR可重复读"></p>
+<h4 id="串行化-Serializable"><a href="#串行化-Serializable" class="headerlink" title="串行化(Serializable)"></a>串行化(Serializable)</h4><p>事务A和事务B，事务A在操作数据库时，事务B只能排队等待</p>
+<p>很少使用，吞吐量太低，用户体验差</p>
+<p>可以避免<code>幻读</code>，每一次读取的都是数据库中真实存在数据，事务A与事务B串行，而不并发</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/%E4%B8%B2%E8%A1%8C%E5%8C%961.o8lrd53onjk.webp" alt="串行化1"></p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/%E4%B8%B2%E8%A1%8C%E5%8C%962.4rkkc6w8foy0.webp" alt="串行化2"></p>
+<p><strong>正确的开始 微小的长进 然后持续 嘿 我是小博 带你一起看我目之所及的世界……</strong></p>
+
+    </div>
+	<div>
+	
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束 <i class="fa fa-paw"></i> 感谢您的阅读-------------</div>
+    
+</div>
+
+     
+	</div>
+	
+	<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/posts/2812722732/">MySQL进阶 二</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a>小博</p>
+  <p><span>发布时间:</span>2022年12月02日 - 16:32</p>
+  <p><span>最后更新:</span>2022年12月02日 - 16:35</p>
+  <p><span>原始链接:</span><a href="/posts/2812722732/" title="MySQL进阶 二">https://codexiaobo.github.io/posts/2812722732/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://codexiaobo.github.io/posts/2812722732/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+      $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+        });
+    });  
+</script>
+
+
+      
+	</div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>学习技术分享、感谢您的支持</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="xiaobo 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="xiaobo 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/mysql/" rel="tag"># mysql</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/2619773061/" rel="prev" title="MySQL进阶 一">
+                  <i class="fa fa-chevron-left"></i> MySQL进阶 一
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaobo</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">840k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">12:44</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+<span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+<script>
+    var now = new Date(); 
+    function createtime() { 
+        var grt= new Date("06/07/2021 10:15:49");//在此处修改你的建站时间，格式：月/日/年 时:分:秒
+        now.setTime(now.getTime()+250); 
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 "; 
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+    } 
+setInterval("createtime()",250);
+</script>
+
+
+
+
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+ 
+  
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+
+ 
+</body>
+</html>
