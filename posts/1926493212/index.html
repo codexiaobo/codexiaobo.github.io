@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/./images/favicon32.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/./images/favicon16.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{&quot;hostname&quot;:&quot;codexiaobo.github.io&quot;,&quot;root&quot;:&quot;&#x2F;&quot;,&quot;images&quot;:&quot;&#x2F;images&quot;,&quot;scheme&quot;:&quot;Pisces&quot;,&quot;version&quot;:&quot;8.5.0&quot;,&quot;exturl&quot;:false,&quot;sidebar&quot;:{&quot;position&quot;:&quot;left&quot;,&quot;display&quot;:&quot;post&quot;,&quot;padding&quot;:18,&quot;offset&quot;:12},&quot;copycode&quot;:true,&quot;bookmark&quot;:{&quot;enable&quot;:false,&quot;color&quot;:&quot;#222&quot;,&quot;save&quot;:&quot;auto&quot;},&quot;fancybox&quot;:false,&quot;mediumzoom&quot;:false,&quot;lazyload&quot;:false,&quot;pangu&quot;:false,&quot;comments&quot;:{&quot;style&quot;:&quot;tabs&quot;,&quot;active&quot;:null,&quot;storage&quot;:true,&quot;lazyload&quot;:false,&quot;nav&quot;:null},&quot;motion&quot;:{&quot;enable&quot;:true,&quot;async&quot;:false,&quot;transition&quot;:{&quot;post_block&quot;:&quot;fadeIn&quot;,&quot;post_header&quot;:&quot;fadeInDown&quot;,&quot;post_body&quot;:&quot;fadeInDown&quot;,&quot;coll_header&quot;:&quot;fadeInLeft&quot;,&quot;sidebar&quot;:&quot;fadeInUp&quot;}},&quot;prism&quot;:false,&quot;i18n&quot;:{&quot;placeholder&quot;:&quot;搜索...&quot;,&quot;empty&quot;:&quot;没有找到任何搜索结果：${query}&quot;,&quot;hits_time&quot;:&quot;找到 ${hits} 个搜索结果（用时 ${time} 毫秒）&quot;,&quot;hits&quot;:&quot;找到 ${hits} 个搜索结果&quot;},&quot;path&quot;:&quot;&#x2F;search.xml&quot;,&quot;localsearch&quot;:{&quot;enable&quot;:true,&quot;trigger&quot;:&quot;auto&quot;,&quot;top_n_per_article&quot;:1,&quot;unescape&quot;:false,&quot;preload&quot;:false}}</script><script src="/js/config.js"></script>
+
+<link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL高级进阶三">
+<meta property="og:url" content="https://codexiaobo.github.io/posts/1926493212/index.html">
+<meta property="og:site_name" content="Code小博">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E6%98%A8%E5%A4%A9%E6%A2%A6%E9%87%8C.3dw2byuyxq40.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/count.15ilnmo72yv4.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/id%E7%B4%A2%E5%BC%95.zwuk2mb7dnk.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/B%E6%A0%91.2ia0n40pzbk0.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/B+%E6%A0%91.4dy460y12xe0.webp">
+<meta property="article:published_time" content="2022-12-06T14:23:54.000Z">
+<meta property="article:modified_time" content="2022-12-06T14:25:13.392Z">
+<meta property="article:author" content="xiaobo">
+<meta property="article:tag" content="mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E6%98%A8%E5%A4%A9%E6%A2%A6%E9%87%8C.3dw2byuyxq40.webp">
+
+
+<link rel="canonical" href="https://codexiaobo.github.io/posts/1926493212/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;codexiaobo.github.io&#x2F;posts&#x2F;1926493212&#x2F;&quot;,&quot;path&quot;:&quot;posts&#x2F;1926493212&#x2F;&quot;,&quot;title&quot;:&quot;MySQL高级进阶三&quot;}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
+<title>MySQL高级进阶三 | Code小博</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Code小博" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+  
+  <a href="https://codexiaobo.github.io" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+  
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">Code小博</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6"><span class="nav-number">1.</span> <span class="nav-text">MySQL高级进阶</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-number">1.1.</span> <span class="nav-text">索引</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Innodb%E7%9A%84b-%E6%A0%91%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.1.</span> <span class="nav-text">Innodb的b+树数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B%E6%A0%91"><span class="nav-number">1.1.2.</span> <span class="nav-text">B树</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#B%E6%A0%91%E7%9A%84%E7%89%B9%E7%82%B9"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">B树的特点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-%E6%A0%91"><span class="nav-number">1.1.3.</span> <span class="nav-text">B+树</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#B%E6%A0%91-VS-B-%E6%A0%91"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">B树 VS B+树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%89%E5%9E%8B%E7%BC%98%E7%94%B1"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">选型缘由</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%8F%91%E7%8E%B0"><span class="nav-number">1.1.4.</span> <span class="nav-text">索引发现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E5%88%86%E7%B1%BB%E5%92%8C%E5%88%9B%E5%BB%BA"><span class="nav-number">1.1.5.</span> <span class="nav-text">索引的分类和创建</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95"><span class="nav-number">1.1.5.1.</span> <span class="nav-text">聚簇索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%9E%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95"><span class="nav-number">1.1.5.2.</span> <span class="nav-text">非聚簇索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%99%AE%E9%80%9A%E7%B4%A2%E5%BC%95%EF%BC%88normal%EF%BC%89"><span class="nav-number">1.1.5.3.</span> <span class="nav-text">普通索引（normal）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%94%AF%E4%B8%80%E7%B4%A2%E5%BC%95%EF%BC%88UNIQUE%EF%BC%89"><span class="nav-number">1.1.5.4.</span> <span class="nav-text">唯一索引（UNIQUE）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E4%B8%AA%E4%BA%8C%E7%BA%A7%E7%B4%A2%E5%BC%95%E7%9A%84%E7%BB%84%E5%90%88"><span class="nav-number">1.1.5.5.</span> <span class="nav-text">多个二级索引的组合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%8D%E5%90%88%E7%B4%A2%E5%BC%95-%E8%81%94%E5%90%88%E7%B4%A2%E5%BC%95"><span class="nav-number">1.1.5.6.</span> <span class="nav-text">复合索引&#x2F;联合索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%A8%E6%96%87%E7%B4%A2%E5%BC%95%EF%BC%88FULLTEXT%EF%BC%89"><span class="nav-number">1.1.5.7.</span> <span class="nav-text">全文索引（FULLTEXT）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#hash%E7%B4%A2%E5%BC%95"><span class="nav-number">1.1.5.8.</span> <span class="nav-text">hash索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A9%BA%E9%97%B4%E7%B4%A2%E5%BC%95%EF%BC%88SPATIAL%EF%BC%89"><span class="nav-number">1.1.5.9.</span> <span class="nav-text">空间索引（SPATIAL）</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="xiaobo"
+      src="/images/xiaobo.png">
+  <p class="site-author-name" itemprop="name">xiaobo</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">85</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://codexiaobo.github.io/" title="GitHub → https:&#x2F;&#x2F;codexiaobo.github.io"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/6557440727/profile?rightmod=1&wvr=6&mod=personinfo&is_all=1" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;6557440727&#x2F;profile?rightmod&#x3D;1&amp;wvr&#x3D;6&amp;mod&#x3D;personinfo&amp;is_all&#x3D;1" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.baidu.com/" title="https:&#x2F;&#x2F;www.baidu.com" rel="noopener" target="_blank">百度</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.zhihu.com/" title="https:&#x2F;&#x2F;www.zhihu.com" rel="noopener" target="_blank">知乎</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.csdn.net/" title="https:&#x2F;&#x2F;www.csdn.net" rel="noopener" target="_blank">CSDN</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.bilibili.com/" title="https:&#x2F;&#x2F;www.bilibili.com" rel="noopener" target="_blank">哔哩哔哩</a>
+        </li>
+    </ul>
+  </div>
+
+        </div>
+      </div>
+    </div>
+	<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=440208476&auto=1&height=66"></iframe>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/1926493212/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/xiaobo.png">
+      <meta itemprop="name" content="xiaobo">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Code小博">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MySQL高级进阶三
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-12-06 22:23:54 / 修改时间：22:25:13" itemprop="dateCreated datePublished" datetime="2022-12-06T22:23:54+08:00">2022-12-06</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+      </div>
+      <div class="post-meta">
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>7.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E6%98%A8%E5%A4%A9%E6%A2%A6%E9%87%8C.3dw2byuyxq40.webp" alt="昨天梦里"></p>
+<!--sleep-->
+
+<span id="more"></span>
+
+<h1 id="MySQL高级进阶"><a href="#MySQL高级进阶" class="headerlink" title="MySQL高级进阶"></a>MySQL高级进阶</h1><h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>这里我们先创建一个有量级的表数据，否则体现不出来索引</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">TABLE</span> IF <span class="keyword">EXISTS</span> `<span class="keyword">user</span>`;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `<span class="keyword">user</span>`  (</span><br><span class="line">  `user_id` <span class="type">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT COMMENT <span class="string">&#x27;用户ID&#x27;</span>,</span><br><span class="line">  `user_name` <span class="type">varchar</span>(<span class="number">30</span>) <span class="type">CHARACTER</span> <span class="keyword">SET</span> utf8mb4 <span class="keyword">COLLATE</span> utf8mb4_0900_ai_ci <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;用户账号&#x27;</span>,</span><br><span class="line">  `nick_name` <span class="type">varchar</span>(<span class="number">30</span>) <span class="type">CHARACTER</span> <span class="keyword">SET</span> utf8mb4 <span class="keyword">COLLATE</span> utf8mb4_0900_ai_ci <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;用户昵称&#x27;</span>,</span><br><span class="line">  `email` <span class="type">varchar</span>(<span class="number">50</span>) <span class="type">CHARACTER</span> <span class="keyword">SET</span> utf8mb4 <span class="keyword">COLLATE</span> utf8mb4_0900_ai_ci <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">&#x27;&#x27;</span> COMMENT <span class="string">&#x27;用户邮箱&#x27;</span>,</span><br><span class="line">  `sex` <span class="type">char</span>(<span class="number">1</span>) <span class="type">CHARACTER</span> <span class="keyword">SET</span> utf8mb4 <span class="keyword">COLLATE</span> utf8mb4_0900_ai_ci <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">&#x27;0&#x27;</span> COMMENT <span class="string">&#x27;用户性别（0男 1女 2未知）&#x27;</span>,</span><br><span class="line">  `avatar` <span class="type">varchar</span>(<span class="number">100</span>) <span class="type">CHARACTER</span> <span class="keyword">SET</span> utf8mb4 <span class="keyword">COLLATE</span> utf8mb4_0900_ai_ci <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">&#x27;&#x27;</span> COMMENT <span class="string">&#x27;头像地址&#x27;</span>,</span><br><span class="line">  `password` <span class="type">varchar</span>(<span class="number">100</span>) <span class="type">CHARACTER</span> <span class="keyword">SET</span> utf8mb4 <span class="keyword">COLLATE</span> utf8mb4_0900_ai_ci <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">&#x27;&#x27;</span> COMMENT <span class="string">&#x27;密码&#x27;</span>,</span><br><span class="line">  `login_ip` <span class="type">varchar</span>(<span class="number">128</span>) <span class="type">CHARACTER</span> <span class="keyword">SET</span> utf8mb4 <span class="keyword">COLLATE</span> utf8mb4_0900_ai_ci <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">&#x27;&#x27;</span> COMMENT <span class="string">&#x27;最后登录IP&#x27;</span>,</span><br><span class="line">  `login_date` datetime <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;最后登录时间&#x27;</span>,</span><br><span class="line">   `text` text <span class="type">CHARACTER</span> <span class="keyword">SET</span> utf8mb4 <span class="keyword">COLLATE</span> utf8mb4_0900_ai_ci COMMENT <span class="string">&#x27;测试文本&#x27;</span>,</span><br><span class="line">  <span class="keyword">PRIMARY</span> KEY (`user_id`) <span class="keyword">USING</span> BTREE</span><br><span class="line">) ENGINE <span class="operator">=</span> InnoDB AUTO_INCREMENT <span class="operator">=</span> <span class="number">2</span> <span class="type">CHARACTER</span> <span class="keyword">SET</span> <span class="operator">=</span> utf8mb4 <span class="keyword">COLLATE</span> <span class="operator">=</span> utf8mb4_0900_ai_ci COMMENT <span class="operator">=</span> <span class="string">&#x27;用户信息表&#x27;</span> ROW_FORMAT <span class="operator">=</span> <span class="keyword">Dynamic</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>nodejs脚本</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 Mock</span></span><br><span class="line"><span class="keyword">var</span> Mock = <span class="built_in">require</span>(<span class="string">&#x27;mockjs&#x27;</span>)</span><br><span class="line"><span class="comment">// mysql8.0需要执行下边的sql，否则nodejs不支持</span></span><br><span class="line"><span class="comment">// ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED WITH mysql_native_password BY &#x27;xiaobo&#x27;;</span></span><br><span class="line"><span class="keyword">var</span> mysql = <span class="built_in">require</span>(<span class="string">&#x27;mysql&#x27;</span>);</span><br><span class="line"><span class="comment">// 定义连接池</span></span><br><span class="line"><span class="keyword">const</span> pool = mysql.createPool(&#123;</span><br><span class="line">    <span class="attr">host</span>: <span class="string">&quot;127.0.0.1&quot;</span>, <span class="comment">// 主机地址</span></span><br><span class="line">    <span class="attr">port</span>: <span class="number">3306</span>,</span><br><span class="line">    <span class="attr">database</span>: <span class="string">&quot;test&quot;</span>, <span class="comment">// 数据库名字</span></span><br><span class="line">    <span class="attr">user</span>: <span class="string">&quot;root&quot;</span>, <span class="comment">// 连接数据库的用户名</span></span><br><span class="line">    <span class="attr">password</span>: <span class="string">&quot;xiaobo&quot;</span>, <span class="comment">// 连接数据库密码</span></span><br><span class="line">    <span class="attr">connectionLimit</span>: <span class="number">30</span>, <span class="comment">// 连接池最大连接数</span></span><br><span class="line">    <span class="attr">multipleStatements</span>: <span class="literal">true</span> <span class="comment">// 允许执行多条sql语句</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">insert</span>(<span class="params">connection</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> content = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</span><br><span class="line">        <span class="comment">// 使用mock.js模拟数据</span></span><br><span class="line">        <span class="keyword">var</span> user = Mock.mock(&#123;</span><br><span class="line">            <span class="attr">userName</span>: Mock.mock(<span class="string">&#x27;@name(true)&#x27;</span>),</span><br><span class="line">            <span class="attr">nickName</span>: Mock.mock(<span class="string">&#x27;@cname()&#x27;</span>),</span><br><span class="line">            <span class="attr">email</span>: Mock.mock(<span class="string">&#x27;@email()&#x27;</span>),</span><br><span class="line">            <span class="attr">sex</span>: <span class="built_in">Math</span>.random() &gt; <span class="number">0.5</span> ? <span class="string">&#x27;男&#x27;</span> : <span class="string">&#x27;女&#x27;</span>,</span><br><span class="line">            <span class="attr">loginIp</span>: Mock.mock(<span class="string">&#x27;@ip()&#x27;</span>),</span><br><span class="line">            <span class="attr">loginDate</span>: Mock.mock(<span class="string">&#x27;@datetime()&#x27;</span>),</span><br><span class="line">            <span class="attr">password</span>: Mock.mock(<span class="string">&#x27;@word(5, 10)&#x27;</span>),</span><br><span class="line">            <span class="attr">avatar</span>: Mock.mock(<span class="string">&#x27;@url()&#x27;</span>),</span><br><span class="line">            <span class="attr">text</span>: Mock.mock(<span class="string">&#x27;@cparagraph(30)&#x27;</span>),</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 每次存入1000条</span></span><br><span class="line">        <span class="keyword">let</span> insertData = <span class="string">&#x27;(&#x27;</span></span><br><span class="line">        <span class="keyword">for</span> (key <span class="keyword">in</span> user) &#123;</span><br><span class="line">            insertData += <span class="string">&#x27;\&#x27;&#x27;</span> + user[key] + <span class="string">&#x27;\&#x27;&#x27;</span> + <span class="string">&#x27;,&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">        insertData = insertData.substring(<span class="number">0</span>, insertData.length - <span class="number">1</span>) + <span class="string">&#x27;)&#x27;</span>;</span><br><span class="line">        content += insertData + <span class="string">&#x27;,&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    content = content.substring(<span class="number">0</span>, content.length - <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">let</span> sql = <span class="string">`insert into user (user_name,</span></span><br><span class="line"><span class="string">        nick_name,email,sex,login_ip,login_date,password,avatar,text) values</span></span><br><span class="line"><span class="string">        <span class="subst">$&#123;content&#125;</span>`</span>;</span><br><span class="line">    connection.query(sql);</span><br><span class="line">    connection.release();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 循环60000万次，总计能插入600万条</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">60000</span>; i++)</span><br><span class="line"> &#123;</span><br><span class="line">    </span><br><span class="line">    pool.getConnection(<span class="function"><span class="keyword">function</span> (<span class="params">err, connection</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 代码</span></span><br><span class="line">        insert(connection)</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&#x27;第&#x27;</span>+i+<span class="string">&#x27;条sql执行成功！&#x27;</span>)</span><br><span class="line">    &#125;) </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>查询对比</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">FROM</span> `<span class="keyword">user</span>`</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `<span class="keyword">user</span>` <span class="keyword">WHERE</span> user_id <span class="operator">=</span> <span class="number">1097</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/count.15ilnmo72yv4.webp" alt="count"></p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/id%E7%B4%A2%E5%BC%95.zwuk2mb7dnk.webp" alt="id索引"></p>
+<h3 id="Innodb的b-树数据结构"><a href="#Innodb的b-树数据结构" class="headerlink" title="Innodb的b+树数据结构"></a>Innodb的b+树数据结构</h3><p>innodb中的数据是以<code>行</code>为单位，存在一个个大小为16k的<code>页</code>中，b+树的作用就是按照一个组织形式，将所有的<code>页</code>组织关联起来</p>
+<h3 id="B树"><a href="#B树" class="headerlink" title="B树"></a>B树</h3><p>B表示balance(平衡)，B树是一种<code>多路自平衡的搜索树</code>，它类似普通的平衡二叉树，不同的一点是B树允许每个节点有更多的子节点</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/B%E6%A0%91.2ia0n40pzbk0.webp" alt="B树"></p>
+<h4 id="B树的特点"><a href="#B树的特点" class="headerlink" title="B树的特点"></a>B树的特点</h4><p>所有键值分布在整颗树中</p>
+<p>任何一个关键字出现且只出现在一个结点中</p>
+<p>搜索有可能在非叶子结点结束</p>
+<p>在关键字全集内做一次查找，性能接近二分查找</p>
+<h3 id="B-树"><a href="#B-树" class="headerlink" title="B+树"></a>B+树</h3><p>一种多路搜索树</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/B+%E6%A0%91.4dy460y12xe0.webp" alt="B+树"></p>
+<h4 id="B树-VS-B-树"><a href="#B树-VS-B-树" class="headerlink" title="B树 VS B+树"></a>B树 VS B+树</h4><ul>
+<li>相同点</li>
+</ul>
+<p>都是一种多路搜索树</p>
+<ul>
+<li>不同点</li>
+</ul>
+<p>B+树所有关键字存储在叶子节点</p>
+<p>B+树为所有叶子结点增加了一个双向指针</p>
+<h4 id="选型缘由"><a href="#选型缘由" class="headerlink" title="选型缘由"></a>选型缘由</h4><blockquote>
+<p>为什么选择b树或b+树</p>
+</blockquote>
+<ul>
+<li><p>mysql数据模型更适合用这类数据结构，一条数据中通常包含id和其他列数据，我们可以很轻松的根据id组织一颗B+树</p>
+</li>
+<li><p>innodb使用页保存数据，一页（16k）b+树中的每个节点都是一页数据</p>
+</li>
+</ul>
+<blockquote>
+<p>为什么选择B+树？</p>
+</blockquote>
+<ul>
+<li><p>相同的空间，不存放整行数据就能存更多的id，b+树能使每个节点能检索的范围更大、更精确，极大的减少了I/O操作，保证b+树的层高较低，通常3到4层的层高就能支持百万级别的访问</p>
+</li>
+<li><p>Mysql是一种关系型数据库，<code>区间访问</code>是很常见的一种情况，B+树叶节点增加的双向指针，加强了区间访问性，可使用在范围区间查询的情况</p>
+</li>
+</ul>
+<h3 id="索引发现"><a href="#索引发现" class="headerlink" title="索引发现"></a>索引发现</h3><p>当我们使用非id列作为条件是发现会很慢，所以我们构建主节点按照属性排序，在叶子节点中只保存id而不保存全部数据，查到id后再回表（回到原来的结构中根据id进行查询）查询整条记录，这就是创建的<code>索引</code></p>
+<h3 id="索引的分类和创建"><a href="#索引的分类和创建" class="headerlink" title="索引的分类和创建"></a>索引的分类和创建</h3><h4 id="聚簇索引"><a href="#聚簇索引" class="headerlink" title="聚簇索引"></a>聚簇索引</h4><p>主键和数据共存的索引被称之为聚簇索引，同时聚簇索引只有在innodb引擎中才存在，而在myIsam中是不存在的</p>
+<p>聚簇索引默认使用主键，如果表中没有定义主键，InnoDB 会选择一个唯一且非空的列代替。如果没有这样的列，InnoDB会隐式定义一个主键rowid来作为聚簇索引的列</p>
+<h4 id="非聚簇索引"><a href="#非聚簇索引" class="headerlink" title="非聚簇索引"></a>非聚簇索引</h4><p>其他列+主键建立的索引，可以称为非聚簇索引/辅助索引/二级索引</p>
+<p>MyIsam使用的是非聚簇索引，非聚簇索引的两棵B+树看上去没什么不同，节点的结构完全一致只是存储的内容不同而已，主键索引B+树的节点存储了主键，辅助键索引B+树存储了辅助列。表数据存储在独立的地方，这两颗B+树的叶子节点都使用一个<code>地址指向真正的表数据</code>，对于表数据来说，这两个键没有任何差别。由于索引树是独立的，通过辅助键检索无需访问主键的索引树</p>
+<p>如果涉及到大数据量的排序、全表扫描、count之类的操作的话，还是MyIsam占优势些，因为索引所占空间小，这些操作是需要在内存中完成的</p>
+<blockquote>
+<p>主键为什么建议使用自增id?</p>
+</blockquote>
+<ul>
+<li><p>主键最好不要使用uuid，因为uuid的值太过离散，不适合排序且可能出现新增加记录的uuid，会插入在索引树中间的位置，出现页分裂，导致索引树调整复杂度变大，消耗更多的时间和资源</p>
+</li>
+<li><p>聚簇索引的数据的物理存放顺序与索引顺序是一致的，即：只要索引是相邻的，那么对应的数据一定也是相邻地存放在磁盘上的。如果主键不是自增id，它会不断地调整数据的物理地址、分页，当然也有其他一些措施来减少这些操作，但却无法彻底避免。但如果是自增的id，它只需要一页一页地写，索引结构相对紧凑，磁盘碎片少，效率也高</p>
+</li>
+</ul>
+<h4 id="普通索引（normal）"><a href="#普通索引（normal）" class="headerlink" title="普通索引（normal）"></a>普通索引（normal）</h4><blockquote>
+<p>创建索引</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> index idx_user_name <span class="keyword">on</span> <span class="keyword">user</span>(user_name);</span><br></pre></td></tr></table></figure>
+
+<p>创建索引很费时间</p>
+<blockquote>
+<p>删除索引</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> index idx_user_name <span class="keyword">on</span> <span class="keyword">user</span>; </span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>修改表的方式添加索引</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> <span class="keyword">user</span> <span class="keyword">add</span> index idx_email (email);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>创建表时同时创建索引</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> tbl_name(</span><br><span class="line">    tid <span class="type">int</span>,</span><br><span class="line">    tname <span class="type">varchar</span>(<span class="number">20</span>),</span><br><span class="line">    gender <span class="type">varchar</span>(<span class="number">1</span>),</span><br><span class="line">    index [索引的名字] (字段) </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h4 id="唯一索引（UNIQUE）"><a href="#唯一索引（UNIQUE）" class="headerlink" title="唯一索引（UNIQUE）"></a>唯一索引（UNIQUE）</h4><p>索引列的值不能重复</p>
+<blockquote>
+<p>创建表的同时创建索引</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> tbl_name(</span><br><span class="line">    tid <span class="type">int</span>,</span><br><span class="line">    tname <span class="type">varchar</span>(<span class="number">20</span>),</span><br><span class="line">    gender <span class="type">varchar</span>(<span class="number">1</span>),</span><br><span class="line">    <span class="keyword">unique</span> index unique_index_tname (tname)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>单独创建索引</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">unique</span> index idx_email <span class="keyword">on</span> <span class="keyword">user</span>(email);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>修改的方式创建索引</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">table</span> 表名 <span class="keyword">ADD</span> <span class="keyword">UNIQUE</span> [索引名字] (字段)</span><br></pre></td></tr></table></figure>
+
+<p><strong>唯一索引 VS 主键</strong></p>
+<ul>
+<li><p>唯一索引列允许空值，而主键列不允许为空值</p>
+</li>
+<li><p>主键列在创建时，已经默认为非空值 + 唯一索引了</p>
+</li>
+<li><p>主键可以被其他表引用为外键，而唯一索引不能</p>
+</li>
+<li><p>一个表最多只能创建一个主键，但可以创建多个唯一索引</p>
+</li>
+<li><p>主键更适合那些不容易更改的唯一标识，如自动递增列、身份证号等</p>
+</li>
+</ul>
+<p><strong>唯一索引 VS 唯一约束</strong></p>
+<ul>
+<li><p>唯一约束和唯一索引，都可以实现列数据的唯一，列值可以为null</p>
+</li>
+<li><p>创建唯一约束，会自动创建一个同名的唯一索引，该索引不能单独删除，删除约束会自动删除索引。唯一约束是通过唯一索引来实现数据唯一</p>
+</li>
+<li><p>创建一个唯一索引，这个索引就是独立的索引，可以单独删除</p>
+</li>
+<li><p>如果一个列上想有约束和索引，且两者可以单独的删除。可以先建唯一索引，再建同名的唯一约束</p>
+</li>
+</ul>
+<h4 id="多个二级索引的组合"><a href="#多个二级索引的组合" class="headerlink" title="多个二级索引的组合"></a>多个二级索引的组合</h4><p>mysql在执行查询语句的时候一般只会使用一个索引，除非是使用or连接的两个索引列会产生索引合并</p>
+<p><strong>以三个索引，三个字段分别为品牌、价格、销量举例</strong></p>
+<ul>
+<li>检索品牌为小米的手机</li>
+</ul>
+<p>通过品牌索引检索出所有小米的商品id，回表查询，得到结果，会使用一个索引</p>
+<ul>
+<li>检索名称为小米，价格在一千到三千之间的手机</li>
+</ul>
+<p>通过品牌索引检索出所有小米的商品id</p>
+<p>直接回表扫描，根据剩余条件检索结果</p>
+<p>只会使用第一个索引</p>
+<ul>
+<li>我们要检索名称为小米，价格为6800，且销量在50以上的手机</li>
+</ul>
+<p>通过品牌索引检索出所有小米的商品id</p>
+<p>直接回表扫描，根据剩余条件检索结果</p>
+<p>只会使用第一个索引</p>
+<ul>
+<li>检索名称为小米或名称为华为的手机</li>
+</ul>
+<p>通过【品牌索引】检索出所有阿玛尼的商品id，得到结果</p>
+<p>or相当于一个in关键字，会使用一个索引</p>
+<ul>
+<li>检索名称为小米或价格大于8000的手机</li>
+</ul>
+<p>通过品牌索引检索出所有小米的商品id</p>
+<p>通过价格索引检索出价格大于8000的商品id，和上一步的结果进行并集，得到结果</p>
+<p>这个过程叫索引合并，当检索条件有or但是所有的条件都有索引时，索引不失效，可以走两个索引</p>
+<ul>
+<li>检索名称为小米，且价格大于8000，且产地（该列无索引）在大连的手机</li>
+</ul>
+<p>通过品牌索引检索出所有小米的商品id</p>
+<p>直接回表扫描，根据剩余条件检索结果</p>
+<p>只会使用第一个索引</p>
+<ul>
+<li>检索名称为小米或价格大于8000，或产地（该列无索引）在大连的手机</li>
+</ul>
+<p>关联条件是or，无索引，发生全表扫描，索引失效</p>
+<h4 id="复合索引-联合索引"><a href="#复合索引-联合索引" class="headerlink" title="复合索引/联合索引"></a>复合索引/联合索引</h4><p>当查询语句中包含多个查询条件，且查询的顺序基本保持一致时使用</p>
+<ul>
+<li>按照A列、B列、C列进行查询时</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alert <span class="keyword">table</span> 表名 <span class="keyword">add</span> 索引名 <span class="keyword">table</span> (a,b,c) </span><br></pre></td></tr></table></figure>
+
+<p>复合索引可以想象成字典目录，你看假如目录都是四字成语 你查第一个字有多少页，然后前两个字又有多少页，你推理一下</p>
+<table>
+<thead>
+<tr>
+<th>品牌</th>
+<th>价格</th>
+<th>销量</th>
+<th>id</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>xiaomi</td>
+<td>6800</td>
+<td>35</td>
+<td>13,24,76</td>
+</tr>
+<tr>
+<td>xiaomi</td>
+<td>6900</td>
+<td>35</td>
+<td>1,23,74</td>
+</tr>
+<tr>
+<td>xiaomi</td>
+<td>7000</td>
+<td>100</td>
+<td>15,21,26</td>
+</tr>
+<tr>
+<td>xiaomi</td>
+<td>7100</td>
+<td>50</td>
+<td>73,54,46</td>
+</tr>
+<tr>
+<td>huawei</td>
+<td>8000</td>
+<td>100</td>
+<td>243,224,766</td>
+</tr>
+<tr>
+<td>apple</td>
+<td>9000</td>
+<td>110</td>
+<td>1123,212,126</td>
+</tr>
+<tr>
+<td>apple</td>
+<td>9500</td>
+<td>120</td>
+<td>1633,1234,76123</td>
+</tr>
+<tr>
+<td>apple</td>
+<td>10000</td>
+<td>130</td>
+<td>13453,21324,3276</td>
+</tr>
+<tr>
+<td>sanxing</td>
+<td>9000</td>
+<td>150</td>
+<td>13745,22344,2136</td>
+</tr>
+</tbody></table>
+<ul>
+<li>检索名称为小米的手机</li>
+</ul>
+<p>通过品牌索引检索出所有小米的商品id，回表查询，得到结果</p>
+<p>使用第一部分索引</p>
+<ul>
+<li>检索名称为小米，价格在七千到八千之间的手机</li>
+</ul>
+<p>通过品牌索引检索出所有小米的叶子节点</p>
+<p>在满足上一步条件的叶子节点中查询价格在七千到八千之间的手机的列，查询出对应的id，回表查询列数据</p>
+<p>使用复合索引的两个部分</p>
+<ul>
+<li>检索名称为小米或价格大于8000的手机</li>
+</ul>
+<p>优化器发现我们并没有一个价格列的单独的二级索引，此时要查询价格大于8000的手机，必须进行全表扫描</p>
+<p>查询的条件中没有复合索引的第一部分，索引直接失效，全表扫描</p>
+<ul>
+<li>检索名称为小米，且价格大于7000，且产地（该列无索引）在北京的手机</li>
+</ul>
+<p>通过品牌索引检索出所有小米的叶子节点</p>
+<p>在满足上一步条件的叶子节点中查询价格大于7000元的小米的叶子节点</p>
+<p>因为产地列无索引，但是and的关系，我们只需要将上一步得到的结果回表查询，在这个很小的范围内，检索产地是不是北京即可</p>
+<p>使用复合索引的两个部分</p>
+<ul>
+<li>检索名称为小米和apple之间，价格为在七千到九千的手机</li>
+</ul>
+<p>通过品牌索引检索出所有小米和apple的所有叶子节点</p>
+<p>快速定位价格的范围，但是发现一个问题，由于第一步不是等值查询，会导致后边的结果不连续，必须对上一步的结果全部遍历，拿到对应的结果</p>
+<p><strong>最左前缀原则</strong></p>
+<ul>
+<li><p>mysql会一直向右匹配直到遇到范围查询（&gt;、&lt;、between、like）就停止匹配，比如a = 1 and b = 2 and c &gt; 3 and d = 4 ，如果建立（a,b,c,d）顺序的联合索引，d是用不到索引的，如果建立(a,b,d,c)的索引则都可以用到，a,b,d的顺序可以任意调整</p>
+</li>
+<li><p>=和in可以乱序，比如a = 1 and b &lt; 2 and c = 3 ，咱们建立的索引就可以是（a,c,b）或者（c,a,b）</p>
+</li>
+</ul>
+<h4 id="全文索引（FULLTEXT）"><a href="#全文索引（FULLTEXT）" class="headerlink" title="全文索引（FULLTEXT）"></a>全文索引（FULLTEXT）</h4><p>只有字段的数据类型为 char、varchar、text 及其系列才可以建全文索引</p>
+<blockquote>
+<p>创建表时创建全文索引</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> ydlclass_user (    </span><br><span class="line">    ..   </span><br><span class="line">    FULLTEXT KEY fulltext_text(text)  </span><br><span class="line">) </span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>单独创建全文索引</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> fulltext index fulltext_text  <span class="keyword">on</span> ydlclass_user(text);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>修改的方式创建全文索引</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> ydlclass_user <span class="keyword">add</span> fulltext index fulltext_text(text);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>删除全文索引</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">drop</span> index fulltext index <span class="keyword">on</span> <span class="keyword">user</span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>全文检索的语法</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="keyword">match</span>(text) against(<span class="string">&#x27;人民万岁&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="hash索引"><a href="#hash索引" class="headerlink" title="hash索引"></a>hash索引</h4><ul>
+<li><p>hash是一种key-value形式的数据结构。实现一般是数组+链表的结构，通过hash函数计算出key在数组中的位置，然后如果出现hash冲突就通过链表来解决。系统使用HashMap来构建热点数据缓存，存取效率很好</p>
+</li>
+<li><p>即使是相近的key，hash的取值也完全没有规律，索引hash索引不支持范围查询</p>
+</li>
+<li><p>hash索引存储的是hash值和行指针，所以通过hash索引查询数据需要进行两次查询,首先查询行的位置，然后找到具体的数据</p>
+</li>
+<li><p>hash索引查询数据的前提就是计算hash值，也就是要求key为一个能准确指向一条数据的key，所以对于like等一类的匹配查询是不支持的</p>
+</li>
+<li><p>只要是只需要做等值比较查询，而不包含排序或范围查询的需求，都适合使用哈希索引</p>
+</li>
+</ul>
+<p><strong>将表的数据加载到内存</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> hash_user <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> user_id <span class="operator">&lt;</span> <span class="number">2000000</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>mysql配置文件中可对其进行内存大小的配置</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tmp_table_size = 4096M</span><br><span class="line">max_heap_table_size = 4096M</span><br></pre></td></tr></table></figure>
+
+<h4 id="空间索引（SPATIAL）"><a href="#空间索引（SPATIAL）" class="headerlink" title="空间索引（SPATIAL）"></a>空间索引（SPATIAL）</h4><p>在地理位置领域使用的一种索引</p>
+<p><strong>正确的开始 微小的长进 然后持续 嘿 我是小博 带你一起看我目之所及的世界……</strong></p>
+
+    </div>
+	<div>
+	
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束 <i class="fa fa-paw"></i> 感谢您的阅读-------------</div>
+    
+</div>
+
+     
+	</div>
+	
+	<div>
+      
+        
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/posts/1926493212/">MySQL高级进阶三</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a>小博</p>
+  <p><span>发布时间:</span>2022年12月06日 - 22:23</p>
+  <p><span>最后更新:</span>2022年12月06日 - 22:25</p>
+  <p><span>原始链接:</span><a href="/posts/1926493212/" title="MySQL高级进阶三">https://codexiaobo.github.io/posts/1926493212/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://codexiaobo.github.io/posts/1926493212/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+      $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+        });
+    });  
+</script>
+
+
+      
+	</div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>学习技术分享、感谢您的支持</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="xiaobo 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="xiaobo 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/mysql/" rel="tag"># mysql</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/2812722732/" rel="prev" title="MySQL进阶 二">
+                  <i class="fa fa-chevron-left"></i> MySQL进阶 二
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xiaobo</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">848k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">12:51</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+<span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+<script>
+    var now = new Date(); 
+    function createtime() { 
+        var grt= new Date("06/07/2021 10:15:49");//在此处修改你的建站时间，格式：月/日/年 时:分:秒
+        now.setTime(now.getTime()+250); 
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 "; 
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+    } 
+setInterval("createtime()",250);
+</script>
+
+
+
+
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+ 
+  
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+
+ 
+</body>
+</html>
