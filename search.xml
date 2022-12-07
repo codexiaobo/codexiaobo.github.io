@@ -1,6 +1,333 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>MySQl高级进阶四</title>
+    <url>/posts/691987327/</url>
+    <content><![CDATA[<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221208005212.4jdrhszoy6w0.webp" alt="微信图片_20221208005212"></p>
+<!--sleep-->
+
+<span id="more"></span>
+
+<h1 id="MySQL高级进阶"><a href="#MySQL高级进阶" class="headerlink" title="MySQL高级进阶"></a>MySQL高级进阶</h1><h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><h3 id="explain"><a href="#explain" class="headerlink" title="explain"></a>explain</h3><p>explain关键字可以模拟MySQL优化器执行SQL语句，可以很好的分析SQL语句或表结构的性能瓶颈</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `<span class="keyword">user</span>` </span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>列</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>select查询的序列号，包含一组数字，表示查询中执行select子句或操作表的顺序</td>
+</tr>
+<tr>
+<td>select_type</td>
+<td>查询类型</td>
+</tr>
+<tr>
+<td>table</td>
+<td>正在访问哪个表</td>
+</tr>
+<tr>
+<td>partitions</td>
+<td>匹配的分区</td>
+</tr>
+<tr>
+<td>type</td>
+<td>访问的类型</td>
+</tr>
+<tr>
+<td>possible_keys</td>
+<td>显示可能应用在这张表中的索引，一个或多个，但不一定实际使用到</td>
+</tr>
+<tr>
+<td>key</td>
+<td>实际使用到的索引，如果为NULL，则没有使用索引</td>
+</tr>
+<tr>
+<td>key_len</td>
+<td>表示索引中使用的字节数，可通过该列计算查询中使用的索引的长度</td>
+</tr>
+<tr>
+<td>ref</td>
+<td>显示索引的哪一列被使用了，如果可能的话，是一个常数，哪些列或常量被用于查找索引列上的值</td>
+</tr>
+<tr>
+<td>rows</td>
+<td>根据表统计信息及索引选用情况，大致估算出找到所需的记录所需读取的行数 filtered 查询的表行占表的百分比</td>
+</tr>
+<tr>
+<td>filtered</td>
+<td>查询的表行占表的百分比</td>
+</tr>
+<tr>
+<td>Extra</td>
+<td>包含不适合在其它列中显示但十分重要的额外信息</td>
+</tr>
+</tbody></table>
+<h4 id="id字段"><a href="#id字段" class="headerlink" title="id字段"></a>id字段</h4><p>select查询的序列号，包含一组数字，表示查询中执行select子句或操作表的顺序</p>
+<ul>
+<li>id如果相同，可以认为是一组，执行顺序从上至下</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student s, scores sc <span class="keyword">where</span> s.id <span class="operator">=</span> sc.s_id</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li> 如果是子查询，id的序号会递增，id的值越大优先级越高，越先被执行例子</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">where</span> age <span class="operator">&gt;</span> (</span><br><span class="line">	<span class="keyword">select</span> age <span class="keyword">from</span> student <span class="keyword">where</span> name <span class="operator">=</span> <span class="string">&#x27;xiaobo&#x27;</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>id如果相同，可以认为是一组，从上往下顺序执行在所有组中，id值越大，优先级越高，越先执行</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">explain </span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student s, score sc <span class="keyword">where</span> s.id <span class="operator">=</span> sc.s_id</span><br><span class="line"><span class="keyword">union</span></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student s, score sc <span class="keyword">where</span> s.id <span class="operator">=</span> sc.s_id;</span><br></pre></td></tr></table></figure>
+
+<h4 id="select-type字段"><a href="#select-type字段" class="headerlink" title="select_type字段"></a>select_type字段</h4><ul>
+<li>SIMPLE</li>
+</ul>
+<p>简单查询，不包含子查询或Union查询的sql语句</p>
+<ul>
+<li>PRIMARY</li>
+</ul>
+<p>查询中若包含任何复杂的子部分，最外层查询则被标记为主查询</p>
+<ul>
+<li>SUBQUERY</li>
+</ul>
+<p>在select或where中包含子查询</p>
+<ul>
+<li>UNION</li>
+</ul>
+<p>若第二个select出现在uion之后，则被标记为UNION</p>
+<ul>
+<li>UNION RESULT</li>
+</ul>
+<p>从UNION表获取结果的合并操作</p>
+<h4 id="type字段"><a href="#type字段" class="headerlink" title="type字段"></a>type字段</h4><ul>
+<li>NULL</li>
+</ul>
+<p>MySQL能够在优化阶段分解查询语句，在执行阶段用不着再访问表或索引</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">explain <span class="keyword">select</span> <span class="built_in">min</span>(id) <span class="keyword">from</span> student;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>system</li>
+</ul>
+<p>表只有一行记录（等于系统表），这是const类型的特列</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> mysql.proxies_priv</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>const</li>
+</ul>
+<p>const用于比较primary key或uique索引，因为只匹配一行数据，所以很快，如主键置于where列表中，MySQL就能将该查询转换为一个常量例子</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">where</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>eq_ref</li>
+</ul>
+<p>唯一性索引扫描，对于每个索引键，表中只有一条记录与之匹配，常见于主键或唯一索引扫描</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> scores sc <span class="keyword">left</span> <span class="keyword">join</span> student s <span class="keyword">on</span> s.id <span class="operator">=</span> sc.s_id</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>ref</li>
+</ul>
+<p>非唯一性索引扫描，返回匹配某个单独值的所有行，本质上也是一种索引访问，返回所有匹配某个单独值的行，然而可能会找到多个符合条件的行，应该属于查找和扫描的混合体</p>
+<ul>
+<li>ref_or_null</li>
+</ul>
+<p>类似ref，但是可以搜索值为NULL的行</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student s <span class="keyword">where</span> name <span class="operator">=</span> <span class="string">&#x27;xiaobo&#x27;</span> <span class="keyword">or</span> name <span class="keyword">is</span> <span class="keyword">null</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>index_merge</li>
+</ul>
+<p>表示使用了索引合并的优化方法</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">where</span> id <span class="operator">=</span> <span class="number">1</span> <span class="keyword">or</span> name <span class="operator">=</span><span class="string">&#x27;xiaobo&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>range</li>
+</ul>
+<p>检索给定范围的行，使用一个索引来选择行，key列显示使用了哪个索引一般就是在你的where语句中出现between、&lt;&gt;、in等的查询</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">where</span> id <span class="keyword">between</span> <span class="number">2</span> <span class="keyword">and</span> <span class="number">4</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>index（全索引扫描）</li>
+</ul>
+<p>Full index Scan，Index与All区别：index只遍历索引树，通常比All快因为索引文件通常比数据文件小，也就是虽然all和index都是读全表，但index是从索引中读取的，而all是从硬盘读的</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">explain <span class="keyword">select</span> name <span class="keyword">from</span> student;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>ALL（全表扫）</li>
+</ul>
+<p>Full Table Scan，将遍历全表以找到匹配行</p>
+<h4 id="table字段"><a href="#table字段" class="headerlink" title="table字段"></a>table字段</h4><p>表示数据来自哪张表</p>
+<h4 id="possible-keys字段"><a href="#possible-keys字段" class="headerlink" title="possible_keys字段"></a>possible_keys字段</h4><p>显示可能应用在这张表中的索引，一个或多个查询涉及到的字段若存在索引，则该索引将被列出，但不一定被实际使用</p>
+<h4 id="key字段"><a href="#key字段" class="headerlink" title="key字段"></a>key字段</h4><p>实际使用到的索引，如果为NULL，则没有使用索引查询中若使用了覆盖索引（查询的列刚好是索引），则该索引仅出现在key列表</p>
+<h4 id="key-len字段"><a href="#key-len字段" class="headerlink" title="key_len字段"></a>key_len字段</h4><p>表示索引中使用的字节数，可通过该列计算查询中使用的索引的长度在不损失精确度的情况下，长度越短越好key_len显示的值为索引字段最大的可能长度，并非实际使用长度即key_len是根据定义计算而得，不是通过表内检索出的</p>
+<h4 id="ref字段"><a href="#ref字段" class="headerlink" title="ref字段"></a>ref字段</h4><p>哪些列或常量被用于查找索引列上的值</p>
+<h4 id="rows字段"><a href="#rows字段" class="headerlink" title="rows字段"></a>rows字段</h4><p>根据表统计信息及索引选用情况，大致估算出找到所需的记录所需读取的行数</p>
+<h4 id="partitions字段"><a href="#partitions字段" class="headerlink" title="partitions字段"></a>partitions字段</h4><p>匹配的分区</p>
+<h4 id="filtered字段"><a href="#filtered字段" class="headerlink" title="filtered字段"></a>filtered字段</h4><p>返回结果的行占需要读到的行(rows列的值)的百分比</p>
+<h4 id="Extra字段"><a href="#Extra字段" class="headerlink" title="Extra字段"></a>Extra字段</h4><ul>
+<li>Using filesort</li>
+</ul>
+<p>只要使用非索引字段排序</p>
+<ul>
+<li>Using temporary</li>
+</ul>
+<p>使用了临时表保存中间结果，MySQL在对结果排序时使用临时表，常见于排序order by 和分组查询group by</p>
+<ul>
+<li>Using where</li>
+</ul>
+<p>使用了where条件</p>
+<ul>
+<li>impossible where</li>
+</ul>
+<p>where子句的值总是false，不能用来获取任何数据</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">where</span> name <span class="operator">=</span> <span class="string">&#x27;xiaobo&#x27;</span> <span class="keyword">and</span> name <span class="operator">=</span> <span class="string">&#x27;pangzi&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Select tables optimized away</li>
+</ul>
+<p>SELECT操作已经优化到不能再优化了（MySQL根本没有遍历表或索引就返回数据了）</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">explain <span class="keyword">select</span> <span class="built_in">min</span>(id) <span class="keyword">from</span> student;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>no matching row in const table</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">where</span> id <span class="operator">&lt;</span> <span class="number">100</span> <span class="keyword">and</span> id <span class="operator">&gt;</span> <span class="number">200</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="索引问题"><a href="#索引问题" class="headerlink" title="索引问题"></a>索引问题</h3><h4 id="哪些情况适合建索引"><a href="#哪些情况适合建索引" class="headerlink" title="哪些情况适合建索引"></a>哪些情况适合建索引</h4><ul>
+<li><p>频繁作为where条件语句查询的字段</p>
+</li>
+<li><p>关联字段需要建立索引</p>
+</li>
+<li><p>分组，排序字段可以建立索引</p>
+</li>
+<li><p>统计字段可以建立索引，例如count()，max()</p>
+</li>
+</ul>
+<h4 id="哪些情况不适合建索引"><a href="#哪些情况不适合建索引" class="headerlink" title="哪些情况不适合建索引"></a>哪些情况不适合建索引</h4><ul>
+<li><p>频繁更新的字段不适合建立索引</p>
+</li>
+<li><p>where条件中用不到的字段不适合建立索引</p>
+</li>
+<li><p>表数据可以确定比较少的不需要建索引</p>
+</li>
+<li><p>数据重复且发布比较均匀的的字段不适合建索引（唯一性太差的字段不适合建立索引），例如性别，真假值</p>
+</li>
+<li><p>参与列计算的列不适合建索引，索引会失效</p>
+</li>
+</ul>
+<h4 id="能用复合索引的要使用复合索引"><a href="#能用复合索引的要使用复合索引" class="headerlink" title="能用复合索引的要使用复合索引"></a>能用复合索引的要使用复合索引</h4><h4 id="null值也是可以走索引的，他被处理成最小值放在b-树的最左侧"><a href="#null值也是可以走索引的，他被处理成最小值放在b-树的最左侧" class="headerlink" title="null值也是可以走索引的，他被处理成最小值放在b+树的最左侧"></a>null值也是可以走索引的，他被处理成最小值放在b+树的最左侧</h4><h4 id="使用短索引"><a href="#使用短索引" class="headerlink" title="使用短索引"></a>使用短索引</h4><p>字符串的列创建索引，如果可能，应该指定一个前缀长度。例如，如果有一个CHAR(255)的 列，如果在前10 个或20 个字符内，多数值是惟一的，那么就不要对整个列进行索引。短索引不仅可以提高查询速度而且可以节省磁盘空间和I/O操作</p>
+<h4 id="排序的索引问题"><a href="#排序的索引问题" class="headerlink" title="排序的索引问题"></a>排序的索引问题</h4><p>mysql查询只使用一个索引，因此如果where子句中已经使用了索引的话，那么order by中的列是不会使用索引的。因此数据库默认排序可以符合要求的情况下不要使用排序操作；尽量不要包含多个列的排序，如果需要，最好给这些列创建复合索引</p>
+<h4 id="MySQL索引失效的情况"><a href="#MySQL索引失效的情况" class="headerlink" title="MySQL索引失效的情况"></a>MySQL索引失效的情况</h4><ul>
+<li><p>如果条件中有or，即使其中有条件带索引也不会使用走索引，除非全部条件都有索引</p>
+</li>
+<li><p>复合索引不满足最左原则就不能使用全部索引</p>
+</li>
+<li><p>like查询以%开头</p>
+</li>
+<li><p>存在列计算</p>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- 索引生效</span></span><br><span class="line">explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">where</span> age <span class="operator">=</span> (<span class="number">23</span><span class="number">-1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 全表扫描</span></span><br><span class="line">explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">where</span> age<span class="number">-1</span> <span class="operator">=</span> <span class="number">22</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>如果mysql估计使用全表扫描要比使用索引快，则不使用索引，比如结果的量很大</p>
+</li>
+<li><p>存在类型转化</p>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- 索引不失效</span></span><br><span class="line">explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">where</span> age <span class="operator">=</span> <span class="string">&#x27;22&#x27;</span>  </span><br><span class="line">explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> ydl_user <span class="keyword">where</span> login_date <span class="operator">=</span> <span class="string">&#x27;2001-05-28 5:20:00&#x27;</span></span><br><span class="line"><span class="comment">-- 索引失效 本来是字符串，你使用数字和他比较</span></span><br><span class="line">explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">where</span> gander <span class="operator">=</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="锁机制"><a href="#锁机制" class="headerlink" title="锁机制"></a>锁机制</h2><h3 id="InnoDB锁类型"><a href="#InnoDB锁类型" class="headerlink" title="InnoDB锁类型"></a>InnoDB锁类型</h3><h4 id="s锁"><a href="#s锁" class="headerlink" title="s锁"></a>s锁</h4><p>读锁（共享锁，shared lock）简称S锁。一个事务获取了一个数据行的读锁，其他事务也能获得该行对应的读锁，但不能获得写锁，即一个事务在读取一个数据行时，其他事务也可以读，但不能对该数行增删改的操作</p>
+<p>大白话：可以多个事务读，但只能一个事务写</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/s%E9%94%811.4r4pn3bkdle0.webp" alt="s锁1"></p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/s%E9%94%812.67nbi7ld38c0.webp" alt="s锁2"></p>
+<h4 id="x锁"><a href="#x锁" class="headerlink" title="x锁"></a>x锁</h4><p>写锁，也叫排他锁，或者叫独占所，简称x锁（exclusive）。一个事务获取了一个数据行的写锁，既可以读该行的记录，也可以修改该行的记录。但其他事务就不能再获取该行的其他任何的锁，包括s锁，直到当前事务将锁释放，保证了其他事务在当前事务释放锁之前不能再修改数据</p>
+<p>大白话：写锁是独占锁，只有一个事务可以持有，当这个事务持有写锁时，被锁的数据就不能被其他事务修改</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/X%E9%94%811.1t170tg3rz5s.webp" alt="X锁1"></p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/X%E9%94%812.1cm45w5omf5s.webp" alt="X锁2"></p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/for-update%E7%9A%84x%E9%94%811.4lfih7hl8d80.webp" alt="for-update的x锁1"></p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/for-update%E7%9A%84x%E9%94%812.5lccfys7oyw0.webp" alt="for-update的x锁2"></p>
+<h4 id="记录锁（Record-Lock）"><a href="#记录锁（Record-Lock）" class="headerlink" title="记录锁（Record Lock）"></a>记录锁（Record Lock）</h4><p>记录锁，只有innodb才支持，行锁是加在索引上的，这是标准的行级锁</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/%E8%AE%B0%E5%BD%95%E9%94%811-1.6hffd8sx90w0.webp" alt="记录锁1-1"></p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/%E8%AE%B0%E5%BD%95%E9%94%811-2.5a86rkited00.webp" alt="记录锁1-2"></p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/%E8%AE%B0%E5%BD%95%E9%94%812-1.3vd8zptg4g40.webp" alt="记录锁2-1"></p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/%E8%AE%B0%E5%BD%95%E9%94%812-2.45avcvh5igs0.webp" alt="记录锁2-2"></p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/%E8%AE%B0%E5%BD%95%E9%94%813-1.3x016hyfahk0.webp" alt="记录锁3-1"></p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/%E8%AE%B0%E5%BD%95%E9%94%814-1.cvs5codageg.webp" alt="记录锁4-1"></p>
+<p>记录锁是行锁，行锁是加在索引上的，这是标准的行级锁</p>
+<h4 id="间隙锁（GAP-Lock）"><a href="#间隙锁（GAP-Lock）" class="headerlink" title="间隙锁（GAP Lock）"></a>间隙锁（GAP Lock）</h4><p>间隙锁帮我们解决了mysql在rr级别下的一部分幻读问题。间隙锁锁定的是记录范围，不包含记录本身，也就是不允许在某个范围内插入数据</p>
+<blockquote>
+<p>条件</p>
+</blockquote>
+<p>A事务使用where进行范围检索时未提交事务，此时B事务向A满足检索条件的范围内插入数据</p>
+<p>where条件必须有索引</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/%E9%97%B4%E9%9A%99%E9%94%811-1.547kf01okds0.webp" alt="间隙锁1-1"></p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/%E9%97%B4%E9%9A%99%E9%94%811-2.13w43oejuheo.webp" alt="间隙锁1-2"></p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/%E9%97%B4%E9%9A%99%E9%94%812.5xwl9phu8hw0.webp" alt="间隙锁2"></p>
+<h4 id="记录锁和间隙锁的组合（next-key-lock）"><a href="#记录锁和间隙锁的组合（next-key-lock）" class="headerlink" title="记录锁和间隙锁的组合（next-key lock）"></a>记录锁和间隙锁的组合（next-key lock）</h4><p>记录锁与间隙锁的组合，它的封锁范围，既包含索引记录，又包含索引区间</p>
+<p>临键锁是为了避免幻读，如果把事务的隔离级别降级为RC，临键锁则也会失效</p>
+<h4 id="MDL锁"><a href="#MDL锁" class="headerlink" title="MDL锁"></a>MDL锁</h4><p>用于保证表中元数据的信息，在会话A中，表开启了查询事务后，会自动获得一个MDL锁，会话B就不可以执行任何DDL语句，不能执行为表中添加字段的操作，会用MDL锁来保证数据之间的一致性</p>
+<p>元数据就是描述数据的数据，也就是你的表结构，在你开启了事务之后获得了意向锁，其他事务就不能更改你的表结构，MDL锁都是为了防止在事务进行中，执行DDL语句导致数据不一致</p>
+<h4 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h4><blockquote>
+<p>死锁必要条件</p>
+</blockquote>
+<ul>
+<li><p><code>互斥条件</code>，在一段时间内，计算机中的某个资源只能被一个进程占用。此时，如果其他进程请求该资源，则只能等待</p>
+</li>
+<li><p><code>不可剥夺条件</code>，某个进程获得的资源在使用完毕之前，不能被其他进程强行夺走，只能由获得资源的进程主动释放</p>
+</li>
+<li><p><code>请求与保持条件</code>，进程已经获得了至少一个资源，又要请求其他资源，但请求的资源已经被其他进程占有，此时请求的进程就会被阻塞，并且不会释放自己已获得的资源</p>
+</li>
+<li><p><code>循环等待条件</code>，系统中的进程之间相互等待，同时各自占用的资源又会被下一个进程所请求</p>
+</li>
+</ul>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/%E6%AD%BB%E9%94%81.7gpbf0vij200.webp" alt="死锁"></p>
+<blockquote>
+<p>避免死锁</p>
+</blockquote>
+<ul>
+<li><p>尽量让数据表中的数据检索都通过索引来完成，避免无效索引导致行锁升级为表锁</p>
+</li>
+<li><p>合理设计索引，尽量缩小锁的范围</p>
+</li>
+<li><p>尽量减少查询条件的范围，尽量避免间隙锁或缩小间隙锁的范围</p>
+</li>
+<li><p>尽量控制事务的大小，减少一次事务锁定的资源数量，缩短锁定资源的时间。如果一条SQL语句涉及事务加锁操作，则尽量将其放在整个事务的最后执行</p>
+</li>
+</ul>
+<h3 id="表锁"><a href="#表锁" class="headerlink" title="表锁"></a>表锁</h3><blockquote>
+<p>特殊事务中，考虑使用表级锁</p>
+</blockquote>
+<ul>
+<li><p>事务需要更新大部分或全部数据，表又比较大，如果使用默认的行锁，不仅这个事务执行效率低，而且可能造成其他事务长时间锁等待和锁冲突</p>
+</li>
+<li><p>事务涉及多个表，比较复杂，很可能引起死锁，造成大量事务回滚。这种情况也可以考虑一次性锁定事务涉及的表，从而避免死锁、减少数据库因事务回滚带来的开销</p>
+</li>
+</ul>
+<h4 id="表锁语法"><a href="#表锁语法" class="headerlink" title="表锁语法"></a>表锁语法</h4><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">lock tables teacher write,student read;</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> teacher;</span><br><span class="line"><span class="keyword">commit</span>;</span><br><span class="line">unlock tables;</span><br></pre></td></tr></table></figure>
+
+<h4 id="表锁注意事项"><a href="#表锁注意事项" class="headerlink" title="表锁注意事项"></a>表锁注意事项</h4><ul>
+<li><p>使用LOCK TALBES虽然可以给InnoDB加表级锁，但必须说明的是，表锁不是由InnoDB存储引擎层管理的，而是由其上一层ＭySQL Server负责的，仅当autocommit=0、innodb_table_lock=1（默认设置）时，InnoDB层才能感知MySQL加的表锁，ＭySQL Server才能感知InnoDB加的行锁，这种情况下，InnoDB才能自动识别涉及表级锁的死锁；否则，InnoDB将无法自动检测并处理这种死锁</p>
+</li>
+<li><p>LOCAK TABLES对InnoDB加锁时要注意，事务结束前，不要用UNLOCAK TABLES释放表锁，因为UNLOCK TABLES会隐含地提交事务；COMMIT或ROLLBACK不能释放用LOCAK TABLES加的表级锁，必须用UNLOCK TABLES释放表锁</p>
+</li>
+<li><p>表锁的力度很大</p>
+</li>
+</ul>
+<h3 id="特殊分类的锁"><a href="#特殊分类的锁" class="headerlink" title="特殊分类的锁"></a>特殊分类的锁</h3><h4 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h4><p>乐观锁基于<code>数据版本记录机制</code>实现，一般是给数据库表增加一个<code>version</code>字段</p>
+<p>读取数据时，将此版本号读出，更新时，对此版本号加一。此时将提交数据的版本数据与数据库表对应记录的当前版本信息进行比对，如果提交的数据版本号大于数据库表当前版本号，则予以更新，否则认为是过期数据</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/%E4%B9%90%E8%A7%82%E9%94%81.6jfi3adog980.webp" alt="乐观锁"></p>
+<h4 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h4><p>悲观锁依靠数据库提供的锁机制实现。MySQL中的共享锁和排它锁都是悲观锁。数据库的增删改操作默认都会加排他锁，而查询不会加任何锁</p>
+<p><strong>正确的开始 微小的长进 然后持续 嘿 我是小博 带你一起看我目之所及的世界……</strong></p>
+]]></content>
+      <tags>
+        <tag>mysql</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MySQL高级进阶三</title>
     <url>/posts/1926493212/</url>
     <content><![CDATA[<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E6%98%A8%E5%A4%A9%E6%A2%A6%E9%87%8C.3dw2byuyxq40.webp" alt="昨天梦里"></p>
