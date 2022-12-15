@@ -23,23 +23,31 @@
 
 <link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Code小博">
-<meta property="og:url" content="https://codexiaobo.github.io/index.html">
+<meta name="description" content="MySQL高级进阶日志系统bin log日志二进制日志以事件形式记录了对MySQL数据库执行更改的所有操作 binlog记录了所有数据库表结构变更以及表数据修改的二进制日志 binlog是mysql server层维护的，跟采用何种引擎没有关系，记录的是所有的更新操作的日志记录，binlog是在事务最终commit前写入的。对支持事务的引擎如innodb，必须要提交了事务才会记录binlog b">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL高级进阶五">
+<meta property="og:url" content="https://codexiaobo.github.io/posts/602143303/index.html">
 <meta property="og:site_name" content="Code小博">
+<meta property="og:description" content="MySQL高级进阶日志系统bin log日志二进制日志以事件形式记录了对MySQL数据库执行更改的所有操作 binlog记录了所有数据库表结构变更以及表数据修改的二进制日志 binlog是mysql server层维护的，跟采用何种引擎没有关系，记录的是所有的更新操作的日志记录，binlog是在事务最终commit前写入的。对支持事务的引擎如innodb，必须要提交了事务才会记录binlog b">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/mysql%E5%B0%8F%E4%BC%81%E9%B9%85.29qt5y9fbtz4.webp">
+<meta property="og:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/%E5%BF%AB%E7%85%A7%E8%AF%BB%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90.3ng3j1sjf440.webp">
+<meta property="article:published_time" content="2022-12-15T12:26:37.000Z">
+<meta property="article:modified_time" content="2022-12-15T12:28:17.708Z">
 <meta property="article:author" content="xiaobo">
+<meta property="article:tag" content="mysql">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/mysql%E5%B0%8F%E4%BC%81%E9%B9%85.29qt5y9fbtz4.webp">
 
 
-<link rel="canonical" href="https://codexiaobo.github.io/">
+<link rel="canonical" href="https://codexiaobo.github.io/posts/602143303/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:true,&quot;isPost&quot;:false,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:&quot;&quot;,&quot;permalink&quot;:&quot;&quot;,&quot;path&quot;:&quot;index.html&quot;,&quot;title&quot;:&quot;&quot;}</script>
+<script class="next-config" data-name="page" type="application/json">{&quot;sidebar&quot;:&quot;&quot;,&quot;isHome&quot;:false,&quot;isPost&quot;:true,&quot;lang&quot;:&quot;zh-CN&quot;,&quot;comments&quot;:true,&quot;permalink&quot;:&quot;https:&#x2F;&#x2F;codexiaobo.github.io&#x2F;posts&#x2F;602143303&#x2F;&quot;,&quot;path&quot;:&quot;posts&#x2F;602143303&#x2F;&quot;,&quot;title&quot;:&quot;MySQL高级进阶五&quot;}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">&quot;&quot;</script>
-<title>Code小博</title>
+<title>MySQL高级进阶五 | Code小博</title>
   
 
 
@@ -135,7 +143,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -148,6 +156,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL%E9%AB%98%E7%BA%A7%E8%BF%9B%E9%98%B6"><span class="nav-number">1.</span> <span class="nav-text">MySQL高级进阶</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.1.</span> <span class="nav-text">日志系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#bin-log%E6%97%A5%E5%BF%97"><span class="nav-number">1.1.1.</span> <span class="nav-text">bin log日志</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#binlog%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">binlog使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">数据恢复</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%BC%E5%BC%8F%E5%88%86%E7%B1%BB"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">格式分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.1.1.4.</span> <span class="nav-text">日志格式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#binlog%E5%88%B7%E7%9B%98"><span class="nav-number">1.1.1.4.1.</span> <span class="nav-text">binlog刷盘</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#binlog%E5%AE%9E%E7%8E%B0%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5"><span class="nav-number">1.1.1.5.</span> <span class="nav-text">binlog实现主从同步</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E6%97%A5%E5%BF%97"><span class="nav-number">1.1.2.</span> <span class="nav-text">其他日志</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E7%94%A8%E6%97%A5%E5%BF%97"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">通用日志</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%85%A2%E6%9F%A5%E8%AF%A2%E6%97%A5%E5%BF%97"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">慢查询日志</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E6%97%A5%E5%BF%97"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">错误日志</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redo-log%E6%97%A5%E5%BF%97"><span class="nav-number">1.1.3.</span> <span class="nav-text">redo log日志</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E7%B3%BB%E7%BB%9F%E5%B4%A9%E6%BA%83%E5%AF%BC%E8%87%B4%E6%95%B0%E6%8D%AE%E4%B8%A2%E5%A4%B1"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">解决系统崩溃导致数据丢失</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#redo-log%E7%9A%84%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">redo log的格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MTR"><span class="nav-number">1.1.3.3.</span> <span class="nav-text">MTR</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1-sql-MTR-redolog%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">1.1.3.4.</span> <span class="nav-text">事务 sql MTR redolog的关系</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undo-log%E6%97%A5%E5%BF%97"><span class="nav-number">1.1.4.</span> <span class="nav-text">undo log日志</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1id%EF%BC%88trx-id%EF%BC%89"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">事务id（trx_id）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#roll-pointer"><span class="nav-number">1.1.4.2.</span> <span class="nav-text">roll_pointer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-number">1.1.4.3.</span> <span class="nav-text">分类</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E4%B8%8EMVCC"><span class="nav-number">1.2.</span> <span class="nav-text">隔离级别与MVCC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Read-View%EF%BC%88%E8%AF%BB%E8%A7%86%E5%9B%BE%EF%BC%89"><span class="nav-number">1.2.1.</span> <span class="nav-text">Read View（读视图）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BD%93%E5%89%8D%E8%AF%BB"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">当前读</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BF%AB%E7%85%A7%E8%AF%BB"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">快照读</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">实现原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Read-View%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.1.4.</span> <span class="nav-text">Read View结构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%AB%E7%85%A7%E8%AF%BB%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90"><span class="nav-number">1.2.2.</span> <span class="nav-text">快照读原理解析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E8%A7%84%E5%88%99"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">逻辑规则</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E8%84%8F%E8%AF%BB%E5%92%8C%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB"><span class="nav-number">1.2.3.</span> <span class="nav-text">解决脏读和不可重复读</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%84%8F%E8%AF%BB%E9%97%AE%E9%A2%98"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">脏读问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">不可重复读</span></a></li></ol></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -226,16 +235,17 @@
 </noscript>
 
 
-    <div class="main-inner index posts-expand">
+    <div class="main-inner post posts-expand">
 
-    
+
+  
 
 
 <div class="post-block">
   
   
 
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/602143303/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -248,9 +258,9 @@
       <meta itemprop="name" content="Code小博">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/602143303/" class="post-title-link" itemprop="url">MySQL高级进阶五</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          MySQL高级进阶五
+        </h1>
 
         <div class="post-meta-container">
           <div class="post-meta">
@@ -265,6 +275,13 @@
     </span>
 
   
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
       </div>
       <div class="post-meta">
     <span class="post-meta-item" title="本文字数">
@@ -290,7 +307,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/mysql%E5%B0%8F%E4%BC%81%E9%B9%85.29qt5y9fbtz4.webp" alt="mysql小企鹅"></p>
+        <p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/mysql%E5%B0%8F%E4%BC%81%E9%B9%85.29qt5y9fbtz4.webp" alt="mysql小企鹅"></p>
 <h1 id="MySQL高级进阶"><a href="#MySQL高级进阶" class="headerlink" title="MySQL高级进阶"></a>MySQL高级进阶</h1><h2 id="日志系统"><a href="#日志系统" class="headerlink" title="日志系统"></a>日志系统</h2><h3 id="bin-log日志"><a href="#bin-log日志" class="headerlink" title="bin log日志"></a>bin log日志</h3><p>二进制日志以<code>事件形式</code>记录了对MySQL数据库执行<code>更改</code>的所有操作</p>
 <p>binlog记录了所有数据库<code>表结构</code>变更以及<code>表数据</code>修改的二进制日志</p>
 <p>binlog是mysql server层维护的，跟采用何种引擎没有关系，记录的是所有的更新操作的日志记录，binlog是在事务最终commit前写入的。对支持事务的引擎如innodb，必须要提交了事务才会记录binlog</p>
@@ -499,109 +516,51 @@
 <p>同一个事务中<code>只在第一次读取数据时生成一个ReadView</code>，以后这个事务中一直使用这个readview，那么同一个事务中就能保证多次读取的数据是一致的</p>
 <p><strong>正确的开始，微小的长进，然后持续，嘿，我是小博，带你一起看我目之所及的世界……</strong></p>
 
-      
     </div>
 	<div>
 	
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束 <i class="fa fa-paw"></i> 感谢您的阅读-------------</div>
+    
+</div>
+
+     
 	</div>
 	
 	<div>
       
-	</div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/691987327/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/691987327/" class="post-title-link" itemprop="url">MySQl高级进阶四</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-12-08 01:14:11 / 修改时间：01:17:08" itemprop="dateCreated datePublished" datetime="2022-12-08T01:14:11+08:00">2022-12-08</time>
-    </span>
-
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>5.7k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>5 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221208005212.4jdrhszoy6w0.webp" alt="微信图片_20221208005212"></p>
-<!--sleep-->
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/691987327/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/posts/602143303/">MySQL高级进阶五</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问  的个人博客"></a>小博</p>
+  <p><span>发布时间:</span>2022年12月15日 - 20:26</p>
+  <p><span>最后更新:</span>2022年12月15日 - 20:28</p>
+  <p><span>原始链接:</span><a href="/posts/602143303/" title="MySQL高级进阶五">https://codexiaobo.github.io/posts/602143303/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://codexiaobo.github.io/posts/602143303/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+      $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+        });
+    });  
+</script>
+
+
       
 	</div>
 
@@ -610,200 +569,39 @@
     
 
     <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/1926493212/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/1926493212/" class="post-title-link" itemprop="url">MySQL高级进阶三</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-12-06 22:23:54 / 修改时间：22:25:24" itemprop="dateCreated datePublished" datetime="2022-12-06T22:23:54+08:00">2022-12-06</time>
-    </span>
-
-  
+          <div class="reward-container">
+  <div>学习技术分享、感谢您的支持</div>
+  <button onclick="document.querySelector('.post-reward').classList.toggle('active');">
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="xiaobo 微信">
+        <span>微信</span>
       </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>7.7k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>7 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E6%98%A8%E5%A4%A9%E6%A2%A6%E9%87%8C.3dw2byuyxq40.webp" alt="昨天梦里"></p>
-<!--sleep-->
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/1926493212/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
-      
-	</div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/2812722732/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/2812722732/" class="post-title-link" itemprop="url">MySQL进阶 二</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-12-02 16:32:22 / 修改时间：16:35:04" itemprop="dateCreated datePublished" datetime="2022-12-02T16:32:22+08:00">2022-12-02</time>
-    </span>
-
-  
+      <div>
+        <img src="/images/alipay.png" alt="xiaobo 支付宝">
+        <span>支付宝</span>
       </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>4.6k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>4 分钟</span>
-    </span>
+
+  </div>
 </div>
 
-        </div>
-      </header>
+          <div class="post-tags">
+              <a href="/tags/mysql/" rel="tag"># mysql</a>
+          </div>
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20221202143149.35bobhhpdfe0.webp" alt="微信截图_20221202143149"></p>
-<!--sleep-->
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/2812722732/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
-      
-	</div>
 
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/691987327/" rel="prev" title="MySQl高级进阶四">
+                  <i class="fa fa-chevron-left"></i> MySQl高级进阶四
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
     </footer>
   </article>
 </div>
@@ -811,585 +609,7 @@
 
 
 
-    
 
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/2619773061/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/2619773061/" class="post-title-link" itemprop="url">MySQL进阶 一</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-12-01 21:06:54 / 修改时间：21:08:30" itemprop="dateCreated datePublished" datetime="2022-12-01T21:06:54+08:00">2022-12-01</time>
-    </span>
-
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>7.4k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>7 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221201204413.3qgwfd5qr3y0.webp" alt="微信图片_20221201204413"></p>
-<!--sleep-->
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/2619773061/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
-      
-	</div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/2855935176/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/2855935176/" class="post-title-link" itemprop="url">jvm(二)</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-11-13 19:58:44 / 修改时间：20:06:38" itemprop="dateCreated datePublished" datetime="2022-11-13T19:58:44+08:00">2022-11-13</time>
-    </span>
-
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>12k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>11 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221110153753.2ld32fgfn680.webp" alt="微信图片_20221110153753"></p>
-<!--sleep-->
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/2855935176/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
-      
-	</div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/3370054281/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/3370054281/" class="post-title-link" itemprop="url">JVM 一</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-11-10 15:42:09 / 修改时间：15:42:55" itemprop="dateCreated datePublished" datetime="2022-11-10T15:42:09+08:00">2022-11-10</time>
-    </span>
-
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>8.4k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>8 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221110153740.4cjwd89ht760.webp" alt="微信图片_20221110153740"></p>
-<!--sleep-->
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/3370054281/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
-      
-	</div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/441140627/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/441140627/" class="post-title-link" itemprop="url">elk 一</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-11-04 00:15:57 / 修改时间：00:16:39" itemprop="dateCreated datePublished" datetime="2022-11-04T00:15:57+08:00">2022-11-04</time>
-    </span>
-
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>6.8k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>6 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/elasticsearch.3dyx4lvs5no0.webp" alt="elasticsearch"></p>
-<!--sleep-->
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/441140627/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
-      
-	</div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/4126800539/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/4126800539/" class="post-title-link" itemprop="url">Docker</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-10-31 20:33:42 / 修改时间：20:35:01" itemprop="dateCreated datePublished" datetime="2022-10-31T20:33:42+08:00">2022-10-31</time>
-    </span>
-
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>8.5k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>8 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/docker.4p2gxlnxopi0.webp" alt="docker"></p>
-<!--sleep-->
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/4126800539/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
-      
-	</div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://codexiaobo.github.io/posts/668782996/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaobo.png">
-      <meta itemprop="name" content="xiaobo">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Code小博">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/posts/668782996/" class="post-title-link" itemprop="url">spring cloud alibaba 一</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2022-10-30 19:20:44 / 修改时间：19:22:29" itemprop="dateCreated datePublished" datetime="2022-10-30T19:20:44+08:00">2022-10-30</time>
-    </span>
-
-  
-      </div>
-      <div class="post-meta">
-    <span class="post-meta-item" title="本文字数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-file-word"></i>
-      </span>
-      <span class="post-meta-item-text">本文字数：</span>
-      <span>12k</span>
-    </span>
-    <span class="post-meta-item" title="阅读时长">
-      <span class="post-meta-item-icon">
-        <i class="far fa-clock"></i>
-      </span>
-      <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>11 分钟</span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221030191700.2tmq4f2y4f8.webp" alt="微信图片_20221030191700"></p>
-<!--sleep-->
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/668782996/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-	<div>
-	
-	</div>
-	
-	<div>
-      
-	</div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
 
 </div>
   </main>

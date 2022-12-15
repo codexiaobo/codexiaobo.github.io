@@ -1,6 +1,222 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>MySQL高级进阶五</title>
+    <url>/posts/602143303/</url>
+    <content><![CDATA[<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/mysql%E5%B0%8F%E4%BC%81%E9%B9%85.29qt5y9fbtz4.webp" alt="mysql小企鹅"></p>
+<h1 id="MySQL高级进阶"><a href="#MySQL高级进阶" class="headerlink" title="MySQL高级进阶"></a>MySQL高级进阶</h1><h2 id="日志系统"><a href="#日志系统" class="headerlink" title="日志系统"></a>日志系统</h2><h3 id="bin-log日志"><a href="#bin-log日志" class="headerlink" title="bin log日志"></a>bin log日志</h3><p>二进制日志以<code>事件形式</code>记录了对MySQL数据库执行<code>更改</code>的所有操作</p>
+<p>binlog记录了所有数据库<code>表结构</code>变更以及<code>表数据</code>修改的二进制日志</p>
+<p>binlog是mysql server层维护的，跟采用何种引擎没有关系，记录的是所有的更新操作的日志记录，binlog是在事务最终commit前写入的。对支持事务的引擎如innodb，必须要提交了事务才会记录binlog</p>
+<p>binlog文件写满后，会自动切换到下一个日志文件继续写，而不会覆盖以前的日志，像redo log，undo log 是循环写入的，后面写入的可能会覆盖前面写入的</p>
+<h4 id="binlog使用场景"><a href="#binlog使用场景" class="headerlink" title="binlog使用场景"></a>binlog使用场景</h4><p><code>主从复制</code></p>
+<p><code>数据恢复</code></p>
+<h4 id="数据恢复"><a href="#数据恢复" class="headerlink" title="数据恢复"></a>数据恢复</h4><ul>
+<li>查看是否开启bin log日志</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">show</span> variables <span class="keyword">like</span> <span class="string">&#x27;%log_bin%&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>刷新生成新的日志文件</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">flush logs;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看日志信息</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysqlbinlog <span class="operator">-</span>v 日志文件名<span class="operator">+</span>后缀</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>指定条件查看日志信息</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"># 指定位置范围</span><br><span class="line">mysqlbinlog <span class="operator">-</span>v 日志文件名<span class="operator">+</span>后缀 <span class="comment">--start-position=起始编号 --stop-position=结束编号</span></span><br><span class="line"># 指定时间范围</span><br><span class="line">mysqlbinlog <span class="operator">-</span>v 日志文件名<span class="operator">+</span>后缀 <span class="comment">--start-datetime=&quot;起始时间&quot; --stop-datetime=&quot;结束时间&quot; </span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>恢复数据</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysqlbinlog <span class="operator">-</span>v 日志文件名<span class="operator">+</span>后缀 <span class="comment">--stop-position=开始编号 -v | mysql -uroot -p</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="格式分类"><a href="#格式分类" class="headerlink" title="格式分类"></a>格式分类</h4><p><code>Statement</code>：每一条会修改数据的 SQL 都会记录在 binlog 中</p>
+<p><code>Row</code>：不记录 SQL 语句上下文信息，仅保存哪条记录被修改</p>
+<p><code>Mixed</code>：Statement 和 Row 的混合体，当前默认的选项，默认row</p>
+<h4 id="日志格式"><a href="#日志格式" class="headerlink" title="日志格式"></a>日志格式</h4><ul>
+<li><p>binlog文件以一个值为0Xfe62696e的魔数开头，这个魔数对应0xfebin。</p>
+</li>
+<li><p>binlog由一系列的binlog event构成。每个binlog event包含header和data两部分</p>
+</li>
+</ul>
+<p><code>header</code>部分提供的是event的公共的类型信息，包括event的创建时间，服务器等等</p>
+<p><code>data</code>部分提供的是针对该event的具体信息，如具体数据的修改</p>
+<h5 id="binlog刷盘"><a href="#binlog刷盘" class="headerlink" title="binlog刷盘"></a>binlog刷盘</h5><p>二进制日志文件并不是每次写的时候同步到磁盘。因此当数据库所在操作系统发生宕机时，可能会有最后一部分数据没有写入二进制日志文件中，所以给恢复和复制带来了问题</p>
+<p>参数sync_binlog=[N]表示每写多少次就同步到磁盘。如果将N设为1，即sync_binlog=1表示采用同步写磁盘的方式来写二进制日志，这时写操作不使用操作系统的缓冲来写二进制日志</p>
+<h4 id="binlog实现主从同步"><a href="#binlog实现主从同步" class="headerlink" title="binlog实现主从同步"></a>binlog实现主从同步</h4><blockquote>
+<p>单点部署的问题</p>
+</blockquote>
+<p>服务器宕机，会导致业务停顿，影响客户体验</p>
+<p>服务器损坏，数据丢失，不能及时备份，造成巨大损失</p>
+<p>读写操作都在同一台服务器，在并发量大的情况下性能存在瓶颈</p>
+<blockquote>
+<p>主从复制工作原理</p>
+</blockquote>
+<p>Master 数据库只要发生变化，立马记录到Binary log 日志文件中</p>
+<p>Slave数据库启动一个I/O thread连接Master数据库，请求Master变化的二进制日志</p>
+<p>Slave I/O获取到的二进制日志，保存到自己的Relay log 日志文件中</p>
+<p>Slave 有一个SQL thread定时检查Realy log是否变化，变化那么就更新数据</p>
+<blockquote>
+<p>搭建</p>
+</blockquote>
+<ul>
+<li>准备两台服务器并安装相同的mysql版本</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql1(master): <span class="number">43.143</span><span class="number">.229</span><span class="number">.12</span>:<span class="number">3306</span></span><br><span class="line">mysql2(slave):  <span class="number">172.168</span><span class="number">.117</span><span class="number">.200</span>:<span class="number">3306</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>mysql1（master）: 开启bin_log且需要配置一个server-id</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">#mysql master1 config </span><br><span class="line">[mysqld]</span><br><span class="line">server<span class="operator">-</span>id <span class="operator">=</span> <span class="number">1</span>            # 节点ID，确保唯一</span><br><span class="line"></span><br><span class="line"># log config</span><br><span class="line">log<span class="operator">-</span>bin <span class="operator">=</span> master<span class="operator">-</span>bin     #开启mysql的binlog日志功能</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>mysql2（slave）: 需要开启中继日志</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">server<span class="operator">-</span>id<span class="operator">=</span><span class="number">2</span></span><br><span class="line">relay<span class="operator">-</span>log<span class="operator">=</span>mysql<span class="operator">-</span>relay<span class="operator">-</span>bin</span><br><span class="line">replicate<span class="operator">-</span>wild<span class="operator">-</span>ignore<span class="operator">-</span><span class="keyword">table</span><span class="operator">=</span>mysql.<span class="operator">%</span></span><br><span class="line">replicate<span class="operator">-</span>wild<span class="operator">-</span>ignore<span class="operator">-</span><span class="keyword">table</span><span class="operator">=</span>sys.<span class="operator">%</span></span><br><span class="line">replicate<span class="operator">-</span>wild<span class="operator">-</span>ignore<span class="operator">-</span><span class="keyword">table</span><span class="operator">=</span>information_schema.<span class="operator">%</span></span><br><span class="line">replicate<span class="operator">-</span>wild<span class="operator">-</span>ignore<span class="operator">-</span><span class="keyword">table</span><span class="operator">=</span>performance_schema.<span class="operator">%</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>重新启动两个mysql服务</p>
+</li>
+<li><p>为master创建复制用户</p>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">&#x27;repl&#x27;</span>@<span class="string">&#x27;%&#x27;</span> IDENTIFIED <span class="keyword">WITH</span> <span class="string">&#x27;mysql_native_password&#x27;</span> <span class="keyword">BY</span> <span class="string">&#x27;ZAQzaq123.&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这里一定要设置加密方式，<code>WITH &#39;mysql_native_password&#39;</code>改一下加密方式，真的，我被这个坑坑了一个小时</p>
+<ul>
+<li>赋予该用户复制的权利</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">grant</span> replication slave <span class="keyword">on</span> <span class="operator">*</span>.<span class="operator">*</span> <span class="keyword">to</span> <span class="string">&#x27;repl&#x27;</span>@<span class="string">&#x27;%&#x27;</span>; </span><br><span class="line">FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看master的状态</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">show</span> master status;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>配置从库</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">CHANGE MASTER <span class="keyword">TO</span> </span><br><span class="line">MASTER_HOST <span class="operator">=</span> <span class="string">&#x27;43.143.229.12&#x27;</span>,  </span><br><span class="line">MASTER_USER <span class="operator">=</span> <span class="string">&#x27;repl&#x27;</span>, </span><br><span class="line">MASTER_PASSWORD <span class="operator">=</span> <span class="string">&#x27;ZAQzaq123.&#x27;</span>,</span><br><span class="line">MASTER_PORT <span class="operator">=</span> <span class="number">3306</span>,</span><br><span class="line">MASTER_LOG_FILE<span class="operator">=</span><span class="string">&#x27;master-bin.000004&#x27;</span>,</span><br><span class="line">MASTER_LOG_POS<span class="operator">=</span><span class="number">3648</span>,</span><br><span class="line">MASTER_HEARTBEAT_PERIOD <span class="operator">=</span> <span class="number">10000</span>; </span><br></pre></td></tr></table></figure>
+
+<p><code>MASTER_HOST</code>：master的IP地址</p>
+<p><code>MASTER_USER</code>：用户</p>
+<p><code>MASTER_PASSWORD</code>：密码</p>
+<p><code>MASTER_PORT</code>：端口号</p>
+<p><code>MASTER_LOG_FILE</code>：在master的状态中的日志文件名</p>
+<p><code>MASTER_LOG_POS</code>：在master的状态中的开始编号</p>
+<ul>
+<li>启动从库</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"># 这个是停止的</span><br><span class="line">stop slave;</span><br><span class="line"># 这个是启动的</span><br><span class="line"><span class="keyword">start</span> slave;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看配置状态</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">show</span> slave status \G;</span><br></pre></td></tr></table></figure>
+
+<p><code>Slave_IO_Running</code>：从库的IO线程，用来接收master发送的binlog，并将其写入到中继日志relag log，这个必须是YES状态</p>
+<p><code>Slave_SQL_Running</code>：从库的SQL线程，用来从relay log中读取并执行binlog，这个必须是YES状态</p>
+<h3 id="其他日志"><a href="#其他日志" class="headerlink" title="其他日志"></a>其他日志</h3><h4 id="通用日志"><a href="#通用日志" class="headerlink" title="通用日志"></a>通用日志</h4><p>记录建立的客户端连接和执行的所有DDL和DML语句，默认情况下是关闭的，它是一个文本文件</p>
+<ul>
+<li>查看</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> VARIABLES <span class="keyword">LIKE</span> <span class="string">&#x27;%general_log%&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>开启</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"># 在全局模式下，开启通用查询日志，<span class="number">1</span>表示开启，<span class="number">0</span>表示关闭</span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">global</span> general_log<span class="operator">=</span><span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看日志文件</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">more 日志文件名 </span><br></pre></td></tr></table></figure>
+
+<p><code>centos.log</code>:日志文件</p>
+<h4 id="慢查询日志"><a href="#慢查询日志" class="headerlink" title="慢查询日志"></a>慢查询日志</h4><p>执行时间大于该值就会被记录在慢查询日志中，默认是3s</p>
+<ul>
+<li>查看</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> VARIABLES <span class="keyword">LIKE</span> <span class="string">&#x27;%slow_query_log%&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h4 id="错误日志"><a href="#错误日志" class="headerlink" title="错误日志"></a>错误日志</h4><p>错误日志（Error Log）主要记录 MySQL 服务器启动和停止过程中的信息、服务器在运行过程中发生的故障和异常情况</p>
+<h3 id="redo-log日志"><a href="#redo-log日志" class="headerlink" title="redo log日志"></a>redo log日志</h3><p>redo log（重做日志）的设计主要是为了防止因系统崩溃而导致的数据丢失</p>
+<h4 id="解决系统崩溃导致数据丢失"><a href="#解决系统崩溃导致数据丢失" class="headerlink" title="解决系统崩溃导致数据丢失"></a>解决系统崩溃导致数据丢失</h4><p>每次提交事务之前，必须将所有和当前事务相关的buffer pool中的脏页刷入磁盘，但是，这个效率比较低，可能会影响主线程的效率，产生用户等待，降低响应速度，因为刷盘是I/O操作，同时一个事务的读写操作也不是顺序读写</p>
+<p>当前事务中修改的数据内容在日志中记录下来，日志记录是顺序写，性能很高。mysql就是这么做的，这个日志被称为redo log，执行事务中，每执行一条语句，就可能有若干redo log日志，并按产生的顺序写入磁盘，redo log日志占用的空间非常小，当redo log空间满了之后又会从头开始以循环的方式进行覆盖式的写入</p>
+<h4 id="redo-log的格式"><a href="#redo-log的格式" class="headerlink" title="redo log的格式"></a>redo log的格式</h4><p><code>type</code>：日志的类型，在5.7中，大概有53种不同类型的redo log，占用一个字节</p>
+<p><code>space</code> id：表空间id</p>
+<p><code>page numbe</code>r：页号</p>
+<p><code>data</code>：日志数据</p>
+<h4 id="MTR"><a href="#MTR" class="headerlink" title="MTR"></a>MTR</h4><p>在innodb执行任务时，有很多操作，必须具有原子性，这一类操作称之为MIni Transaction</p>
+<h4 id="事务-sql-MTR-redolog的关系"><a href="#事务-sql-MTR-redolog的关系" class="headerlink" title="事务 sql MTR redolog的关系"></a>事务 sql MTR redolog的关系</h4><p>一个事务包含一条或多条sql</p>
+<p>一条sql包含一个或多个MTR</p>
+<p>一个MTR包含一个或多个redo log</p>
+<h3 id="undo-log日志"><a href="#undo-log日志" class="headerlink" title="undo log日志"></a>undo log日志</h3><p>undo log（撤销日志或回滚日志），主要作用是为了实现回滚操作。他也是MVCC多版本控制的核心模块。undo log保存在共享表空间<code>ibdata1</code>文件中</p>
+<h4 id="事务id（trx-id）"><a href="#事务id（trx-id）" class="headerlink" title="事务id（trx_id）"></a>事务id（trx_id）</h4><p>在innodb的行数据中，会自动添加两个隐藏列，一个是<code>trx_id</code>，一个是<code>roll_pointer</code>，如果该表中没有定义主键，也没有定义非空唯一列，则还会生成一个隐藏列<code>row_id</code></p>
+<p>事务id是一个自增的全局变量，如果一个事务对任意表做了增删改的操作，那么innodb就会给他分配一个独一无二的事务id</p>
+<p>事务id保存在一个全局变量<code>MAX_TRX_ID</code>上，每次事务需要分配事务id，就会从这个全局变量中获取，然后自增1</p>
+<p>该变量每次自增到256的倍数会进行一个落盘（保存在表空间页号为5的页面中），发生服务停止或者系统崩溃后，再起启动服务，会读取这个数字，然后再加256。这样做既保证不会有太多I/O操作，还能保证id的有序增长，保证新的事务id一定大</p>
+<h4 id="roll-pointer"><a href="#roll-pointer" class="headerlink" title="roll_pointer"></a>roll_pointer</h4><p>undo log在记录日志时是这样记录的，每次修改数据，都会将修改的数据标记一个新的版本，同时，这个版本的数据的地址会保存在修改之前的数据的roll_pointer列中</p>
+<h4 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h4><blockquote>
+<p>只记录插入类型的操作（insert）</p>
+</blockquote>
+<p>插入型的记录不需要记录版本，事务提交以后这一片空间就可以重复利用了</p>
+<p>插入一条数据时，至少要把这条数据的主键记录下来，以后不想要了直接根据主键删除</p>
+<blockquote>
+<p>只记录修改类型的操作（delete，update）</p>
+</blockquote>
+<p>修改型的必须将每次修改作为一个版本记录下来，即使当前事务已经提交，也不一定能回收空间，因为其他事务可能在用</p>
+<p>删除一条数据时，至少要把这个数据所有的内容全部记录下来，以后才能全量恢复。但事实上不需要，每行数据都有一个delete_flag，事务中将其置1，记录id，如需要回滚根据id复原即可，提交事务后又清除线程处理垃圾</p>
+<p>修改一条数据时，至少要将修改前后的数据都保存下来</p>
+<h2 id="隔离级别与MVCC"><a href="#隔离级别与MVCC" class="headerlink" title="隔离级别与MVCC"></a>隔离级别与MVCC</h2><p>全称Multi-Version Concurrency Control，<code>多版本并发控制</code>，MVCC在MySQL InnoDB中的实现主要是为了提高数据库的并发性能，用更好的方式去处理<code>读-写冲突</code>，做到即使有读写冲突时，也能做到不加锁，非阻塞并发读</p>
+<h3 id="Read-View（读视图）"><a href="#Read-View（读视图）" class="headerlink" title="Read View（读视图）"></a>Read View（读视图）</h3><h4 id="当前读"><a href="#当前读" class="headerlink" title="当前读"></a>当前读</h4><p>像select lock in share mode（锁）、 select for update、 update、insert、delete（排他锁）这些操作都是<code>当前读</code>，他读取的是记录的<code>最新版本</code>，读取时还要保证其他<code>并发事务</code>不能修改当前记录，会对读取的记录进行加锁</p>
+<h4 id="快照读"><a href="#快照读" class="headerlink" title="快照读"></a>快照读</h4><p>像不加锁的select操作就是快照读，即不加锁的<code>非阻塞读</code>，快照读的前提是<code>隔离级别不是串行级别</code>，串行级别下的快照读会<code>退化成当前读</code>，快照读读取的是<code>快照</code>，他是通过readView实现的</p>
+<h4 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h4><p>Read View就是事务进行<code>快照读</code>的时候生产的<code>读视图</code>(Read View)，在该事务<code>执行快照读</code>的那一刻，会生成数据库系统当前的一个快照</p>
+<h4 id="Read-View结构"><a href="#Read-View结构" class="headerlink" title="Read View结构"></a>Read View结构</h4><p><code>m_ids</code>：生成该readview时，当前系统中<code>活跃的事务</code>id列表</p>
+<p><code>min_trx_id</code>：当前系统<code>活跃事务</code>中<code>最小的事务id</code>，他也是m_ids的最小值</p>
+<p><code>max_trx_id</code>：当前系统中计划分配给下一个事务的id，他可能是m_ids的最大值+1，也可能比他大</p>
+<p><code>creator_trx_id</code>：生成这个readView的事务id</p>
+<p>想象成是一个Java实例</p>
+<h3 id="快照读原理解析"><a href="#快照读原理解析" class="headerlink" title="快照读原理解析"></a>快照读原理解析</h3><p>在一个事务读取数据时，会根据当前数据形成一个readview，按照逻辑规则进行读取</p>
+<h4 id="逻辑规则"><a href="#逻辑规则" class="headerlink" title="逻辑规则"></a>逻辑规则</h4><p>如果<code>被访问数据的事务trx_id</code>和readView中的<code>creator_trx_id值</code>相同，意味着自己在访问自己修改过的记录，当然可以被访问</p>
+<p>如果<code>被访问数据的事务trx_id</code>小于readView中的<code>min_trx_id</code>值，说明生成这个版本数据的事务，在生成readview前已经提交，这样的数据也可以访问</p>
+<p>大白话：这个数据之前被其他的事务修改过，但是事务已经提交，所以这个版本的数据是可以使用的，这样不会产生脏读</p>
+<p>如果<code>被访问数据的事务trx_id</code>大于等于readView中的<code>max_trx_id值</code>，说明生成这个版本数据的事务，是在生成readview后开启，这样的数据不应该被访问</p>
+<p>大白话：你读取数据之后，有人修改了当前数据，那人家后边修改的数据，你也不能读</p>
+<p>如果<code>被访问数据的事务trx_id</code>如果在<code>min_trx_id</code>和<code>max_trx_id</code>范围内，则需要判断是不是在<code>m_ids</code>中（目的是判断这个数据是不是已经提交），如果在，说明生成这个版本的事务还是活跃的，没有提交的事务产生的数据当然不能读，如果不在，说明事务已经提交，该数据可以被访问</p>
+<p>大白话：这个数据被现在活跃的其他事务正在修改中，读取时要看此时这个事务是不是已经提交，目的也是为了不要读取别人未提交的事务</p>
+<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/mysql/%E5%BF%AB%E7%85%A7%E8%AF%BB%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90.3ng3j1sjf440.webp" alt="快照读原理解析"></p>
+<h3 id="解决脏读和不可重复读"><a href="#解决脏读和不可重复读" class="headerlink" title="解决脏读和不可重复读"></a>解决脏读和不可重复读</h3><p>对于RU隔离级别的事务来说，由于可以读取到未提交的事务，所有直接读取<code>最新的记录</code>（当前读）就可以，对于serializable的事务来说，必须使用加锁的方式来访问</p>
+<h4 id="脏读问题"><a href="#脏读问题" class="headerlink" title="脏读问题"></a>脏读问题</h4><blockquote>
+<p>加锁方式</p>
+</blockquote>
+<p>一个事务读取了数据之后，立马给这个数据加写锁，不允许其他事务进行修改，这是加锁解决脏读</p>
+<blockquote>
+<p>使用undo+mvcc</p>
+</blockquote>
+<p>所有事务对数据的修改，记录成版本链，使用readview进行版本选择，每个事务只能读取满足条件的数据，这个过程不需要加锁</p>
+<p>使用mvcc很好的解决了读写操作的并发执行，而且采用了无锁机制</p>
+<h4 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h4><p>RC和RR两个隔离级别解决不可重复读是通过生成readview时间不同</p>
+<blockquote>
+<p>RC隔离级别</p>
+</blockquote>
+<p>同一个事务中<code>每次读取数据时都生成一个新的ReadView</code>，两次读取时，如果中间有其他事务进行提交，可能会生成两个不同的readview，导致当前事务中，两次读取的数据不一致，这就是不可重复读</p>
+<blockquote>
+<p>RR隔离级别</p>
+</blockquote>
+<p>同一个事务中<code>只在第一次读取数据时生成一个ReadView</code>，以后这个事务中一直使用这个readview，那么同一个事务中就能保证多次读取的数据是一致的</p>
+<p><strong>正确的开始，微小的长进，然后持续，嘿，我是小博，带你一起看我目之所及的世界……</strong></p>
+]]></content>
+      <tags>
+        <tag>mysql</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MySQl高级进阶四</title>
     <url>/posts/691987327/</url>
     <content><![CDATA[<p><img src="https://cdn.staticaly.com/gh/codexiaobo/image@main/%E6%A0%87%E9%A2%98%E5%9B%BE%E7%89%87/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20221208005212.4jdrhszoy6w0.webp" alt="微信图片_20221208005212"></p>
